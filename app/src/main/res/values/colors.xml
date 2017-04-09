@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <!-- 透明 -->
+    <color name="transparent">#00000000</color>
+
+    <!--按钮颜色-->
+    <color name="blue">#41c378</color>
+    <color name="blue_1">#2da861</color>
+    <!--黑色-->
+    <color name="black">#000000</color>
+
+    <color name="text_color">#ffffff00</color>
+
+    <color name="nomal_button_color">#0F75B4</color>
+    <color name="press_button_color">#0399F0</color>
+
+    <color name="light_gray_1">#f5f5f5</color>
+    <color name="light_gray">#EEEEEE</color><!--淡灰色 -->
+
+    <!-- 白色 -->
+    <color name="white">#ffffff</color>
+
+    <color name="gray">#f1e9e7</color>
+    <color name="light_black">#393d3f</color><!--浅黑色 -->
+</resources>
