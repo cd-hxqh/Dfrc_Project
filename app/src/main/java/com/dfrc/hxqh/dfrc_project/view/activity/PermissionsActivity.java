@@ -57,10 +57,12 @@ public class PermissionsActivity extends BaseActivity {
 
     }
 
+
     @Override
     protected void initView() {
 
     }
+
 
     @Override protected void onResume() {
         super.onResume();

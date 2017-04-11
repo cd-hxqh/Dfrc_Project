@@ -7,6 +7,10 @@ import com.dfrc.hxqh.dfrc_project.bean.LoginResults;
 import com.dfrc.hxqh.dfrc_project.bean.Results;
 import com.dfrc.hxqh.dfrc_project.constants.Constants;
 import com.dfrc.hxqh.dfrc_project.model.ASSET;
+import com.dfrc.hxqh.dfrc_project.model.N_PROBLEM;
+import com.dfrc.hxqh.dfrc_project.model.SPAREPART;
+import com.dfrc.hxqh.dfrc_project.model.WORKORDER;
+import com.dfrc.hxqh.dfrc_project.model.WOTASK;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -148,6 +152,193 @@ public class JsonUtils {
 
                 }
                 list.add(asset);
+            }
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+    /**
+     * 备件
+     */
+    public static ArrayList<SPAREPART> parsingSPAREPART(String data) {
+        ArrayList<SPAREPART> list = null;
+        SPAREPART sparepart = null;
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            JSONObject jsonObject;
+            list = new ArrayList<SPAREPART>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                sparepart = new SPAREPART();
+                jsonObject = jsonArray.getJSONObject(i);
+                Field[] field = sparepart.getClass().getDeclaredFields();        //获取实体类的所有属性，返回Field数组
+                for (int j = 0; j < field.length; j++) {     //遍历所有属性
+                    field[j].setAccessible(true);
+                    String name = field[j].getName();    //获取属性的名字
+                    if (jsonObject.has(name) && jsonObject.getString(name) != null && !jsonObject.getString(name).equals("")) {
+                        try {
+                            // 调用getter方法获取属性值
+                            Method getOrSet = sparepart.getClass().getMethod("get" + name);
+                            Object value = getOrSet.invoke(sparepart);
+                            if (value == null) {
+                                //调用setter方法设属性值
+                                Class[] parameterTypes = new Class[1];
+                                parameterTypes[0] = field[j].getType();
+                                getOrSet = sparepart.getClass().getDeclaredMethod("set" + name, parameterTypes);
+                                getOrSet.invoke(sparepart, jsonObject.getString(name));
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+                list.add(sparepart);
+            }
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+    /**
+     * 定期点检工单
+     */
+    public static ArrayList<WORKORDER> parsingWORKORDER(String data) {
+        ArrayList<WORKORDER> list = null;
+        WORKORDER workorder = null;
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            JSONObject jsonObject;
+            list = new ArrayList<WORKORDER>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                workorder = new WORKORDER();
+                jsonObject = jsonArray.getJSONObject(i);
+                Field[] field = workorder.getClass().getDeclaredFields();        //获取实体类的所有属性，返回Field数组
+                for (int j = 0; j < field.length; j++) {     //遍历所有属性
+                    field[j].setAccessible(true);
+                    String name = field[j].getName();    //获取属性的名字
+                    if (jsonObject.has(name) && jsonObject.getString(name) != null && !jsonObject.getString(name).equals("")) {
+                        try {
+                            // 调用getter方法获取属性值
+                            Method getOrSet = workorder.getClass().getMethod("get" + name);
+                            Object value = getOrSet.invoke(workorder);
+                            if (value == null) {
+                                //调用setter方法设属性值
+                                Class[] parameterTypes = new Class[1];
+                                parameterTypes[0] = field[j].getType();
+                                getOrSet = workorder.getClass().getDeclaredMethod("set" + name, parameterTypes);
+                                getOrSet.invoke(workorder, jsonObject.getString(name));
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+                list.add(workorder);
+            }
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+
+    /**
+     * 定期点检工单明细行
+     */
+    public static ArrayList<WOTASK> parsingWOTASK(String data) {
+        ArrayList<WOTASK> list = null;
+        WOTASK wotask = null;
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            JSONObject jsonObject;
+            list = new ArrayList<WOTASK>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                wotask = new WOTASK();
+                jsonObject = jsonArray.getJSONObject(i);
+                Field[] field = wotask.getClass().getDeclaredFields();        //获取实体类的所有属性，返回Field数组
+                for (int j = 0; j < field.length; j++) {     //遍历所有属性
+                    field[j].setAccessible(true);
+                    String name = field[j].getName();    //获取属性的名字
+                    if (jsonObject.has(name) && jsonObject.getString(name) != null && !jsonObject.getString(name).equals("")) {
+                        try {
+                            // 调用getter方法获取属性值
+                            Method getOrSet = wotask.getClass().getMethod("get" + name);
+                            Object value = getOrSet.invoke(wotask);
+                            if (value == null) {
+                                //调用setter方法设属性值
+                                Class[] parameterTypes = new Class[1];
+                                parameterTypes[0] = field[j].getType();
+                                getOrSet = wotask.getClass().getDeclaredMethod("set" + name, parameterTypes);
+                                getOrSet.invoke(wotask, jsonObject.getString(name));
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+                list.add(wotask);
+            }
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+
+
+
+    /**
+     * 问题点管理
+     */
+    public static ArrayList<N_PROBLEM> parsingN_PROBLEM(String data) {
+        ArrayList<N_PROBLEM> list = null;
+        N_PROBLEM n_problem = null;
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            JSONObject jsonObject;
+            list = new ArrayList<N_PROBLEM>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                n_problem = new N_PROBLEM();
+                jsonObject = jsonArray.getJSONObject(i);
+                Field[] field = n_problem.getClass().getDeclaredFields();        //获取实体类的所有属性，返回Field数组
+                for (int j = 0; j < field.length; j++) {     //遍历所有属性
+                    field[j].setAccessible(true);
+                    String name = field[j].getName();    //获取属性的名字
+                    if (jsonObject.has(name) && jsonObject.getString(name) != null && !jsonObject.getString(name).equals("")) {
+                        try {
+                            // 调用getter方法获取属性值
+                            Method getOrSet = n_problem.getClass().getMethod("get" + name);
+                            Object value = getOrSet.invoke(n_problem);
+                            if (value == null) {
+                                //调用setter方法设属性值
+                                Class[] parameterTypes = new Class[1];
+                                parameterTypes[0] = field[j].getType();
+                                getOrSet = n_problem.getClass().getDeclaredMethod("set" + name, parameterTypes);
+                                getOrSet.invoke(n_problem, jsonObject.getString(name));
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+                list.add(n_problem);
             }
             return list;
         } catch (JSONException e) {

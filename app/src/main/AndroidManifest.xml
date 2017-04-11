@@ -57,15 +57,40 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.activity.MainActivity"
-            android:label="PermissionsActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.activity.AssetActivity"
-            android:label="PermissionsActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.activity.AssetDetailsActivity"
             android:label="PermissionsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.JhbqActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.SparepartActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.WorkorderActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.WorkOrderDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.WotaskActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.N_problemActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.WotaskDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.BjglActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.N_ProblemDetailsActivity"
             android:screenOrientation="portrait" />
 
     </application>

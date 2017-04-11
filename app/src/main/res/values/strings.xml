@@ -50,7 +50,7 @@
 
     <!--正在加载中-->
     <string name="loading">正在加载中...</string>
-    <string name="assetnum_text">设备编码:</string>
+    <string name="assetnum_text">设备编号:</string>
 
     <!-- hint -->
     <string name="hint_item_num_title">暂无编号</string>
@@ -87,4 +87,54 @@
     <string name="siteid_text">地点:</string>
     <string name="asset_detail_text">设备详情</string>
     <string name="beijian_text">备件</string>
+    <string name="jhbq_text">计划保全</string>
+    <string name="ddjgd_text">定期点检工单</string>
+    <string name="wtdgl_text">问题点管理</string>
+    <string name="itemnum_text">物料编码:</string>
+    <string name="itemnum_description_text">备件名称:</string>
+    <string name="n_location_text">安装部位:</string>
+    <string name="quantity_text">数量:</string>
+    <string name="wonum_text">工单:</string>
+    <string name="desc_text">描述:</string>
+    <string name="bz_text">班组:</string>
+    <string name="year_text">年度:</string>
+    <string name="month_text">月度:</string>
+    <string name="n_wpnum_text">周计划编号:</string>
+    <string name="changeby_text">变更人:</string>
+    <string name="num_text">编号:</string>
+
+    <!--定期点检工单明细行-->
+    <string name="wotask_text">点检明细行</string>
+    <string name="wosequence_text">序号:</string>
+    <string name="type_text">类别:</string>
+    <string name="sbmc_text">设备名称:</string>
+    <string name="item_text">项目:</string>
+    <string name="position_text">部位:</string>
+    <string name="method_text">点检方法:</string>
+    <string name="rule_text">基准:</string>
+    <string name="solve_text">异常处置:</string>
+    <string name="hours_text">点检工时:</string>
+    <string name="abc_text">重要度:</string>
+    <string name="cycle_text">周期(月):</string>
+    <string name="n_result_text">结果:</string>
+    <string name="n_responsor_text">实施责任人:</string>
+    <string name="n_members_text">实施人员:</string>
+    <string name="kccx_text">库存查询</string>
+    <string name="kcpd_text">库存盘点</string>
+    <string name="jsrk_text">接收入库</string>
+    <string name="wzff_text">物资发放</string>
+    <string name="tk_text">退库</string>
+    <string name="bjgl_text">备件管理</string>
+    <string name="n_problemnum_text">问题点编号:</string>
+    <string name="prodesc_text">问题点描述:</string>
+    <string name="gdms_text">工单描述:</string>
+    <string name="finddate_text">发现日期:</string>
+    <string name="responsor_text">担当:</string>
+    <string name="pl_text">生产线:</string>
+    <string name="reason_text">原因:</string>
+    <string name="dc_text">对策:</string>
+    <string name="finishdate_text">完成日期:</string>
+    <string name="jz_text">进展:</string>
+    <string name="confirmby_text">确认人:</string>
+    <string name="result_text">整改结果:</string>
 </resources>

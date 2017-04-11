@@ -7,6 +7,8 @@ import android.support.v7.app.ActionBarActivity;
 import com.dfrc.hxqh.dfrc_project.BaseApplication;
 import com.mpt.hxqh.dfrc_project.AppManager;
 
+import butterknife.ButterKnife;
+
 
 public abstract class BaseActivity extends ActionBarActivity {
     private ProgressDialog mProgressDialog;
@@ -26,6 +28,7 @@ public abstract class BaseActivity extends ActionBarActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        ButterKnife.unbind(this);
         //结束Activity&从堆栈中移除
         AppManager.getAppManager().finishActivity(this);
     }

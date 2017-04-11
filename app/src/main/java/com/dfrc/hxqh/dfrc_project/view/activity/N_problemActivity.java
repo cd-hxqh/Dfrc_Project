@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -25,52 +24,47 @@ import com.dfrc.hxqh.dfrc_project.api.HttpManager;
 import com.dfrc.hxqh.dfrc_project.api.HttpRequestHandler;
 import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.bean.Results;
-import com.dfrc.hxqh.dfrc_project.model.ASSET;
-import com.dfrc.hxqh.dfrc_project.view.adapter.AssetListAdapter;
+import com.dfrc.hxqh.dfrc_project.model.N_PROBLEM;
 import com.dfrc.hxqh.dfrc_project.view.adapter.BaseQuickAdapter;
+import com.dfrc.hxqh.dfrc_project.view.adapter.N_problemListAdapter;
 import com.dfrc.hxqh.dfrc_project.view.widght.SwipeRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by Administrator on 2017/2/15.
- * 设备管理
+ * 问题点管理
  */
 
-public class AssetActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
-    private static final String TAG = "AssetActivity";
+public class N_problemActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
+    private static final String TAG = "N_problemActivity";
     /**
      * 返回按钮
      */
-    private ImageView backImageView;
-    /**
-     * 标题
-     */
-    private TextView titleTextView;
+    @Bind(R.id.title_back_id)
+    ImageView backImageView; //返回按钮
+    @Bind(R.id.title_name)
+    TextView titleTextView; //标题
     LinearLayoutManager layoutManager;
 
+    @Bind(R.id.recyclerView_id)
+    RecyclerView recyclerView; //RecyclerView
+    @Bind(R.id.have_not_data_id)
+    LinearLayout nodatalayout; //暂无数据
 
-    /**
-     * RecyclerView*
-     */
-    public RecyclerView recyclerView;
-    /**
-     * 暂无数据*
-     */
-    private LinearLayout nodatalayout;
-    /**
-     * 界面刷新*
-     */
-    private SwipeRefreshLayout refresh_layout = null;
+    @Bind(R.id.swipe_container)
+    SwipeRefreshLayout refresh_layout;//界面刷新
     /**
      * 适配器*
      */
-    private AssetListAdapter assetListAdapter;
-    /**
-     * 编辑框*
-     */
-    private EditText search;
+    private N_problemListAdapter n_problemListAdapter;
+
+    @Bind(R.id.search_edit)
+    EditText search; //编辑框
     /**
      * 查询条件*
      */
@@ -78,35 +72,30 @@ public class AssetActivity extends BaseActivity implements SwipeRefreshLayout.On
     private int page = 1;
 
 
-    ArrayList<ASSET> items = new ArrayList<ASSET>();
+    ArrayList<N_PROBLEM> items = new ArrayList<N_PROBLEM>();
 
-    private int mark;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+        ButterKnife.bind(this);
         findViewById();
         initView();
     }
 
 
+
     @Override
     protected void findViewById() {
-        backImageView = (ImageView) findViewById(R.id.title_back_id);
-        titleTextView = (TextView) findViewById(R.id.title_name);
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView_id);
-        refresh_layout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
-        nodatalayout = (LinearLayout) findViewById(R.id.have_not_data_id);
-        search = (EditText) findViewById(R.id.search_edit);
-    }
 
+    }
 
 
     @Override
     protected void initView() {
         backImageView.setOnClickListener(backOnClickListener);
-        titleTextView.setText(R.string.sbcx_text);
+        titleTextView.setText(R.string.wtdgl_text);
         setSearchEdit();
 
         layoutManager = new LinearLayoutManager(this);
@@ -125,8 +114,6 @@ public class AssetActivity extends BaseActivity implements SwipeRefreshLayout.On
     }
 
 
-
-
     private View.OnClickListener backOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -139,7 +126,7 @@ public class AssetActivity extends BaseActivity implements SwipeRefreshLayout.On
     public void onStart() {
         super.onStart();
         refresh_layout.setRefreshing(true);
-        initAdapter(new ArrayList<ASSET>());
+        initAdapter(new ArrayList<N_PROBLEM>());
         items = new ArrayList<>();
         getData(searchText);
     }
@@ -171,12 +158,12 @@ public class AssetActivity extends BaseActivity implements SwipeRefreshLayout.On
                     // 先隐藏键盘
                     ((InputMethodManager) search.getContext().getSystemService(Context.INPUT_METHOD_SERVICE))
                             .hideSoftInputFromWindow(
-                                    AssetActivity.this.getCurrentFocus()
+                                    N_problemActivity.this.getCurrentFocus()
                                             .getWindowToken(),
                                     InputMethodManager.HIDE_NOT_ALWAYS);
                     searchText = search.getText().toString();
-                    assetListAdapter.removeAll(items);
-                    items = new ArrayList<ASSET>();
+                    n_problemListAdapter.removeAll(items);
+                    items = new ArrayList<N_PROBLEM>();
                     nodatalayout.setVisibility(View.GONE);
                     refresh_layout.setRefreshing(true);
                     page = 1;
@@ -195,15 +182,14 @@ public class AssetActivity extends BaseActivity implements SwipeRefreshLayout.On
     private void getData(String search) {
 
 
-        HttpManager.getDataPagingInfo(AssetActivity.this, HttpManager.getASSETURL(search, page, 20), new HttpRequestHandler<Results>() {
+        HttpManager.getDataPagingInfo(N_problemActivity.this, HttpManager.getN_PROBLEMURL(search, page, 20), new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {
-                Log.i(TAG, "data=" + results);
             }
 
             @Override
             public void onSuccess(Results results, int totalPages, int currentPage) {
-                ArrayList<ASSET> item = JsonUtils.parsingASSET(results.getResultlist());
+                ArrayList<N_PROBLEM> item = JsonUtils.parsingN_PROBLEM(results.getResultlist());
                 refresh_layout.setRefreshing(false);
                 refresh_layout.setLoading(false);
                 if (item == null || item.isEmpty()) {
@@ -212,7 +198,7 @@ public class AssetActivity extends BaseActivity implements SwipeRefreshLayout.On
 
                     if (item != null || item.size() != 0) {
                         if (page == 1) {
-                            items = new ArrayList<ASSET>();
+                            items = new ArrayList<N_PROBLEM>();
                             initAdapter(items);
                         }
                         for (int i = 0; i < item.size(); i++) {
@@ -239,27 +225,28 @@ public class AssetActivity extends BaseActivity implements SwipeRefreshLayout.On
     /**
      * 获取数据*
      */
-    private void initAdapter(final List<ASSET> list) {
-        assetListAdapter = new AssetListAdapter(AssetActivity.this, R.layout.list_item_asset, list);
-        recyclerView.setAdapter(assetListAdapter);
-        assetListAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
+    private void initAdapter(final List<N_PROBLEM> list) {
+        n_problemListAdapter = new N_problemListAdapter(N_problemActivity.this, R.layout.list_item_asset, list);
+        recyclerView.setAdapter(n_problemListAdapter);
+        n_problemListAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Intent intent = getIntent();
-                intent.setClass(AssetActivity.this, AssetDetailsActivity.class);
+                intent.setClass(N_problemActivity.this, N_ProblemDetailsActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("asset", items.get(position));
+                bundle.putSerializable("n_problem", items.get(position));
                 intent.putExtras(bundle);
                 startActivityForResult(intent, 0);
             }
         });
+
     }
 
     /**
      * 添加数据*
      */
-    private void addData(final List<ASSET> list) {
-        assetListAdapter.addData(list);
+    private void addData(final List<N_PROBLEM> list) {
+        n_problemListAdapter.addData(list);
     }
 
 }

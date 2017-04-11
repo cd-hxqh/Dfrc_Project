@@ -1,5 +1,6 @@
 package com.dfrc.hxqh.dfrc_project.view.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -7,11 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.dfrc.hxqh.dfrc_project.R;
 import com.dfrc.hxqh.dfrc_project.model.ASSET;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 
 /**
@@ -20,56 +25,80 @@ import com.dfrc.hxqh.dfrc_project.model.ASSET;
 public class AssetDetailsActivity extends BaseActivity {
     private static String TAG = "AssetDetailsActivity";
 
-    /**
-     * 返回按钮
-     */
-    private ImageView backImageView;
-    /**
-     * 标题
-     */
-    private TextView titleTextView;
 
-    /**
-     * 菜单
-     **/
-    private ImageView menuImageView;
-    private PopupWindow popupWindow;
+    @Bind(R.id.title_back_id)
+    ImageView backImageView; //返回按钮
 
-    private TextView assetnumTextView; //设备编码
-    private TextView descriptionTextView; //设备描述
-    private TextView locationTextView; //位置编码
-    private TextView locdescTextView; //位置描述
-    private TextView n_mantypeTextView; //管理类型
-    private TextView n_specialtypeTextView; //设备类型
-    private TextView n_importanceTextView; //重要程度
-    private TextView n_crewidTextView; //使用班组
-    private TextView n_userdepartmentTextView; //使用部门
-    private TextView n_managementTextView; //管理部门
-    private TextView n_assetnumTextView; //资产编码
-    private TextView n_brandTextView; //品牌
-    private TextView n_modelTextView; //规格型号
-    private TextView n_sortTextView; //设备分类
-    private TextView n_releasedateTextView; //出厂日期
-    private TextView n_makernameTextView; //制造厂商
-    private TextView n_providernameTextView; //供应商
-    private TextView n_minitabdateTextView; //启用日期
-    private TextView n_recordateTextView; //等记日期
-    private TextView n_cardidTextView; //使用证号
-    private TextView n_bonuscodeTextView; //注册代码
-    private CheckBox n_dcequipmentCheckBox; //数控设备
-    private CheckBox n_pcequipmentCheckBox; //精密设备
-    private CheckBox n_ipequipmentCheckBox; //进口设备
-    private CheckBox n_virtualCheckBox; //虚拟设备
-    private TextView statusTextView; //状态
-    private TextView siteidTextView; //地点
+    @Bind(R.id.title_name)
+    TextView titleTextView; //标题
+    @Bind(R.id.title_add)
+    ImageView menuImageView; //菜单
+    PopupWindow popupWindow;
+    @Bind(R.id.assetnum_text_id)
+    TextView assetnumTextView; //设备编码
+    @Bind(R.id.description_text_id)
+    TextView descriptionTextView; //设备描述
+    @Bind(R.id.location_text_id)
+    TextView locationTextView; //位置编码
+    @Bind(R.id.loc_desc_text_id)
+    TextView locdescTextView; //位置描述
+    @Bind(R.id.n_mantype_text_id)
+    TextView n_mantypeTextView; //管理类型
+    @Bind(R.id.n_specialtype_text_id)
+    TextView n_specialtypeTextView; //设备类型
+    @Bind(R.id.n_importance_text_id)
+    TextView n_importanceTextView; //重要程度
+    @Bind(R.id.n_crewid_text_id)
+    TextView n_crewidTextView; //使用班组
+    @Bind(R.id.n_userdepartment_text_id)
+    TextView n_userdepartmentTextView; //使用部门
+    @Bind(R.id.n_management_text_id)
+    TextView n_managementTextView; //管理部门
+    @Bind(R.id.n_assetnum_text_id)
+    TextView n_assetnumTextView; //资产编码
+    @Bind(R.id.n_brand_text_id)
+    TextView n_brandTextView; //品牌
+    @Bind(R.id.n_model_text_id)
+    TextView n_modelTextView; //规格型号
+    @Bind(R.id.n_sort_text_id)
+    TextView n_sortTextView; //设备分类
+    @Bind(R.id.n_releasedate_text_id)
+    TextView n_releasedateTextView; //出厂日期
+    @Bind(R.id.n_makername_text_id)
+    TextView n_makernameTextView; //制造厂商
+    @Bind(R.id.n_providername_text_id)
+    TextView n_providernameTextView; //供应商
+    @Bind(R.id.n_minitabdate_text_id)
+    TextView n_minitabdateTextView; //启用日期
+    @Bind(R.id.n_recordate_text_id)
+    TextView n_recordateTextView; //等记日期
+    @Bind(R.id.n_cardid_text_id)
+    TextView n_cardidTextView; //使用证号
+    @Bind(R.id.n_bonuscode_text_id)
+    TextView n_bonuscodeTextView; //注册代码
+    @Bind(R.id.n_dcequipment_text_id)
+    CheckBox n_dcequipmentCheckBox; //数控设备
+    @Bind(R.id.n_pcequipment_text_id)
+    CheckBox n_pcequipmentCheckBox; //精密设备
+    @Bind(R.id.n_ipequipment_text_id)
+    CheckBox n_ipequipmentCheckBox; //进口设备
+    @Bind(R.id.n_virtual_text_id)
+    CheckBox n_virtualCheckBox; //虚拟设备
+    @Bind(R.id.status_text_id)
+    TextView statusTextView; //状态
+    @Bind(R.id.siteid_text_id)
+    TextView siteidTextView; //地点
 
     private ASSET asset;
+
+    LinearLayout bejjianLinearLayout; //备件
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_asset_details);
+        ButterKnife.bind(this);
         geiIntentData();
         findViewById();
         initView();
@@ -82,37 +111,6 @@ public class AssetDetailsActivity extends BaseActivity {
 
     @Override
     protected void findViewById() {
-        backImageView = (ImageView) findViewById(R.id.title_back_id);
-        titleTextView = (TextView) findViewById(R.id.title_name);
-        menuImageView = (ImageView) findViewById(R.id.title_add);
-
-        assetnumTextView = (TextView) findViewById(R.id.assetnum_text_id);
-        descriptionTextView = (TextView) findViewById(R.id.description_text_id);
-        locationTextView = (TextView) findViewById(R.id.location_text_id);
-        locdescTextView = (TextView) findViewById(R.id.loc_desc_text_id);
-        n_mantypeTextView = (TextView) findViewById(R.id.n_mantype_text_id);
-        n_specialtypeTextView = (TextView) findViewById(R.id.n_specialtype_text_id);
-        n_importanceTextView = (TextView) findViewById(R.id.n_importance_text_id);
-        n_crewidTextView = (TextView) findViewById(R.id.n_crewid_text_id);
-        n_userdepartmentTextView = (TextView) findViewById(R.id.n_userdepartment_text_id);
-        n_managementTextView = (TextView) findViewById(R.id.n_management_text_id);
-        n_assetnumTextView = (TextView) findViewById(R.id.n_assetnum_text_id);
-        n_brandTextView = (TextView) findViewById(R.id.n_brand_text_id);
-        n_modelTextView = (TextView) findViewById(R.id.n_model_text_id);
-        n_sortTextView = (TextView) findViewById(R.id.n_sort_text_id);
-        n_releasedateTextView = (TextView) findViewById(R.id.n_releasedate_text_id);
-        n_makernameTextView = (TextView) findViewById(R.id.n_makername_text_id);
-        n_providernameTextView = (TextView) findViewById(R.id.n_providername_text_id);
-        n_minitabdateTextView = (TextView) findViewById(R.id.n_minitabdate_text_id);
-        n_recordateTextView = (TextView) findViewById(R.id.n_recordate_text_id);
-        n_cardidTextView = (TextView) findViewById(R.id.n_cardid_text_id);
-        n_bonuscodeTextView = (TextView) findViewById(R.id.n_bonuscode_text_id);
-        n_dcequipmentCheckBox = (CheckBox) findViewById(R.id.n_dcequipment_text_id);
-        n_pcequipmentCheckBox = (CheckBox) findViewById(R.id.n_pcequipment_text_id);
-        n_ipequipmentCheckBox = (CheckBox) findViewById(R.id.n_ipequipment_text_id);
-        n_virtualCheckBox = (CheckBox) findViewById(R.id.n_virtual_text_id);
-        statusTextView = (TextView) findViewById(R.id.status_text_id);
-        siteidTextView = (TextView) findViewById(R.id.siteid_text_id);
 
 
     }
@@ -182,13 +180,12 @@ public class AssetDetailsActivity extends BaseActivity {
         }
     };
 
-    private View.OnClickListener menuImageViewOnClickListener=new View.OnClickListener() {
+    private View.OnClickListener menuImageViewOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             showPopupWindow(menuImageView);
         }
     };
-
 
 
     /**
@@ -209,8 +206,6 @@ public class AssetDetailsActivity extends BaseActivity {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-
-
                 return false;
             }
         });
@@ -222,23 +217,21 @@ public class AssetDetailsActivity extends BaseActivity {
 
         // 设置好参数之后再show
         popupWindow.showAsDropDown(view);
-
-//        invbalancesLayout = (LinearLayout) contentView.findViewById(R.id.invbalances_id);
-//        invbalancesLayout.setOnClickListener(invbalancesOnClickListener);
+        bejjianLinearLayout = (LinearLayout) contentView.findViewById(R.id.beijian_linearlayout_id);
+        bejjianLinearLayout.setOnClickListener(beijianOnClickListener);
 
     }
 
-//    private View.OnClickListener invbalancesOnClickListener = new View.OnClickListener() {
-//        @Override
-//        public void onClick(View view) {
-//            Intent intent = new Intent(InventoryDetailsActivity.this, Inventory_InvbalancesActivity.class);
-//            Bundle bundle = new Bundle();
-//            bundle.putSerializable("inventory", inventory);
-////            bundle.putSerializable("woactivityList", woactivityList);
-//            intent.putExtras(bundle);
-//            startActivityForResult(intent, 1000);
-//            popupWindow.dismiss();
-//        }
-//    };
+    private View.OnClickListener beijianOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(AssetDetailsActivity.this, SparepartActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("assetnum", asset.getASSETNUM());
+            intent.putExtras(bundle);
+            startActivityForResult(intent, 1000);
+            popupWindow.dismiss();
+        }
+    };
 
 }

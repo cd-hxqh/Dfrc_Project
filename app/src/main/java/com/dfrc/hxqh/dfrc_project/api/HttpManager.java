@@ -38,6 +38,61 @@ public class HttpManager {
     }
 
 
+    /**
+     * 设置根据设备编号获取备件
+     */
+    public static String getSPAREPARTURL(String vaule,String assetnum, int curpage, int showcount) {
+        if (vaule.equals("")){
+            return "{'appid':'" + Constants.ASSET_APPID + "','objectname':'" + Constants.SPAREPART_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'ASSETNUM':'="+assetnum+"'}}";
+
+        }
+        else {
+            return "{'appid':'" + Constants.ASSET_APPID + "','objectname':'" + Constants.SPAREPART_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'ASSETNUM':'="+assetnum+"'},'sinorsearch':{'ITEMNUM':'" + vaule + "'}}";
+        }
+    }
+
+
+    /**
+     * 设置定期点检工单
+     */
+    public static String getWORKORDERURL(String vaule, int curpage, int showcount) {
+        if (vaule.equals("")){
+            return "{'appid':'" + Constants.N_MATWO_APPID + "','objectname':'" + Constants.WORKORDER_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WONUM DESC','condition':{'WORKTYPE':'=MAINT','PARENT':''}}";
+
+        }
+        else {
+            return "{'appid':'" + Constants.N_MATWO_APPID + "','objectname':'" + Constants.WORKORDER_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WONUM DESC','condition':{'WORKTYPE':'=MAINT','PARENT':''},'sinorsearch':{'WONUM':'" + vaule + "','DESCRIPTION':'" + vaule + "'}}";
+        }
+    }
+
+
+
+    /**
+     * 设置定期点检工单明细行
+     */
+    public static String getWOTASKURL(String vaule,String wonum, int curpage, int showcount) {
+        if (vaule.equals("")){
+            return "{'appid':'" + Constants.N_MATWO_APPID + "','objectname':'" + Constants.WOTASK_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WOSEQUENCE DESC','condition':{'WONUM':'="+wonum+"'}}";
+
+        }
+        else {
+            return "{'appid':'" + Constants.N_MATWO_APPID + "','objectname':'" + Constants.WOTASK_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WOSEQUENCE DESC','condition':{'WONUM':'="+wonum+"'},'sinorsearch':{'WOSEQUENCE':'" + vaule + "','ASSETNUM':'" + vaule + "'}}";
+        }
+    }
+
+    /**
+     * 设置问题点管理
+     */
+    public static String getN_PROBLEMURL(String vaule, int curpage, int showcount) {
+        if (vaule.equals("")){
+            return "{'appid':'" + Constants.N_PROB2_APPID + "','objectname':'" + Constants.N_PROBLEM_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'N_PROBLEMNUM DESC'}";
+
+        }
+        else {
+            return "{'appid':'" + Constants.N_PROB2_APPID + "','objectname':'" + Constants.N_PROBLEM_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'N_PROBLEMNUM DESC','sinorsearch':{'N_PROBLEMNUM':'" + vaule + "','PRODESC':'" + vaule + "'}}";
+        }
+    }
+
 
     /**
      * 使用用户名密码登录

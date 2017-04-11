@@ -73,6 +73,8 @@ public class Constants {
 
     //设备的表名
     public static final String ASSET_NAME = "ASSET";
+    //备件的表名
+    public static final String SPAREPART_NAME = "SPAREPART";
 
     //库存appid
     public static final String INVENTOR_APPID = "INVENTOR" ;
@@ -97,6 +99,8 @@ public class Constants {
 
     //定期点检工单的表名
     public static final String WORKORDER_NAME = "WORKORDER";
+    //定期点检工单明细行的表名
+    public static final String WOTASK_NAME = "WOTASK";
 
     //采购接收appid
     public static final String RECEIPTS_APPID = "RECEIPTS" ;

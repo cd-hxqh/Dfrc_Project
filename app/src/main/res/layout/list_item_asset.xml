@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/workorder_sb_title"
                 android:layout_marginTop="5dp"
-                android:text="描        述:"
+                android:text="@string/desc_text"
                 android:textColor="@color/black"
                 android:textSize="@dimen/dimens_16sp" />
 
@@ -81,7 +81,7 @@
                 android:layout_marginTop="5dp">
 
                 <TextView
-                    android:id="@+id/date_image"
+                    android:id="@+id/status_title_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/status_text"
@@ -94,7 +94,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="5dp"
-                    android:layout_toRightOf="@+id/date_image"
+                    android:layout_toRightOf="@+id/status_title_id"
                     android:ellipsize="end"
                     android:ems="14"
                     android:hint="@string/have_not_data"

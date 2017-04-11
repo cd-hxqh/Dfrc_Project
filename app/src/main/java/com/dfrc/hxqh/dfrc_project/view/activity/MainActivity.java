@@ -43,7 +43,7 @@ public class MainActivity extends BaseActivity {
     private List<View> viewPagerList;//GridView作为一个View对象添加到ViewPager集合中
     private int currentPage;//当前页
     private ArrayList<String> list = new ArrayList<>();//appid集合
-    private String[] proName = {"设备查询", "计划保全", "设备管理", "设置"};
+    private String[] proName = {"设备查询", "计划保全", "备件管理", "设置"};
 
 
     @Override
@@ -67,6 +67,7 @@ public class MainActivity extends BaseActivity {
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         group = (LinearLayout) findViewById(R.id.points);
     }
+
 
     @Override
     protected void initView() {
@@ -107,11 +108,15 @@ public class MainActivity extends BaseActivity {
                         switch (prodctBean.getAppid()) {
                             case Constants.ASSET_APPID: // 设备查询
                                 intent = new Intent(MainActivity.this, AssetActivity.class);
-                                startActivity(intent);
+                                startActivityForResult(intent, 0);
                                 break;
                             case Constants.N_PROB2_APPID: //计划保全
+                                intent = new Intent(MainActivity.this, JhbqActivity.class);
+                                startActivityForResult(intent, 0);
                                 break;
                             case Constants.RECEIPTS_APPID: //备件管理
+                                intent = new Intent(MainActivity.this, BjglActivity.class);
+                                startActivityForResult(intent, 0);
                                 break;
                             case "设置": //设置
                                 break;

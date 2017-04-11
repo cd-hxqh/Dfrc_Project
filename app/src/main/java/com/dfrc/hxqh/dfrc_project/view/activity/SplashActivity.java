@@ -39,10 +39,12 @@ public class SplashActivity extends BaseActivity {
 
     }
 
+
     @Override
     protected void initView() {
 
     }
+
 
 
     class splashhandler implements Runnable {

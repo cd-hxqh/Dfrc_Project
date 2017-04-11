@@ -27,18 +27,23 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * d登陆界面
  **/
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = "LoginActivity";
-    private EditText mUsername;
-    private EditText mPassword;
-
-    private Button loginBtn;
-
-    private CheckBox checkBox; //记住密码
+    @Bind(R.id.login_username_edit)
+     EditText mUsername;
+    @Bind(R.id.login_password_edit)
+     EditText mPassword;
+    @Bind(R.id.btn_login)
+     Button loginBtn;
+    @Bind(R.id.checkBox)
+     CheckBox checkBox; //记住密码
 
 
     private boolean isRemember; //是否记住密码
@@ -56,7 +61,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        ButterKnife.bind(this);
         Bugly.init(getApplicationContext(), "2d01706f1a", true);
 
         imei = ((TelephonyManager) getSystemService(TELEPHONY_SERVICE))
@@ -75,10 +80,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     @Override
     protected void findViewById() {
 
-        mUsername = (EditText) findViewById(R.id.login_username_edit);
-        mPassword = (EditText) findViewById(R.id.login_password_edit);
-
-        loginBtn = (Button) findViewById(R.id.btn_login);
+//        mUsername = (EditText) findViewById(R.id.login_username_edit);
+//        mPassword = (EditText) findViewById(R.id.login_password_edit);
+//
+//        loginBtn = (Button) findViewById(R.id.btn_login);
 
         boolean isChecked = AccountUtils.getIsChecked(LoginActivity.this);
         if (isChecked) {
@@ -87,7 +92,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         }
 
 
-        checkBox = (CheckBox) findViewById(R.id.checkBox);
+//        checkBox = (CheckBox) findViewById(R.id.checkBox);
 
     }
 
