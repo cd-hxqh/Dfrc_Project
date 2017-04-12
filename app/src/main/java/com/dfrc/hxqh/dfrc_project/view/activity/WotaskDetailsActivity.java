@@ -15,7 +15,6 @@ import butterknife.OnClick;
  * 设备详情
  */
 public class WotaskDetailsActivity extends BaseActivity {
-    private static String TAG = "AssetDetailsActivity";
 
 
     @OnClick(R.id.title_back_id)

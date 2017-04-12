@@ -17,6 +17,7 @@ import com.dfrc.hxqh.dfrc_project.model.ASSET;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 /**
@@ -118,11 +119,9 @@ public class AssetDetailsActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        backImageView.setOnClickListener(backImageViewOnClickListener);
         titleTextView.setText(R.string.asset_detail_text);
         menuImageView.setVisibility(View.VISIBLE);
         menuImageView.setImageResource(R.mipmap.ic_more);
-        menuImageView.setOnClickListener(menuImageViewOnClickListener);
         if (asset != null) {
             assetnumTextView.setText(asset.getASSETNUM());
             descriptionTextView.setText(asset.getDESCRIPTION());
@@ -172,20 +171,17 @@ public class AssetDetailsActivity extends BaseActivity {
 
     }
 
+    //返回事件
+    @OnClick(R.id.title_back_id)
+    void setBackImageViewOnClickListener() {
+        finish();
+    }
 
-    private View.OnClickListener backImageViewOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            finish();
-        }
-    };
-
-    private View.OnClickListener menuImageViewOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            showPopupWindow(menuImageView);
-        }
-    };
+    //菜单事件
+    @OnClick(R.id.title_add)
+    void setMenuImageViewOnClickListener() {
+        showPopupWindow(menuImageView);
+    }
 
 
     /**

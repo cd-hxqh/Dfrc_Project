@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -33,6 +32,10 @@ import com.dfrc.hxqh.dfrc_project.view.widght.SwipeRefreshLayout;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 /**
  * Created by Administrator on 2017/2/15.
  * 设备管理
@@ -40,37 +43,23 @@ import java.util.List;
 
 public class AssetActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
     private static final String TAG = "AssetActivity";
-    /**
-     * 返回按钮
-     */
-    private ImageView backImageView;
-    /**
-     * 标题
-     */
-    private TextView titleTextView;
+    @Bind(R.id.title_name) //标题
+            TextView titleTextView;
     LinearLayoutManager layoutManager;
 
+    @Bind(R.id.recyclerView_id)//RecyclerView
+            RecyclerView recyclerView;
+    @Bind(R.id.have_not_data_id)
+    LinearLayout nodatalayout; //暂无数据
+    @Bind(R.id.swipe_container)
+    SwipeRefreshLayout refresh_layout;//界面刷新
 
-    /**
-     * RecyclerView*
-     */
-    public RecyclerView recyclerView;
-    /**
-     * 暂无数据*
-     */
-    private LinearLayout nodatalayout;
-    /**
-     * 界面刷新*
-     */
-    private SwipeRefreshLayout refresh_layout = null;
+    @Bind(R.id.search_edit)
+    EditText search;//编辑框
     /**
      * 适配器*
      */
     private AssetListAdapter assetListAdapter;
-    /**
-     * 编辑框*
-     */
-    private EditText search;
     /**
      * 查询条件*
      */
@@ -86,6 +75,7 @@ public class AssetActivity extends BaseActivity implements SwipeRefreshLayout.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+        ButterKnife.bind(this);
         findViewById();
         initView();
     }
@@ -93,19 +83,11 @@ public class AssetActivity extends BaseActivity implements SwipeRefreshLayout.On
 
     @Override
     protected void findViewById() {
-        backImageView = (ImageView) findViewById(R.id.title_back_id);
-        titleTextView = (TextView) findViewById(R.id.title_name);
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView_id);
-        refresh_layout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
-        nodatalayout = (LinearLayout) findViewById(R.id.have_not_data_id);
-        search = (EditText) findViewById(R.id.search_edit);
     }
-
 
 
     @Override
     protected void initView() {
-        backImageView.setOnClickListener(backOnClickListener);
         titleTextView.setText(R.string.sbcx_text);
         setSearchEdit();
 
@@ -125,14 +107,11 @@ public class AssetActivity extends BaseActivity implements SwipeRefreshLayout.On
     }
 
 
-
-
-    private View.OnClickListener backOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            finish();
-        }
-    };
+    //返回事件
+    @OnClick(R.id.title_back_id)
+    void setBackOnClickListener() {
+        finish();
+    }
 
 
     @Override

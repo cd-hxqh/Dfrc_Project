@@ -4,10 +4,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
-import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import com.dfrc.hxqh.dfrc_project.R;
@@ -29,21 +25,19 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
+import butterknife.OnClick;
 
 /**
  * d登陆界面
  **/
 
-public class LoginActivity extends BaseActivity implements View.OnClickListener {
+public class LoginActivity extends BaseActivity{
     private static final String TAG = "LoginActivity";
     @Bind(R.id.login_username_edit)
-     EditText mUsername;
+    EditText mUsername;
     @Bind(R.id.login_password_edit)
-     EditText mPassword;
-    @Bind(R.id.btn_login)
-     Button loginBtn;
-    @Bind(R.id.checkBox)
-     CheckBox checkBox; //记住密码
+    EditText mPassword;
 
 
     private boolean isRemember; //是否记住密码
@@ -72,49 +66,29 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         }
         findViewById();
         initView();
-        setEvent();
 
 
     }
 
     @Override
     protected void findViewById() {
-
-//        mUsername = (EditText) findViewById(R.id.login_username_edit);
-//        mPassword = (EditText) findViewById(R.id.login_password_edit);
-//
-//        loginBtn = (Button) findViewById(R.id.btn_login);
-
         boolean isChecked = AccountUtils.getIsChecked(LoginActivity.this);
         if (isChecked) {
             mUsername.setText(AccountUtils.getUserName(LoginActivity.this));
             mPassword.setText(AccountUtils.getUserPassword(LoginActivity.this));
         }
 
-
-//        checkBox = (CheckBox) findViewById(R.id.checkBox);
-
     }
 
-    /**
-     * 设置事件监听*
-     */
-    private void setEvent() {
-        checkBox.setOnCheckedChangeListener(cheBoxOnCheckedChangListener);
+    //记住密码
+    @OnCheckedChanged(R.id.checkBox)
+    void onChecked(boolean isChecked) {
+        isRemember = isChecked;
     }
-
-
-    private CompoundButton.OnCheckedChangeListener cheBoxOnCheckedChangListener = new CompoundButton.OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            isRemember = isChecked;
-        }
-    };
 
 
     @Override
     protected void initView() {
-        loginBtn.setOnClickListener(this);
 
         if (AccountUtils.getIpAddress(LoginActivity.this) == null
                 || AccountUtils.getIpAddress(LoginActivity.this).equals("")) {//初始化地址
@@ -135,24 +109,20 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         overridePendingTransition(R.anim.push_up_in, R.anim.push_up_out);
     }
 
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_login:
-                if (mUsername.getText().length() == 0) {
-                    mUsername.setError(getString(R.string.login_error_empty_user));
-                    mUsername.requestFocus();
-                } else if (mPassword.getText().length() == 0) {
-                    mPassword.setError(getString(R.string.login_error_empty_passwd));
-                    mPassword.requestFocus();
-                } else {
-                    login();
-                }
-                break;
-
+    //登陆按钮
+    @OnClick(R.id.btn_login) void setOnClick(){
+        if (mUsername.getText().length() == 0) {
+            mUsername.setError(getString(R.string.login_error_empty_user));
+            mUsername.requestFocus();
+        } else if (mPassword.getText().length() == 0) {
+            mPassword.setError(getString(R.string.login_error_empty_passwd));
+            mPassword.requestFocus();
+        } else {
+            login();
         }
     }
+
+
 
 
     /**

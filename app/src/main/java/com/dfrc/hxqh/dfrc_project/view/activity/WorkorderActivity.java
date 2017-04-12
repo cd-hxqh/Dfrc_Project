@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -34,6 +33,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Administrator on 2017/2/15.
@@ -42,11 +42,7 @@ import butterknife.ButterKnife;
 
 public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
     private static final String TAG = "WorkorderActivity";
-    /**
-     * 返回按钮
-     */
-    @Bind(R.id.title_back_id)
-    ImageView backImageView; //返回按钮
+
     @Bind(R.id.title_name)
     TextView titleTextView; //标题
     LinearLayoutManager layoutManager;
@@ -94,7 +90,6 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
 
     @Override
     protected void initView() {
-        backImageView.setOnClickListener(backOnClickListener);
         titleTextView.setText(R.string.ddjgd_text);
         setSearchEdit();
 
@@ -113,13 +108,11 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
         refresh_layout.setOnLoadListener(this);
     }
 
-
-    private View.OnClickListener backOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            finish();
-        }
-    };
+    //返回事件
+    @OnClick(R.id.title_back_id)
+    void setBackImageViewOnClickListener() {
+        finish();
+    }
 
 
     @Override

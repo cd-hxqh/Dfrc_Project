@@ -137,4 +137,11 @@
     <string name="jz_text">进展:</string>
     <string name="confirmby_text">确认人:</string>
     <string name="result_text">整改结果:</string>
+    <string name="cgjs_text">采购接收</string>
+    <string name="zklld_text">总库领料单</string>
+    <string name="zkdbd_text">总库调拨单</string>
+    <string name="fklld_text">分库领料单</string>
+    <string name="bjjy_text">备件借用</string>
+    <string name="bjgh_text">备件归还</string>
+    <string name="kwzy_text">库未转移</string>
 </resources>

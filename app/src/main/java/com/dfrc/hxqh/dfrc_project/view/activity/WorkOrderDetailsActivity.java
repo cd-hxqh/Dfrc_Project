@@ -16,17 +16,13 @@ import com.dfrc.hxqh.dfrc_project.model.WORKORDER;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 /**
  * 工单详情
  */
 public class WorkOrderDetailsActivity extends BaseActivity {
-    private static String TAG = "WorkOrderDetailsActivity";
-
-
-    @Bind(R.id.title_back_id)
-    ImageView backImageView; //返回按钮
 
     @Bind(R.id.title_name)
     TextView titleTextView; //标题
@@ -79,11 +75,9 @@ public class WorkOrderDetailsActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        backImageView.setOnClickListener(backImageViewOnClickListener);
         titleTextView.setText(R.string.ddjgd_text);
         menuImageView.setVisibility(View.VISIBLE);
         menuImageView.setImageResource(R.mipmap.ic_more);
-        menuImageView.setOnClickListener(menuImageViewOnClickListener);
         if (workorder != null) {
             wonumTextView.setText(workorder.getWONUM());
             descriptionTextView.setText(workorder.getDESCRIPTION());
@@ -98,20 +92,17 @@ public class WorkOrderDetailsActivity extends BaseActivity {
 
     }
 
+    //返回事件
+    @OnClick(R.id.title_back_id)
+    void setBackImageViewOnClickListener() {
+        finish();
+    }
+    //菜单事件
+    @OnClick(R.id.title_add)
+    void setMenuImageViewOnClickListener() {
+        showPopupWindow(menuImageView);
+    }
 
-    private View.OnClickListener backImageViewOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            finish();
-        }
-    };
-
-    private View.OnClickListener menuImageViewOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            showPopupWindow(menuImageView);
-        }
-    };
 
 
     /**

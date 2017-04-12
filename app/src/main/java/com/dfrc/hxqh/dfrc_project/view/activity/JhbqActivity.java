@@ -17,16 +17,11 @@ import butterknife.OnClick;
  */
 
 public class JhbqActivity extends BaseActivity {
-    private static final String TAG = "JhbqActivity";
 
     @Bind(R.id.title_back_id)
     ImageView backImageView; //返回按钮
     @Bind(R.id.title_name)
     TextView titleTextView; //标题
-
-//    @Bind(R.id.workorder_text_id)
-//    TextView workorderTextView; //定期点检工单
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

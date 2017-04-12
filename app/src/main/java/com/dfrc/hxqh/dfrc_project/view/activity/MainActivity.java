@@ -23,6 +23,9 @@ import com.mpt.hxqh.dfrc_project.AppManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * MainActivity
  */
@@ -31,11 +34,12 @@ public class MainActivity extends BaseActivity {
     public static final int ROTASSETNUM_CODE = 10001;  //移动设备查询
 
     public static final int ITEMNUM_CODE = 10002;  //工具查询查询
-
-    private ImageView memberImg;
-    private TextView memberText;
-    private ViewPager viewPager;
-    private LinearLayout group;//圆点指示器
+    @Bind(R.id.txt_member)
+    TextView memberText;
+    @Bind(R.id.viewpager)
+    ViewPager viewPager;
+    @Bind(R.id.points)
+    LinearLayout group;//圆点指示器
     private ImageView[] ivPoints;//小圆点图片的集合
     private int totalPage; //总的页数
     private int mPageSize = 8; //每页显示的最大的数量
@@ -50,7 +54,7 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        ButterKnife.bind(this);
         getIntentData();
         findViewById();
         initView();
@@ -62,10 +66,6 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void findViewById() {
-        memberImg = (ImageView) findViewById(R.id.img_member);
-        memberText = (TextView) findViewById(R.id.txt_member);
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        group = (LinearLayout) findViewById(R.id.points);
     }
 
 
