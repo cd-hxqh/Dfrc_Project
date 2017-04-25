@@ -109,6 +109,10 @@ public class SparepartActivity extends BaseActivity implements SwipeRefreshLayou
 
         refresh_layout.setOnRefreshListener(this);
         refresh_layout.setOnLoadListener(this);
+        refresh_layout.setRefreshing(true);
+        initAdapter(new ArrayList<SPAREPART>());
+        items = new ArrayList<>();
+        getData(searchText);
     }
 
     //返回事件
@@ -118,14 +122,6 @@ public class SparepartActivity extends BaseActivity implements SwipeRefreshLayou
     }
 
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        refresh_layout.setRefreshing(true);
-        initAdapter(new ArrayList<SPAREPART>());
-        items = new ArrayList<>();
-        getData(searchText);
-    }
 
     @Override
     public void onLoad() {

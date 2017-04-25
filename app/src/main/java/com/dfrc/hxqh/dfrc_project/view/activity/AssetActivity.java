@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -25,6 +26,7 @@ import com.dfrc.hxqh.dfrc_project.api.HttpRequestHandler;
 import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.bean.Results;
 import com.dfrc.hxqh.dfrc_project.model.ASSET;
+import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
 import com.dfrc.hxqh.dfrc_project.view.adapter.AssetListAdapter;
 import com.dfrc.hxqh.dfrc_project.view.adapter.BaseQuickAdapter;
 import com.dfrc.hxqh.dfrc_project.view.widght.SwipeRefreshLayout;
@@ -43,8 +45,11 @@ import butterknife.OnClick;
 
 public class AssetActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
     private static final String TAG = "AssetActivity";
+    public static final int ASSET_CODE = 1001;
     @Bind(R.id.title_name) //标题
             TextView titleTextView;
+    @Bind(R.id.sbmittext_id)
+    ImageButton codeImageButton;
     LinearLayoutManager layoutManager;
 
     @Bind(R.id.recyclerView_id)//RecyclerView
@@ -70,15 +75,22 @@ public class AssetActivity extends BaseActivity implements SwipeRefreshLayout.On
     ArrayList<ASSET> items = new ArrayList<ASSET>();
 
     private int mark;
+    private String assetNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
         ButterKnife.bind(this);
+        initDate();
         findViewById();
         initView();
     }
+    private void initDate() {
+        assetNum = getIntent().getExtras().getString("assetNum");
+
+    }
+
 
 
     @Override
@@ -90,6 +102,8 @@ public class AssetActivity extends BaseActivity implements SwipeRefreshLayout.On
     protected void initView() {
         titleTextView.setText(R.string.sbcx_text);
         setSearchEdit();
+        codeImageButton.setImageResource(R.drawable.ic_code);
+        codeImageButton.setVisibility(View.VISIBLE);
 
         layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -104,6 +118,11 @@ public class AssetActivity extends BaseActivity implements SwipeRefreshLayout.On
 
         refresh_layout.setOnRefreshListener(this);
         refresh_layout.setOnLoadListener(this);
+
+        refresh_layout.setRefreshing(true);
+        initAdapter(new ArrayList<ASSET>());
+        items = new ArrayList<>();
+        getData(searchText);
     }
 
 
@@ -113,15 +132,15 @@ public class AssetActivity extends BaseActivity implements SwipeRefreshLayout.On
         finish();
     }
 
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        refresh_layout.setRefreshing(true);
-        initAdapter(new ArrayList<ASSET>());
-        items = new ArrayList<>();
-        getData(searchText);
+    //二维码扫描
+    @OnClick(R.id.sbmittext_id)
+    void setCodeImageButtonOnClickListener() {
+        Intent intent = getIntent();
+        intent.setClass(AssetActivity.this, MipcaActivityCapture.class);
+        intent.putExtra("mark", ASSET_CODE);
+        startActivityForResult(intent, 0);
     }
+
 
     @Override
     public void onLoad() {
@@ -172,9 +191,14 @@ public class AssetActivity extends BaseActivity implements SwipeRefreshLayout.On
      * 获取数据*
      */
     private void getData(String search) {
+        String url = null;
+        if (assetNum.equals("")) {
+            url = HttpManager.getASSETURL(search, AccountUtils.getloginSite(AssetActivity.this), page, 20);
+        } else {
+            url = HttpManager.getASSETByNuMURL(assetNum, search, page, 20);
+        }
 
-
-        HttpManager.getDataPagingInfo(AssetActivity.this, HttpManager.getASSETURL(search, page, 20), new HttpRequestHandler<Results>() {
+        HttpManager.getDataPagingInfo(AssetActivity.this, url, new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {
                 Log.i(TAG, "data=" + results);

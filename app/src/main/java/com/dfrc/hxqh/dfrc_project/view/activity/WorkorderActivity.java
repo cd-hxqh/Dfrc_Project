@@ -24,6 +24,7 @@ import com.dfrc.hxqh.dfrc_project.api.HttpRequestHandler;
 import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.bean.Results;
 import com.dfrc.hxqh.dfrc_project.model.WORKORDER;
+import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
 import com.dfrc.hxqh.dfrc_project.view.adapter.BaseQuickAdapter;
 import com.dfrc.hxqh.dfrc_project.view.adapter.WorkOrderListAdapter;
 import com.dfrc.hxqh.dfrc_project.view.widght.SwipeRefreshLayout;
@@ -81,7 +82,6 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
     }
 
 
-
     @Override
     protected void findViewById() {
 
@@ -106,6 +106,10 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
 
         refresh_layout.setOnRefreshListener(this);
         refresh_layout.setOnLoadListener(this);
+        refresh_layout.setRefreshing(true);
+        initAdapter(new ArrayList<WORKORDER>());
+        items = new ArrayList<>();
+        getData(searchText);
     }
 
     //返回事件
@@ -114,15 +118,6 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
         finish();
     }
 
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        refresh_layout.setRefreshing(true);
-        initAdapter(new ArrayList<WORKORDER>());
-        items = new ArrayList<>();
-        getData(searchText);
-    }
 
     @Override
     public void onLoad() {
@@ -175,7 +170,7 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
     private void getData(String search) {
 
 
-        HttpManager.getDataPagingInfo(WorkorderActivity.this, HttpManager.getWORKORDERURL(search, page, 20), new HttpRequestHandler<Results>() {
+        HttpManager.getDataPagingInfo(WorkorderActivity.this, HttpManager.getWORKORDERURL(search, AccountUtils.getCrewid(WorkorderActivity.this), page, 20), new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {
             }

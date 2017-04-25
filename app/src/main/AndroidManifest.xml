@@ -92,6 +92,42 @@
         <activity
             android:name=".view.activity.N_ProblemDetailsActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.MipcaActivityCapture"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.ResultDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.N_PB_AddActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.PersonActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.Inventoryactivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.InventoryDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.InvbalancesActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.ZkworkorderActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.ZkworkorderDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.N_materialActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.FkworkorderActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.FkworkorderDetailsActivity"
+            android:screenOrientation="portrait" />
 
     </application>
 

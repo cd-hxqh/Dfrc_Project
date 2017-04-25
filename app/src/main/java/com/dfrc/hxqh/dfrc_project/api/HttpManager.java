@@ -23,17 +23,27 @@ public class HttpManager {
     private static final String TAG = "HttpManager";
 
 
-
     /**
      * 设置获取设备
      */
-    public static String getASSETURL(String vaule, int curpage, int showcount) {
-        if (vaule.equals("")){
-            return "{'appid':'" + Constants.ASSET_APPID + "','objectname':'" + Constants.ASSET_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'ASSETNUM DESC','condition':{'STATUS':'=活动'}}";
+    public static String getASSETURL(String vaule, String siteid, int curpage, int showcount) {
+        if (vaule.equals("")) {
+            return "{'appid':'" + Constants.ASSET_APPID + "','objectname':'" + Constants.ASSET_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'ASSETNUM DESC','condition':{'STATUS':'=活动','SITEID':'=" + siteid + "'}}";
 
+        } else {
+            return "{'appid':'" + Constants.ASSET_APPID + "','objectname':'" + Constants.ASSET_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'ASSETNUM DESC','condition':{'STATUS':'=活动','SITEID':'=" + siteid + "'},'sinorsearch':{'ASSETNUM':'" + vaule + "','DESCRIPTION':'" + vaule + "'}}";
         }
-        else {
-            return "{'appid':'" + Constants.ASSET_APPID + "','objectname':'" + Constants.ASSET_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'ASSETNUM DESC','condition':{'STATUS':'=活动'},'sinorsearch':{'ASSETNUM':'" + vaule + "','DESCRIPTION':'" + vaule + "'}}";
+    }
+
+    /**
+     * 根据编号获取设备
+     */
+    public static String getASSETByNuMURL(String assetNum, String vaule, int curpage, int showcount) {
+        if (vaule.equals("")) {
+            return "{'appid':'" + Constants.ASSET_APPID + "','objectname':'" + Constants.ASSET_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'ASSETNUM DESC','condition':{'ASSETNUM':'=" + assetNum + "'}}";
+
+        } else {
+            return "{'appid':'" + Constants.ASSET_APPID + "','objectname':'" + Constants.ASSET_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'ASSETNUM DESC','condition':{'ASSETNUM':'=" + assetNum + "'},'sinorsearch':{'ASSETNUM':'" + vaule + "','DESCRIPTION':'" + vaule + "'}}";
         }
     }
 
@@ -41,43 +51,50 @@ public class HttpManager {
     /**
      * 设置根据设备编号获取备件
      */
-    public static String getSPAREPARTURL(String vaule,String assetnum, int curpage, int showcount) {
-        if (vaule.equals("")){
-            return "{'appid':'" + Constants.ASSET_APPID + "','objectname':'" + Constants.SPAREPART_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'ASSETNUM':'="+assetnum+"'}}";
+    public static String getSPAREPARTURL(String vaule, String assetnum, int curpage, int showcount) {
+        if (vaule.equals("")) {
+            return "{'appid':'" + Constants.ASSET_APPID + "','objectname':'" + Constants.SPAREPART_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'ASSETNUM':'=" + assetnum + "'}}";
 
-        }
-        else {
-            return "{'appid':'" + Constants.ASSET_APPID + "','objectname':'" + Constants.SPAREPART_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'ASSETNUM':'="+assetnum+"'},'sinorsearch':{'ITEMNUM':'" + vaule + "'}}";
+        } else {
+            return "{'appid':'" + Constants.ASSET_APPID + "','objectname':'" + Constants.SPAREPART_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'ASSETNUM':'=" + assetnum + "'},'sinorsearch':{'ITEMNUM':'" + vaule + "'}}";
         }
     }
-
 
 
     /**
      * 设置定期点检工单
      */
-    public static String getWORKORDERURL(String vaule, int curpage, int showcount) {
-        if (vaule.equals("")){
-            return "{'appid':'" + Constants.N_MATWO_APPID + "','objectname':'" + Constants.WORKORDER_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WONUM DESC','condition':{'WORKTYPE':'=MAINT','PARENT':''}}";
+    public static String getWORKORDERURL(String vaule, String crewid, int curpage, int showcount) {
+        if (vaule.equals("")) {
+            return "{'appid':'" + Constants.N_MATWO_APPID + "','objectname':'" + Constants.WORKORDER_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WONUM DESC','condition':{'WORKTYPE':'=MAINT','WKTYPE':'=MAINT','CREWID':'=" + crewid + "'}}";
 
-        }
-        else {
-            return "{'appid':'" + Constants.N_MATWO_APPID + "','objectname':'" + Constants.WORKORDER_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WONUM DESC','condition':{'WORKTYPE':'=MAINT','PARENT':''},'sinorsearch':{'WONUM':'" + vaule + "','DESCRIPTION':'" + vaule + "'}}";
+        } else {
+            return "{'appid':'" + Constants.N_MATWO_APPID + "','objectname':'" + Constants.WORKORDER_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WONUM DESC','condition':{'WORKTYPE':'=MAINT','WKTYPE':'=MAINT','CREWID':'=" + crewid + "'},'sinorsearch':{'WONUM':'" + vaule + "','DESCRIPTION':'" + vaule + "'}}";
         }
     }
-
 
 
     /**
      * 设置定期点检工单明细行
      */
-    public static String getWOTASKURL(String vaule,String wonum, int curpage, int showcount) {
-        if (vaule.equals("")){
-            return "{'appid':'" + Constants.N_MATWO_APPID + "','objectname':'" + Constants.WOTASK_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WOSEQUENCE DESC','condition':{'WONUM':'="+wonum+"'}}";
+    public static String getWOTASKURL(String vaule, String wonum, int curpage, int showcount) {
+        if (vaule.equals("")) {
+            return "{'appid':'" + Constants.N_MATWO_APPID + "','objectname':'" + Constants.WOTASK_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WOSEQUENCE DESC','condition':{'WONUM':'=" + wonum + "'}}";
 
+        } else {
+            return "{'appid':'" + Constants.N_MATWO_APPID + "','objectname':'" + Constants.WOTASK_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WOSEQUENCE DESC','condition':{'WONUM':'=" + wonum + "'},'sinorsearch':{'WOSEQUENCE':'" + vaule + "','ASSETNUM':'" + vaule + "'}}";
         }
-        else {
-            return "{'appid':'" + Constants.N_MATWO_APPID + "','objectname':'" + Constants.WOTASK_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WOSEQUENCE DESC','condition':{'WONUM':'="+wonum+"'},'sinorsearch':{'WOSEQUENCE':'" + vaule + "','ASSETNUM':'" + vaule + "'}}";
+    }
+
+    /**
+     * 设置定期点检工单明细行
+     */
+    public static String getWOTASKURL(String vaule, String wonum, String assetnum, int curpage, int showcount) {
+        if (vaule.equals("")) {
+            return "{'appid':'" + Constants.N_MATWO_APPID + "','objectname':'" + Constants.WOTASK_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WOSEQUENCE DESC','condition':{'WONUM':'=" + wonum + "','ASSETNUM':'=" + assetnum + "'}}";
+
+        } else {
+            return "{'appid':'" + Constants.N_MATWO_APPID + "','objectname':'" + Constants.WOTASK_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WOSEQUENCE DESC','condition':{'WONUM':'=" + wonum + "','ASSETNUM':'=" + assetnum + "'},'sinorsearch':{'WOSEQUENCE':'" + vaule + "','ASSETNUM':'" + vaule + "'}}";
         }
     }
 
@@ -85,15 +102,111 @@ public class HttpManager {
      * 设置问题点管理
      */
     public static String getN_PROBLEMURL(String vaule, int curpage, int showcount) {
-        if (vaule.equals("")){
+        if (vaule.equals("")) {
             return "{'appid':'" + Constants.N_PROB2_APPID + "','objectname':'" + Constants.N_PROBLEM_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'N_PROBLEMNUM DESC'}";
 
-        }
-        else {
+        } else {
             return "{'appid':'" + Constants.N_PROB2_APPID + "','objectname':'" + Constants.N_PROBLEM_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'N_PROBLEMNUM DESC','sinorsearch':{'N_PROBLEMNUM':'" + vaule + "','PRODESC':'" + vaule + "'}}";
         }
     }
 
+
+    /**
+     * 设置获取人员
+     */
+    public static String getPERSIONURL(String vaule, int curpage, int showcount) {
+        if (vaule.equals("")) {
+            return "{'appid':'" + Constants.PERSON_APPID + "','objectname':'" + Constants.PERSON_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'PERSONID DESC'}";
+
+        } else {
+            return "{'appid':'" + Constants.PERSON_APPID + "','objectname':'" + Constants.PERSON_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'PERSONID DESC','sinorsearch':{'PERSONID':'" + vaule + "','DISPLAYNAME':'" + vaule + "'}}";
+        }
+    }
+
+    /**
+     * 设置获取人员
+     */
+    public static String getPERSIONByIDURL(String personid, int curpage, int showcount) {
+        return "{'appid':'" + Constants.PERSON_APPID + "','objectname':'" + Constants.PERSON_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'PERSONID DESC','condition':{'PERSONID':'=" + personid + "'}}";
+
+
+    }
+
+
+    /**
+     * 设置获取库存
+     */
+    public static String getINVETORYURL(String vaule, String siteid, int curpage, int showcount) {
+        if (vaule.equals("")) {
+            return "{'appid':'" + Constants.INVENTOR_APPID + "','objectname':'" + Constants.INVENTORY_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'STATUS':'=活动','SITEID':'=" + siteid + "'}}";
+
+        } else {
+            return "{'appid':'" + Constants.INVENTOR_APPID + "','objectname':'" + Constants.INVENTORY_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'STATUS':'=活动','SITEID':'=" + siteid + "'},'sinorsearch':{'ITEMNUM':'" + vaule + "'}}";
+        }
+    }
+
+    /**
+     * 设置根据备件获取库存
+     */
+    public static String getINVETORYIDURL(String itemnum, String vaule, int curpage, int showcount) {
+        if (vaule.equals("")) {
+            return "{'appid':'" + Constants.INVENTOR_APPID + "','objectname':'" + Constants.INVENTORY_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'ITEMNUM':'=" + itemnum + "'}}";
+
+        } else {
+            return "{'appid':'" + Constants.INVENTOR_APPID + "','objectname':'" + Constants.INVENTORY_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'ITEMNUM':'=" + itemnum + "'},'sinorsearch':{'ITEMNUM':'" + vaule + "'}}";
+        }
+
+    }
+
+    /**
+     * 设置根据备件编号获取库存余量
+     */
+    public static String getINVBALANCESURL(String itemnum, String vaule, int curpage, int showcount) {
+        if (vaule.equals("")) {
+            return "{'appid':'" + Constants.INVENTOR_APPID + "','objectname':'" + Constants.INVBALANCES_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'ITEMNUM':'=" + itemnum + "'}}";
+
+        } else {
+            return "{'appid':'" + Constants.INVENTOR_APPID + "','objectname':'" + Constants.INVBALANCES_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'ITEMNUM':'=" + itemnum + "'},'sinorsearch':{'ITEMNUM':'" + vaule + "'}}";
+        }
+
+    }
+
+
+    /**
+     * 获取总库领料单
+     */
+    public static String getN_WORKORURL(String vaule, String siteid, int curpage, int showcount) {
+        if (vaule.equals("")) {
+            return "{'appid':'" + Constants.N_WORKOR2 + "','objectname':'" + Constants.WORKORDER_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WONUM DESC','condition':{'SITEID':'=" + siteid + "'}}";
+
+        } else {
+            return "{'appid':'" + Constants.N_WORKOR2 + "','objectname':'" + Constants.WORKORDER_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WONUM DESC','condition':{'SITEID':'=" + siteid + "'},'sinorsearch':{'WONUM':'" + vaule + "','DESCRIPTION':'" + vaule + "'}}";
+        }
+    }
+    /**
+     * 获取总库领料单
+     */
+    public static String getN_MATERIAL(String vaule, String wonum, int curpage, int showcount) {
+        if (vaule.equals("")) {
+            return "{'appid':'" + Constants.N_WORKOR2 + "','objectname':'" + Constants.N_MATERIAL + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'WONUM':'=" + wonum + "'}}";
+
+        } else {
+            return "{'appid':'" + Constants.N_WORKOR2 + "','objectname':'" + Constants.N_MATERIAL + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'WONUM':'=" + wonum + "'},'sinorsearch':{'ITEMNUM':'" + vaule + "','DESCRIPTION':'" + vaule + "'}}";
+        }
+    }
+
+
+    /**
+     * 获取分库领料单
+     */
+    public static String getN_WORKORDEURL(String vaule, String siteid, int curpage, int showcount) {
+        if (vaule.equals("")) {
+            return "{'appid':'" + Constants.N_WORKORDE + "','objectname':'" + Constants.WORKORDER_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WONUM DESC','condition':{'SITEID':'=" + siteid + "'}}";
+
+        } else {
+            return "{'appid':'" + Constants.N_WORKORDE + "','objectname':'" + Constants.WORKORDER_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WONUM DESC','condition':{'SITEID':'=" + siteid + "'},'sinorsearch':{'WONUM':'" + vaule + "','DESCRIPTION':'" + vaule + "'}}";
+        }
+    }
 
     /**
      * 使用用户名密码登录

@@ -20,6 +20,7 @@
     <string name="login_displayName">login_displayName</string>
     <string name="login_UserName">loginUserName</string>
     <string name="login_department">login_department</string>
+    <string name="login_n_crewid">login_n_crewid</string>
 
     <string name="login_error_empty_user">用户名不能为空</string>
     <string name="login_error_empty_passwd">密码不能为空</string>
@@ -117,6 +118,7 @@
     <string name="abc_text">重要度:</string>
     <string name="cycle_text">周期(月):</string>
     <string name="n_result_text">结果:</string>
+    <string name="n_note_text">预知项目结果:</string>
     <string name="n_responsor_text">实施责任人:</string>
     <string name="n_members_text">实施人员:</string>
     <string name="kccx_text">库存查询</string>
@@ -143,5 +145,50 @@
     <string name="fklld_text">分库领料单</string>
     <string name="bjjy_text">备件借用</string>
     <string name="bjgh_text">备件归还</string>
-    <string name="kwzy_text">库未转移</string>
+    <string name="kwzy_text">库位转移</string>
+
+    <!-- 二微码扫描 -->
+    <string name="scan_text">请将二维码/条码放入框内</string>
+    <string name="scanning_text">二维码/条码扫描</string>
+    <string name="result_text_id">扫描结果</string>
+    <string name="cxzc_text">查询资产</string>
+    <string name="wfcxsb_text">无法查询设备编号!</string>
+    <string name="save_text">保存</string>
+    <string name="ok_text">OK</string>
+    <string name="no_text">NO</string>
+    <string name="n_pb_text">问题点</string>
+    <string name="n_prodesc_text">问题点录入:</string>
+    <string name="n_solve_text">解决办法:</string>
+    <string name="n_improver_text">改善担当:</string>
+    <string name="n_finishdate_text">完成日期:</string>
+    <string name="wtdll_text">问题点录入</string>
+    <string name="person_text">人员</string>
+    <string name="persionid_text">人员:</string>
+    <string name="displaname_text">名称:</string>
+    <string name="djwtdjl_text">点检问题点记录</string>
+    <string name="gzjl_text">故障记录</string>
+    <string name="location1_text">库房:</string>
+    <string name="location_desc_text">库存描述:</string>
+    <string name="binnum_text">存放位置:</string>
+    <string name="udunitcost_text">单价:</string>
+    <string name="issueunit_text">发放单位:</string>
+    <string name="kcxq_text">库存详情</string>
+    <string name="lcyl_text">库存余量</string>
+    <string name="hg_text">货柜:</string>
+    <string name="curbal_text">当前余量:</string>
+    <string name="wonum1_text">领料单号:</string>
+    <string name="sb_text">设备:</string>
+    <string name="tbr_text">提报人:</string>
+    <string name="n_sap1_text">发货仓库:</string>
+    <string name="reportdate_text">报告日期:</string>
+    <string name="statusdate_text">状态日期:</string>
+    <string name="totalcost_text">领料单合计:</string>
+    <string name="loc_text">位置:</string>
+    <string name="sqlywlmx_text">申请领用物料明细</string>
+    <string name="wlbm_text">物料编码:</string>
+    <string name="n_sap3_text">申请数量:</string>
+    <string name="curbal1_text">当前余量:</string>
+    <string name="n_reason_text">领用原因:</string>
+    <string name="lld_text">领料单号:</string>
+
 </resources>

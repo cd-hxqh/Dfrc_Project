@@ -97,12 +97,12 @@ public class WorkOrderDetailsActivity extends BaseActivity {
     void setBackImageViewOnClickListener() {
         finish();
     }
+
     //菜单事件
     @OnClick(R.id.title_add)
     void setMenuImageViewOnClickListener() {
         showPopupWindow(menuImageView);
     }
-
 
 
     /**
@@ -145,6 +145,7 @@ public class WorkOrderDetailsActivity extends BaseActivity {
             Intent intent = new Intent(WorkOrderDetailsActivity.this, WotaskActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable("wonum", workorder.getWONUM());
+            bundle.putString("assetNum", "");
             intent.putExtras(bundle);
             startActivityForResult(intent, 1000);
             popupWindow.dismiss();

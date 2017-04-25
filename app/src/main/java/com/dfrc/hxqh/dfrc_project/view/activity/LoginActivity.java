@@ -4,13 +4,17 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.widget.EditText;
 
 import com.dfrc.hxqh.dfrc_project.R;
 import com.dfrc.hxqh.dfrc_project.api.HttpManager;
 import com.dfrc.hxqh.dfrc_project.api.HttpRequestHandler;
+import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
+import com.dfrc.hxqh.dfrc_project.bean.Results;
 import com.dfrc.hxqh.dfrc_project.constants.Constants;
 import com.dfrc.hxqh.dfrc_project.dialog.FlippingLoadingDialog;
+import com.dfrc.hxqh.dfrc_project.model.PERSON;
 import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
 import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
 import com.dfrc.hxqh.dfrc_project.webserviceclient.AndroidClientService;
@@ -32,7 +36,7 @@ import butterknife.OnClick;
  * d登陆界面
  **/
 
-public class LoginActivity extends BaseActivity{
+public class LoginActivity extends BaseActivity {
     private static final String TAG = "LoginActivity";
     @Bind(R.id.login_username_edit)
     EditText mUsername;
@@ -42,8 +46,6 @@ public class LoginActivity extends BaseActivity{
 
     private boolean isRemember; //是否记住密码
 
-    String userName; //用户名
-    String userPassWorld; //密码
     String imei; //imei
 
     private long exitTime = 0;
@@ -110,7 +112,8 @@ public class LoginActivity extends BaseActivity{
     }
 
     //登陆按钮
-    @OnClick(R.id.btn_login) void setOnClick(){
+    @OnClick(R.id.btn_login)
+    void setOnClick() {
         if (mUsername.getText().length() == 0) {
             mUsername.setError(getString(R.string.login_error_empty_user));
             mUsername.requestFocus();
@@ -121,8 +124,6 @@ public class LoginActivity extends BaseActivity{
             login();
         }
     }
-
-
 
 
     /**
@@ -154,7 +155,7 @@ public class LoginActivity extends BaseActivity{
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-
+                            getPerson(mUsername.getText().toString());
                             getUserApp(mUsername.getText().toString());
                         }
                     }
@@ -162,7 +163,7 @@ public class LoginActivity extends BaseActivity{
                     @Override
                     public void onSuccess(String data, int totalPages, int currentPage) {
                         if (data != null) {
-
+                            getPerson(mUsername.getText().toString());
                             getUserApp(mUsername.getText().toString());
 
                         }
@@ -239,6 +240,33 @@ public class LoginActivity extends BaseActivity{
                 }
             }
         }.execute();
+    }
+
+    /**
+     * 获取Person*
+     */
+    private void getPerson(final String username) {
+        HttpManager.getDataPagingInfo(LoginActivity.this, HttpManager.getPERSIONByIDURL(username, 1, 20), new HttpRequestHandler<Results>() {
+            @Override
+            public void onSuccess(Results results) {
+                Log.i(TAG, "data=" + results);
+            }
+
+            @Override
+            public void onSuccess(Results results, int totalPages, int currentPage) {
+                ArrayList<PERSON> item = JsonUtils.parsingPERSON(results.getResultlist());
+                if (item == null || item.isEmpty()) {
+                } else {
+
+                    Log.i(TAG, "BZ=" + item.get(0).getN_CREWID());
+                    AccountUtils.setPerson(LoginActivity.this, item.get(0));
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+            }
+        });
     }
 
 }

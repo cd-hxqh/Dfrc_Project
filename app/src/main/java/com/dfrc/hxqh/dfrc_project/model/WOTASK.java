@@ -5,6 +5,7 @@ package com.dfrc.hxqh.dfrc_project.model;
  * 点检明细行
  */
 public class WOTASK extends Entity {
+    public String WOTASKID;//任务ID
     public String ASSETNUM;//设备编号
     public String ASSET_DESCRIPTION;//设备名称
     public String ITEM;//项目
@@ -22,6 +23,14 @@ public class WOTASK extends Entity {
     public String WOSEQUENCE;//序号
     public String WPLINE_RULE;//基准
     public String WPLINE_SOLVE;//异常处理
+
+    public String getWOTASKID() {
+        return WOTASKID;
+    }
+
+    public void setWOTASKID(String WOTASKID) {
+        this.WOTASKID = WOTASKID;
+    }
 
     public String getASSETNUM() {
         return ASSETNUM;

@@ -1,0 +1,116 @@
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:background="@drawable/shape_corner_workorder_item"
+    android:foreground="?android:selectableItemBackground"
+    android:orientation="horizontal"
+    card_view:cardCornerRadius="2dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="5dp"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/workorder_sb_title"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="@string/item_text"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimens_16sp" />
+
+            <TextView
+                android:id="@+id/assetnum_text_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/workorder_sb_title"
+                android:hint="@string/hint_item_num_title"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimens_16sp" />
+
+
+            <TextView
+                android:id="@+id/item_desc_title"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/workorder_sb_title"
+                android:layout_marginTop="5dp"
+                android:text="@string/desc_text"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimens_16sp" />
+
+            <TextView
+                android:id="@+id/item_desc_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/assetnum_text_id"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_toRightOf="@+id/item_desc_title"
+                android:ellipsize="end"
+                android:ems="14"
+                android:hint="@string/hint_item_desc_title"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimens_16sp" />
+
+            <View
+                android:id="@+id/view_1_id"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_below="@+id/item_desc_title"
+                android:layout_marginTop="5dp"
+                android:background="@color/light_gray" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/view_1_id"
+                android:layout_marginTop="5dp">
+
+                <TextView
+                    android:id="@+id/status_title_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/status_text"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/dimens_16sp" />
+
+                <TextView
+                    android:id="@+id/status_text_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/status_title_id"
+                    android:ellipsize="end"
+                    android:ems="14"
+                    android:hint="@string/have_not_data"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/dimens_16sp" />
+
+                <TextView
+                    android:id="@+id/family_displayname_text_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/dimens_16sp" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

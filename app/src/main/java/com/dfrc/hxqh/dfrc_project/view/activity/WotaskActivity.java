@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -42,9 +43,13 @@ import butterknife.OnClick;
 
 public class WotaskActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
     private static final String TAG = "WotaskActivity";
+    public static final int WOTASK_CODE = 1002;
 
     @Bind(R.id.title_name)
     TextView titleTextView; //标题
+    @Bind(R.id.sbmittext_id)
+    ImageButton codeImageButton;
+
     LinearLayoutManager layoutManager;
 
     @Bind(R.id.recyclerView_id)
@@ -71,7 +76,7 @@ public class WotaskActivity extends BaseActivity implements SwipeRefreshLayout.O
     ArrayList<WOTASK> items = new ArrayList<WOTASK>();
 
     private String wonum; //工单编号
-
+    private String assetNum; //设备编号
 
 
     @OnClick(R.id.title_back_id)
@@ -90,7 +95,8 @@ public class WotaskActivity extends BaseActivity implements SwipeRefreshLayout.O
     }
 
     private void initData() {
-        wonum=getIntent().getExtras().getString("wonum");
+        wonum = getIntent().getExtras().getString("wonum");
+        assetNum = getIntent().getExtras().getString("assetNum");
     }
 
 
@@ -100,9 +106,20 @@ public class WotaskActivity extends BaseActivity implements SwipeRefreshLayout.O
     }
 
 
+    //二维码扫描
+    @OnClick(R.id.sbmittext_id)
+    void setCodeImageButtonOnClickListener() {
+        Intent intent = getIntent();
+        intent.setClass(WotaskActivity.this, MipcaActivityCapture.class);
+        intent.putExtra("mark", WOTASK_CODE);
+        startActivityForResult(intent, 0);
+    }
+
     @Override
     protected void initView() {
         titleTextView.setText(R.string.wotask_text);
+        codeImageButton.setImageResource(R.drawable.ic_code);
+        codeImageButton.setVisibility(View.VISIBLE);
         setSearchEdit();
 
         layoutManager = new LinearLayoutManager(this);
@@ -118,19 +135,13 @@ public class WotaskActivity extends BaseActivity implements SwipeRefreshLayout.O
 
         refresh_layout.setOnRefreshListener(this);
         refresh_layout.setOnLoadListener(this);
-    }
-
-
-
-
-    @Override
-    public void onStart() {
-        super.onStart();
         refresh_layout.setRefreshing(true);
         initAdapter(new ArrayList<WOTASK>());
         items = new ArrayList<>();
         getData(searchText);
     }
+
+
 
     @Override
     public void onLoad() {
@@ -181,9 +192,14 @@ public class WotaskActivity extends BaseActivity implements SwipeRefreshLayout.O
      * 获取数据*
      */
     private void getData(String search) {
+        String url = null;
+        if (assetNum.equals("")) {
+            url = HttpManager.getWOTASKURL(search, wonum, page, 20);
+        } else {
+            url = HttpManager.getWOTASKURL(search, wonum, assetNum, page, 20);
+        }
 
-
-        HttpManager.getDataPagingInfo(WotaskActivity.this, HttpManager.getWOTASKURL(search, wonum, page, 20), new HttpRequestHandler<Results>() {
+        HttpManager.getDataPagingInfo(WotaskActivity.this, url, new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {
             }
@@ -236,6 +252,7 @@ public class WotaskActivity extends BaseActivity implements SwipeRefreshLayout.O
                 intent.setClass(WotaskActivity.this, WotaskDetailsActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("wotask", items.get(position));
+                bundle.putString("wonum", wonum);
                 intent.putExtras(bundle);
                 startActivityForResult(intent, 0);
             }

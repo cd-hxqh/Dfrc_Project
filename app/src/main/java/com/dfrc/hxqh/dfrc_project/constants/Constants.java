@@ -13,7 +13,7 @@ public class Constants {
     /**
      * 默认 外网*
      */
-    public static final String HTTP_API_IP = "http://172.25.185.33:7001";
+    public static final String HTTP_API_IP = "http://172.25.185.32:7001";
     //本地
 //    public static final String HTTP_API_IP = "http://192.168.101.164:7001";
 
@@ -21,33 +21,15 @@ public class Constants {
     //登陆URL
     public static final String SIGN_IN_URL ="/maximo/mobile/system/login";
 
-    //粮情检查单webservice上传接口
-    public static final String lqwebserviceURL = "/meaweb/services/N_GRAINS";
 
-    //扦样单webservice上传接口
-    public static final String qywebserviceURL = "/meaweb/services/N_SAMPLE";
 
-    //货运预报webservice上传接口
-    public static final String carwebserviceURL = "/meaweb/services/N_CAR";
-
-    //扦样单webservice获取车辆信息接口
-    public static final String qywebservice1URL = "/meaweb/services/N_SAMPLE1";
-
-    //缺陷工单,快速上报webservice新增接口
-    public static final String WorkOrderwebserviceURL = "/meaweb/services/MOBILEROUTES";
-
-    //获取权限接口
+    //全都是一个接口
     public static final String LoginwebserviceURL = "/meaweb/services/DFLSERVICE";
 
-    //移动设备查询
-    public static final String MobileassteURL = "/meaweb/services/MOBILEASSTE";
 
-    //工具设备
-    public static final String MOBILETOOLSURL = "/meaweb/services/MOBILETOOLS";
 
     //通用接口查询
     public static final String BASE_URL =  "/maximo/mobile/common/api";
-
 
 
     //生成物资编码接口
@@ -82,6 +64,9 @@ public class Constants {
     //库存的表名
     public static final String INVENTORY_NAME = "INVENTORY";
 
+    //库存余量的表名
+    public static final String INVBALANCES_NAME = "INVBALANCES";
+
     //位置appid
     public static final String LOCATION_APPID = "LOCATION" ;
 
@@ -107,6 +92,23 @@ public class Constants {
 
     //采购接收的表名
     public static final String PO_NAME = "PO";
+
+    //人员appid
+    public static final String PERSON_APPID = "PERSON" ;
+
+    //人员的表名
+    public static final String PERSON_NAME = "PERSON";
+
+    //总库领料单appid
+    public static final String N_WORKOR2 = "N_WORKOR2" ;
+    //总库领料单明细行的表名
+    public static final String N_MATERIAL = "N_MATERIAL" ;
+
+    //分库领料单appid
+    public static final String N_WORKORDE = "N_WORKORDE" ;
+//    //总库领料单明细行的表名
+//    public static final String N_MATERIAL = "N_MATERIAL" ;
+
 
 
 

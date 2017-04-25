@@ -108,6 +108,7 @@ public class MainActivity extends BaseActivity {
                         switch (prodctBean.getAppid()) {
                             case Constants.ASSET_APPID: // 设备查询
                                 intent = new Intent(MainActivity.this, AssetActivity.class);
+                                intent.putExtra("assetNum", "");
                                 startActivityForResult(intent, 0);
                                 break;
                             case Constants.N_PROB2_APPID: //计划保全

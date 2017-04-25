@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -42,8 +43,11 @@ import butterknife.OnClick;
 
 public class N_problemActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
     private static final String TAG = "N_problemActivity";
+    public static final int PROBLEM_CODE = 1003;
     @Bind(R.id.title_name)
     TextView titleTextView; //标题
+    @Bind(R.id.sbmittext_id)
+    ImageButton codeImageButton;
     LinearLayoutManager layoutManager;
 
     @Bind(R.id.recyclerView_id)
@@ -68,6 +72,7 @@ public class N_problemActivity extends BaseActivity implements SwipeRefreshLayou
 
 
     ArrayList<N_PROBLEM> items = new ArrayList<N_PROBLEM>();
+    private String assetNum;
 
 
     @Override
@@ -75,11 +80,16 @@ public class N_problemActivity extends BaseActivity implements SwipeRefreshLayou
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
         ButterKnife.bind(this);
+        initDate();
         findViewById();
         initView();
     }
 
 
+    private void initDate() {
+        assetNum = getIntent().getExtras().getString("assetNum");
+
+    }
 
     @Override
     protected void findViewById() {
@@ -90,6 +100,8 @@ public class N_problemActivity extends BaseActivity implements SwipeRefreshLayou
     @Override
     protected void initView() {
         titleTextView.setText(R.string.wtdgl_text);
+        codeImageButton.setImageResource(R.drawable.ic_code);
+        codeImageButton.setVisibility(View.VISIBLE);
         setSearchEdit();
 
         layoutManager = new LinearLayoutManager(this);
@@ -105,6 +117,10 @@ public class N_problemActivity extends BaseActivity implements SwipeRefreshLayou
 
         refresh_layout.setOnRefreshListener(this);
         refresh_layout.setOnLoadListener(this);
+        refresh_layout.setRefreshing(true);
+        initAdapter(new ArrayList<N_PROBLEM>());
+        items = new ArrayList<>();
+        getData(searchText);
     }
 
     //返回事件
@@ -113,15 +129,15 @@ public class N_problemActivity extends BaseActivity implements SwipeRefreshLayou
         finish();
     }
 
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        refresh_layout.setRefreshing(true);
-        initAdapter(new ArrayList<N_PROBLEM>());
-        items = new ArrayList<>();
-        getData(searchText);
+    //二维码扫描
+    @OnClick(R.id.sbmittext_id)
+    void setCodeImageButtonOnClickListener() {
+        Intent intent = getIntent();
+        intent.setClass(N_problemActivity.this, MipcaActivityCapture.class);
+        intent.putExtra("mark", PROBLEM_CODE);
+        startActivityForResult(intent, 0);
     }
+
 
     @Override
     public void onLoad() {

@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawablePadding="@dimen/dimen_5"
-            android:drawableTop="@mipmap/ic_wtdj"
+            android:drawableTop="@mipmap/ic_zkdbd"
             android:gravity="center"
             android:text="@string/zkdbd_text" />
 
@@ -100,7 +100,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawablePadding="@dimen/dimen_5"
-            android:drawableTop="@mipmap/ic_fklld"
+            android:drawableTop="@mipmap/ic_bjgl"
             android:gravity="center"
             android:text="@string/bjgh_text" />
 

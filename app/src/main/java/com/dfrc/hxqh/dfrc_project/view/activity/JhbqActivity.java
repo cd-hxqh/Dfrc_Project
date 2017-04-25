@@ -52,6 +52,7 @@ public class JhbqActivity extends BaseActivity {
     @OnClick(R.id.n_problem_text_id)
     public void setN_problemOnClickListener() {
         Intent intent = new Intent(this, N_problemActivity.class);
+        intent.putExtra("assetNum", "");
         startActivityForResult(intent, 0);
     }
 

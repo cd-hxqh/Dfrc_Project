@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.dfrc.hxqh.dfrc_project.R;
+import com.dfrc.hxqh.dfrc_project.model.PERSON;
 
 
 /**
@@ -16,7 +17,6 @@ public class AccountUtils {
 
     private static final String key_login_member = "logined@member";
     private static final String key_fav_nodes = "logined@fav_nodes";
-
 
 
     /**
@@ -117,30 +117,60 @@ public class AccountUtils {
 
     /**
      * 记录登录返回信息
+     *
      * @param cxt
      * @param insertSite
      * @param insertOrg
      * @param personId
-     *
      */
-    public static void setLoginDetails(Context cxt,String insertOrg,String insertSite,String personId,String userName,String displayName,String loginUserName){
+    public static void setLoginDetails(Context cxt, String insertOrg, String insertSite, String personId, String userName, String displayName, String loginUserName) {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(cxt);
         sharedPreferences.edit().putString(cxt.getString(R.string.login_insertOrg), insertOrg).putString(cxt.getString(R.string.login_insertSite), insertSite)
                 .putString(cxt.getString(R.string.login_personId), personId).putString(cxt.getString(R.string.login_userName), userName)
-                .putString(cxt.getString(R.string.login_displayName), displayName).putString(cxt.getString(R.string.login_UserName),loginUserName).commit();
+                .putString(cxt.getString(R.string.login_displayName), displayName).putString(cxt.getString(R.string.login_UserName), loginUserName).commit();
     }
 
 
-    /**获取中文名称**/
-    public static String getdisplayName(Context cxt){
+    /**
+     * 记录PERSON*
+     */
+    public static void setPerson(Context cxt, PERSON person) {
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(cxt);
+        sharedPreferences.edit().putString(cxt.getString(R.string.login_n_crewid), person.getN_CREWID()).commit();
+
+    }
+
+    /**
+     * 获取中文名称
+     **/
+    public static String getdisplayName(Context cxt) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(cxt);
         return sharedPreferences.getString(cxt.getString(R.string.login_displayName), "");
     }
-    /**获取用户登录名**/
-    public static String getloginUserName(Context cxt){
+
+    /**
+     * 获取用户登录名
+     **/
+    public static String getloginUserName(Context cxt) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(cxt);
         return sharedPreferences.getString(cxt.getString(R.string.login_UserName), "");
+    }
+
+    /**
+     * 获取站点名
+     **/
+    public static String getloginSite(Context cxt) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(cxt);
+        return sharedPreferences.getString(cxt.getString(R.string.login_insertSite), "");
+    }
+    /**
+     * 获取班组
+     **/
+    public static String getCrewid(Context cxt) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(cxt);
+        return sharedPreferences.getString(cxt.getString(R.string.login_n_crewid), "");
     }
 
 }

@@ -1,5 +1,6 @@
 package com.dfrc.hxqh.dfrc_project.view.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -49,17 +50,23 @@ public class BjglActivity extends BaseActivity {
     }
 
 
-//    @OnClick(R.id.workorder_text_id)
-//    public void setWorkorderOnClickListener() {
-//        Intent intent = new Intent(this, WorkorderActivity.class);
-//        startActivityForResult(intent, 0);
-//    }
-//
-//    @OnClick(R.id.n_problem_text_id)
-//    public void setN_problemOnClickListener() {
-//        Intent intent = new Intent(this, N_problemActivity.class);
-//        startActivityForResult(intent, 0);
-//    }
+    @OnClick(R.id.cgjs_text_id) //库存查询
+    public void setCgjsTextViewOnClickListener() {
+        Intent intent = new Intent(this, Inventoryactivity.class);
+        intent.putExtra("assetNum", "");
+        startActivityForResult(intent, 0);
+    }
+
+    @OnClick(R.id.zklld_text_id) //总库领料单
+    public void setZkworkorderOnClickListener() {
+        Intent intent = new Intent(this, ZkworkorderActivity.class);
+        startActivityForResult(intent, 0);
+    }
+    @OnClick(R.id.fklld_text_id) //分库领料单
+    public void setFkworkorderOnClickListener() {
+        Intent intent = new Intent(this, FkworkorderActivity.class);
+        startActivityForResult(intent, 0);
+    }
 
 
 }

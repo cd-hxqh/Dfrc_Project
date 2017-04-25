@@ -24,11 +24,68 @@
                 android:src="@mipmap/ic_beijian" />
 
             <TextView
-                android:id="@+id/invbalances"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dimen_5"
                 android:text="@string/beijian_text"
+                android:textSize="@dimen/dimens_16dp" />
+
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimens_line"
+            android:background="@mipmap/line" />
+
+        <LinearLayout
+            android:id="@+id/djwtdjl_linearlayout_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="@dimen/size_10dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_beijian" />
+
+            <TextView
+                android:id="@+id/djwtdjl_text_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_5"
+                android:text="@string/djwtdjl_text"
+                android:textSize="@dimen/dimens_16dp" />
+
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimens_line"
+            android:background="@mipmap/line" />
+
+        <LinearLayout
+            android:id="@+id/gzjl_linearlayout_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="@dimen/size_10dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_beijian" />
+
+            <TextView
+                android:id="@+id/gzjl_text_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_5"
+                android:text="@string/gzjl_text"
                 android:textSize="@dimen/dimens_16dp" />
 
         </LinearLayout>
