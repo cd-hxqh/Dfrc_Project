@@ -23,7 +23,6 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.READ_LOGS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <!-- Permission for Unit Test -->
@@ -128,6 +127,37 @@
         <activity
             android:name=".view.activity.FkworkorderDetailsActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.MatusetransActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.MatusetransDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.PoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.PoDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.SettingActivity"
+            android:screenOrientation="portrait" />
+
+        <!--设置蒲公英-->
+        <meta-data
+            android:name="PGYER_APPID"
+            android:value="44f4bd87c4c1396fd4c0b8669dfe8d1f" >
+        </meta-data>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.pgyersdk.test.fileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
 
     </application>
 

@@ -26,6 +26,9 @@ public class Constants {
     //全都是一个接口
     public static final String LoginwebserviceURL = "/meaweb/services/DFLSERVICE";
 
+    //全都是一个接口
+    public static final String MOBILESERVICEURL = "/meaweb/services/MOBILESERVICE";
+
 
 
     //通用接口查询
@@ -106,8 +109,8 @@ public class Constants {
 
     //分库领料单appid
     public static final String N_WORKORDE = "N_WORKORDE" ;
-//    //总库领料单明细行的表名
-//    public static final String N_MATERIAL = "N_MATERIAL" ;
+    //总库领料单明细行的表名
+    public static final String MATUSETRANS = "MATUSETRANS" ;
 
 
 

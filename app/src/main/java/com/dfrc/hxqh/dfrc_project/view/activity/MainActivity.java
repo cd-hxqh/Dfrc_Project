@@ -120,6 +120,8 @@ public class MainActivity extends BaseActivity {
                                 startActivityForResult(intent, 0);
                                 break;
                             case "设置": //设置
+                                intent = new Intent(MainActivity.this, SettingActivity.class);
+                                startActivityForResult(intent, 0);
                                 break;
 
                         }

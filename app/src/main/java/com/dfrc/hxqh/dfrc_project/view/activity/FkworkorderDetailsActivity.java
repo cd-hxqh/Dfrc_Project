@@ -1,5 +1,6 @@
 package com.dfrc.hxqh.dfrc_project.view.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -144,11 +145,11 @@ public class FkworkorderDetailsActivity extends BaseActivity {
     private View.OnClickListener kcylOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-//            Intent intent = new Intent(FkworkorderDetailsActivity.this, N_materialActivity.class);
-//            Bundle bundle = new Bundle();
-//            bundle.putSerializable("wonum", zkworkorder.getWONUM());
-//            intent.putExtras(bundle);
-//            startActivityForResult(intent, 1000);
+            Intent intent = new Intent(FkworkorderDetailsActivity.this, MatusetransActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("wonum", fkworkorder.getWONUM());
+            intent.putExtras(bundle);
+            startActivityForResult(intent, 1000);
             popupWindow.dismiss();
         }
     };

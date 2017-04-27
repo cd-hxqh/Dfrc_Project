@@ -14,6 +14,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.dfrc.hxqh.dfrc_project.R;
+import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.constants.Constants;
 import com.dfrc.hxqh.dfrc_project.dialog.FlippingLoadingDialog;
 import com.dfrc.hxqh.dfrc_project.model.PERSON;
@@ -244,10 +245,11 @@ public class WotaskDetailsActivity extends BaseActivity {
 
         final String n_result = n_resultTextView.getText().toString();
         final String n_note = n_noteTextView.getText().toString();
+        final String n_members = n_membersTextView.getText().toString();
         new AsyncTask<String, String, String>() {
             @Override
             protected String doInBackground(String... strings) {
-                return AndroidClientService.UpdateMbo(WotaskDetailsActivity.this, "", Constants.WORKORDER_NAME, "1", "WONUM");
+                return AndroidClientService.UpdateMbo(WotaskDetailsActivity.this, JsonUtils.potoWOTASK(n_result, n_note, n_members), Constants.WOTASK_NAME, "WOTASKID", wotask.getWOTASKID());
             }
 
             @Override

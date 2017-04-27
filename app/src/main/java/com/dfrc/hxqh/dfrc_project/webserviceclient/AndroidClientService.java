@@ -140,7 +140,7 @@ public class AndroidClientService {
      */
     public static String UpdateMbo(final Context cxt, String json, String mboObjectName, String mboKey, String mboKeyValue) {
 
-        String ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
+        String ip_adress = AccountUtils.getIpAddress(cxt) + Constants.MOBILESERVICEURL;
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;

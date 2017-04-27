@@ -50,7 +50,12 @@ public class BjglActivity extends BaseActivity {
     }
 
 
-    @OnClick(R.id.cgjs_text_id) //库存查询
+    @OnClick(R.id.cgjs_text_id) //采购接收
+    public void setKcjsTextViewOnClickListener() {
+        Intent intent = new Intent(this, PoActivity.class);
+        startActivityForResult(intent, 0);
+    }
+    @OnClick(R.id.kccx_text_id) //库存查询
     public void setCgjsTextViewOnClickListener() {
         Intent intent = new Intent(this, Inventoryactivity.class);
         intent.putExtra("assetNum", "");

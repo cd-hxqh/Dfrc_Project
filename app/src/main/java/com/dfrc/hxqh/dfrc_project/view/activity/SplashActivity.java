@@ -19,6 +19,7 @@ public class SplashActivity extends BaseActivity {
             Manifest.permission.READ_PHONE_STATE,
             Manifest.permission.CAMERA,
             Manifest.permission.INTERNET,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
     };
 
     private PermissionsChecker mPermissionsChecker; // 权限检测器

@@ -19,7 +19,7 @@ import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
 import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
 import com.dfrc.hxqh.dfrc_project.webserviceclient.AndroidClientService;
 import com.mpt.hxqh.dfrc_project.AppManager;
-import com.tencent.bugly.Bugly;
+import com.pgyersdk.update.PgyUpdateManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,8 +58,7 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-        Bugly.init(getApplicationContext(), "2d01706f1a", true);
-
+        PgyUpdateManager.register(LoginActivity.this, getString(R.string.file_provider));
         imei = ((TelephonyManager) getSystemService(TELEPHONY_SERVICE))
                 .getDeviceId();
 

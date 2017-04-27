@@ -10,9 +10,11 @@ import com.dfrc.hxqh.dfrc_project.model.ASSET;
 import com.dfrc.hxqh.dfrc_project.model.FKWORKORDER;
 import com.dfrc.hxqh.dfrc_project.model.INVBALANCES;
 import com.dfrc.hxqh.dfrc_project.model.INVENTORY;
+import com.dfrc.hxqh.dfrc_project.model.MATUSETRANS;
 import com.dfrc.hxqh.dfrc_project.model.N_MATERIAL;
 import com.dfrc.hxqh.dfrc_project.model.N_PROBLEM;
 import com.dfrc.hxqh.dfrc_project.model.PERSON;
+import com.dfrc.hxqh.dfrc_project.model.PO;
 import com.dfrc.hxqh.dfrc_project.model.SPAREPART;
 import com.dfrc.hxqh.dfrc_project.model.WORKORDER;
 import com.dfrc.hxqh.dfrc_project.model.WOTASK;
@@ -166,6 +168,7 @@ public class JsonUtils {
         }
 
     }
+
     /**
      * 备件
      */
@@ -306,8 +309,6 @@ public class JsonUtils {
     }
 
 
-
-
     /**
      * 问题点管理
      */
@@ -355,7 +356,6 @@ public class JsonUtils {
     }
 
 
-
     /**
      * 人员
      */
@@ -401,7 +401,6 @@ public class JsonUtils {
         }
 
     }
-
 
 
     /**
@@ -543,6 +542,7 @@ public class JsonUtils {
         }
 
     }
+
     /**
      * 总库领料单明细行
      */
@@ -588,6 +588,7 @@ public class JsonUtils {
         }
 
     }
+
     /**
      * 分库领料单
      */
@@ -634,7 +635,126 @@ public class JsonUtils {
 
     }
 
+    /**
+     * 分库领料单行
+     */
+    public static ArrayList<MATUSETRANS> parsingMATUSETRANS(String data) {
+        ArrayList<MATUSETRANS> list = null;
+        MATUSETRANS matusetrans = null;
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            JSONObject jsonObject;
+            list = new ArrayList<MATUSETRANS>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                matusetrans = new MATUSETRANS();
+                jsonObject = jsonArray.getJSONObject(i);
+                Field[] field = matusetrans.getClass().getDeclaredFields();        //获取实体类的所有属性，返回Field数组
+                for (int j = 0; j < field.length; j++) {     //遍历所有属性
+                    field[j].setAccessible(true);
+                    String name = field[j].getName();    //获取属性的名字
+                    if (jsonObject.has(name) && jsonObject.getString(name) != null && !jsonObject.getString(name).equals("")) {
+                        try {
+                            // 调用getter方法获取属性值
+                            Method getOrSet = matusetrans.getClass().getMethod("get" + name);
+                            Object value = getOrSet.invoke(matusetrans);
+                            if (value == null) {
+                                //调用setter方法设属性值
+                                Class[] parameterTypes = new Class[1];
+                                parameterTypes[0] = field[j].getType();
+                                getOrSet = matusetrans.getClass().getDeclaredMethod("set" + name, parameterTypes);
+                                getOrSet.invoke(matusetrans, jsonObject.getString(name));
+                            }
 
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+                list.add(matusetrans);
+            }
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+
+    /**
+     * 采购接收
+     */
+    public static ArrayList<PO> parsingPO(String data) {
+        ArrayList<PO> list = null;
+        PO po = null;
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            JSONObject jsonObject;
+            list = new ArrayList<PO>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                po = new PO();
+                jsonObject = jsonArray.getJSONObject(i);
+                Field[] field = po.getClass().getDeclaredFields();        //获取实体类的所有属性，返回Field数组
+                for (int j = 0; j < field.length; j++) {     //遍历所有属性
+                    field[j].setAccessible(true);
+                    String name = field[j].getName();    //获取属性的名字
+                    if (jsonObject.has(name) && jsonObject.getString(name) != null && !jsonObject.getString(name).equals("")) {
+                        try {
+                            // 调用getter方法获取属性值
+                            Method getOrSet = po.getClass().getMethod("get" + name);
+                            Object value = getOrSet.invoke(po);
+                            if (value == null) {
+                                //调用setter方法设属性值
+                                Class[] parameterTypes = new Class[1];
+                                parameterTypes[0] = field[j].getType();
+                                getOrSet = po.getClass().getDeclaredMethod("set" + name, parameterTypes);
+                                getOrSet.invoke(po, jsonObject.getString(name));
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+                list.add(po);
+            }
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+
+    ////////////////封装json
+
+    /**
+     * 封装WOTASK的json
+     */
+    public static String potoWOTASK(String n_result, String n_note, String n_members) {
+
+        JSONObject json = new JSONObject();
+
+        try {
+            json.put("N_RESULT", n_result);  //结果
+            json.put("N_NOTE", n_note); //预知项目结果
+            json.put("N_MEMBERS", n_members); //实施人员
+            JSONArray jsonArray = new JSONArray();
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("", "");
+            jsonArray.put(jsonObject);
+            json.put("relationShip", jsonArray);
+        } catch (JSONException e) {
+            return null;
+        }
+
+        Log.i(TAG, "json=" + json);
+        return json.toString();
+
+    }
 
 
 }
