@@ -24,9 +24,9 @@ import com.dfrc.hxqh.dfrc_project.api.HttpManager;
 import com.dfrc.hxqh.dfrc_project.api.HttpRequestHandler;
 import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.bean.Results;
-import com.dfrc.hxqh.dfrc_project.model.PERSON;
+import com.dfrc.hxqh.dfrc_project.model.ASSET;
+import com.dfrc.hxqh.dfrc_project.view.adapter.AssetListAdapter;
 import com.dfrc.hxqh.dfrc_project.view.adapter.BaseQuickAdapter;
-import com.dfrc.hxqh.dfrc_project.view.adapter.PersonListAdapter;
 import com.dfrc.hxqh.dfrc_project.view.widght.SwipeRefreshLayout;
 
 import java.util.ArrayList;
@@ -38,11 +38,12 @@ import butterknife.OnClick;
 
 /**
  * Created by Administrator on 2017/2/15.
- * 人员选择
+ * 设备选择
  */
 
-public class PersonActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
-    private static final String TAG = "PersonActivity";
+public class AssetChooseActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
+    private static final String TAG = "AssetChooseActivity";
+    public static final int  ASSET_CODE=1001;
     @Bind(R.id.title_name) //标题
             TextView titleTextView;
     LinearLayoutManager layoutManager;
@@ -59,7 +60,7 @@ public class PersonActivity extends BaseActivity implements SwipeRefreshLayout.O
     /**
      * 适配器*
      */
-    private PersonListAdapter personListAdapter;
+    private AssetListAdapter assetListAdapter;
     /**
      * 查询条件*
      */
@@ -67,7 +68,7 @@ public class PersonActivity extends BaseActivity implements SwipeRefreshLayout.O
     private int page = 1;
 
 
-    ArrayList<PERSON> items = new ArrayList<PERSON>();
+    ArrayList<ASSET> items = new ArrayList<ASSET>();
 
     private int mark;
     private String assetNum;
@@ -95,7 +96,7 @@ public class PersonActivity extends BaseActivity implements SwipeRefreshLayout.O
 
     @Override
     protected void initView() {
-        titleTextView.setText(R.string.person_text);
+        titleTextView.setText(R.string.sbcx_text);
         setSearchEdit();
 
         layoutManager = new LinearLayoutManager(this);
@@ -113,7 +114,7 @@ public class PersonActivity extends BaseActivity implements SwipeRefreshLayout.O
         refresh_layout.setOnLoadListener(this);
 
         refresh_layout.setRefreshing(true);
-        initAdapter(new ArrayList<PERSON>());
+        initAdapter(new ArrayList<ASSET>());
         items = new ArrayList<>();
         getData(searchText);
     }
@@ -153,12 +154,12 @@ public class PersonActivity extends BaseActivity implements SwipeRefreshLayout.O
                     // 先隐藏键盘
                     ((InputMethodManager) search.getContext().getSystemService(Context.INPUT_METHOD_SERVICE))
                             .hideSoftInputFromWindow(
-                                    PersonActivity.this.getCurrentFocus()
+                                    AssetChooseActivity.this.getCurrentFocus()
                                             .getWindowToken(),
                                     InputMethodManager.HIDE_NOT_ALWAYS);
                     searchText = search.getText().toString();
-                    personListAdapter.removeAll(items);
-                    items = new ArrayList<PERSON>();
+                    assetListAdapter.removeAll(items);
+                    items = new ArrayList<ASSET>();
                     nodatalayout.setVisibility(View.GONE);
                     refresh_layout.setRefreshing(true);
                     page = 1;
@@ -175,13 +176,8 @@ public class PersonActivity extends BaseActivity implements SwipeRefreshLayout.O
      * 获取数据*
      */
     private void getData(String search) {
-        String url = null;
-        if (crewid.equals("")) {
-            url = HttpManager.getPERSIONURL(search, page, 20);
-        } else {
-            url = HttpManager.getPERSIONURL(search, crewid, page, 20);
-        }
-        HttpManager.getDataPagingInfo(PersonActivity.this, url, new HttpRequestHandler<Results>() {
+        String url = HttpManager.getASSETURL1(search, crewid, page, 20);
+        HttpManager.getDataPagingInfo(AssetChooseActivity.this, url, new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {
                 Log.i(TAG, "data=" + results);
@@ -189,7 +185,7 @@ public class PersonActivity extends BaseActivity implements SwipeRefreshLayout.O
 
             @Override
             public void onSuccess(Results results, int totalPages, int currentPage) {
-                ArrayList<PERSON> item = JsonUtils.parsingPERSON(results.getResultlist());
+                ArrayList<ASSET> item = JsonUtils.parsingASSET(results.getResultlist());
                 refresh_layout.setRefreshing(false);
                 refresh_layout.setLoading(false);
                 if (item == null || item.isEmpty()) {
@@ -198,7 +194,7 @@ public class PersonActivity extends BaseActivity implements SwipeRefreshLayout.O
 
                     if (item != null || item.size() != 0) {
                         if (page == 1) {
-                            items = new ArrayList<PERSON>();
+                            items = new ArrayList<ASSET>();
                             initAdapter(items);
                         }
                         for (int i = 0; i < item.size(); i++) {
@@ -225,17 +221,17 @@ public class PersonActivity extends BaseActivity implements SwipeRefreshLayout.O
     /**
      * 获取数据*
      */
-    private void initAdapter(final List<PERSON> list) {
-        personListAdapter = new PersonListAdapter(PersonActivity.this, R.layout.list_item_person, list);
-        recyclerView.setAdapter(personListAdapter);
-        personListAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
+    private void initAdapter(final List<ASSET> list) {
+        assetListAdapter = new AssetListAdapter(AssetChooseActivity.this, R.layout.list_item_asset, list);
+        recyclerView.setAdapter(assetListAdapter);
+        assetListAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Intent intent = getIntent();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("person", items.get(position));
+                bundle.putSerializable("asset", items.get(position));
                 intent.putExtras(bundle);
-                setResult(1000, intent);
+                setResult(ASSET_CODE, intent);
                 finish();
             }
         });
@@ -244,8 +240,8 @@ public class PersonActivity extends BaseActivity implements SwipeRefreshLayout.O
     /**
      * 添加数据*
      */
-    private void addData(final List<PERSON> list) {
-        personListAdapter.addData(list);
+    private void addData(final List<ASSET> list) {
+        assetListAdapter.addData(list);
     }
 
 }

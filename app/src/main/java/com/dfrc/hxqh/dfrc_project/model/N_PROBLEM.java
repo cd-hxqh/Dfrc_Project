@@ -19,6 +19,7 @@ public class N_PROBLEM extends Entity {
     public String PRODESC;//问题点描述
     public String REASON;//原因
     public String RESPONSOR;//担当
+    public String DISPLAYNAME;//担当名称
     public String RESULT;//整改结果
     public String SOLVE;//进展
     public String STATUS;//状态
@@ -176,5 +177,13 @@ public class N_PROBLEM extends Entity {
 
     public void setWORKORDER_DESCRIPTION(String WORKORDER_DESCRIPTION) {
         this.WORKORDER_DESCRIPTION = WORKORDER_DESCRIPTION;
+    }
+
+    public String getDISPLAYNAME() {
+        return DISPLAYNAME;
+    }
+
+    public void setDISPLAYNAME(String DISPLAYNAME) {
+        this.DISPLAYNAME = DISPLAYNAME;
     }
 }

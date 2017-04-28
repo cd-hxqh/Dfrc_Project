@@ -74,7 +74,7 @@
                         android:textColor="@color/light_black"
                         android:textSize="@dimen/dimens_16sp" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/prodesc_text_id"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -211,6 +211,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="3"
                         android:background="@color/sb__transparent"
+                        android:drawableRight="@mipmap/item_more"
                         android:gravity="right"
                         android:hint="@string/have_not_data"
                         android:textColor="@color/light_black"
@@ -246,6 +247,41 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="3"
                         android:background="@color/sb__transparent"
+                        android:drawableRight="@mipmap/item_more"
+                        android:gravity="right"
+                        android:hint="@string/have_not_data"
+                        android:textColor="@color/light_black"
+                        android:textSize="@dimen/dimens_16sp" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimens_line"
+                    android:background="@mipmap/line"></View>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/dimen_10">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/ddname_text"
+                        android:textColor="@color/light_black"
+                        android:textSize="@dimen/dimens_16sp" />
+
+                    <TextView
+                        android:id="@+id/ddname_text_id"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:background="@color/sb__transparent"
                         android:gravity="right"
                         android:hint="@string/have_not_data"
                         android:textColor="@color/light_black"
@@ -273,7 +309,7 @@
                         android:textColor="@color/light_black"
                         android:textSize="@dimen/dimens_16sp" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/pl_text_id"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -285,6 +321,7 @@
                         android:textSize="@dimen/dimens_16sp" />
 
                 </LinearLayout>
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dimens_line"
@@ -305,7 +342,7 @@
                         android:textColor="@color/light_black"
                         android:textSize="@dimen/dimens_16sp" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/position_text_id"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -348,6 +385,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="3"
                         android:background="@color/sb__transparent"
+                        android:drawableRight="@mipmap/item_more"
                         android:gravity="right"
                         android:hint="@string/have_not_data"
                         android:textColor="@color/light_black"
@@ -408,11 +446,11 @@
                         android:textColor="@color/light_black"
                         android:textSize="@dimen/dimens_16sp" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/reason_text_id"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="3"
+                        android:background="@color/transparent"
                         android:gravity="right"
                         android:hint="@string/have_not_data"
                         android:textColor="@color/light_black"
@@ -440,10 +478,11 @@
                         android:textColor="@color/light_black"
                         android:textSize="@dimen/dimens_16sp" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/dc_text_id"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@color/transparent"
                         android:gravity="right"
                         android:hint="@string/have_not_data"
                         android:textColor="@color/light_black"
@@ -453,8 +492,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dimens_line"
-                    android:background="@mipmap/line"
-                   ></View>
+                    android:background="@mipmap/line"></View>
 
 
                 <LinearLayout
@@ -477,19 +515,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/sb__transparent"
+                        android:drawableRight="@mipmap/item_more"
                         android:gravity="right"
                         android:hint="@string/have_not_data"
                         android:textColor="@color/light_black"
                         android:textSize="@dimen/dimens_16sp" />
 
                 </LinearLayout>
-
-
-
-
-
-
-
 
 
             </LinearLayout>
@@ -524,6 +556,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="3"
                         android:background="@color/sb__transparent"
+                        android:drawableRight="@mipmap/item_more"
                         android:gravity="right"
                         android:hint="@string/have_not_data"
                         android:textColor="@color/light_black"
@@ -557,6 +590,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="3"
                         android:background="@color/sb__transparent"
+                        android:drawableRight="@mipmap/item_more"
                         android:gravity="right"
                         android:hint="@string/have_not_data"
                         android:textColor="@color/light_black"
@@ -589,6 +623,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="3"
+                        android:drawableRight="@mipmap/item_more"
                         android:gravity="right"
                         android:hint="@string/have_not_data"
                         android:textColor="@color/light_black"
@@ -596,16 +631,6 @@
 
 
                 </LinearLayout>
-
-
-
-
-
-
-
-
-
-
 
 
             </LinearLayout>

@@ -111,6 +111,7 @@ public class N_PB_AddActivity extends BaseActivity {
     @OnClick(R.id.n_improver_text_id)
     void setN_prodescTextViewOnClickListener() {
         Intent intent = new Intent(N_PB_AddActivity.this, PersonActivity.class);
+        intent.putExtra("crewid", "");
         startActivityForResult(intent, 0);
     }
 

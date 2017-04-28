@@ -142,6 +142,9 @@
         <activity
             android:name=".view.activity.SettingActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.AssetChooseActivity"
+            android:screenOrientation="portrait" />
 
         <!--设置蒲公英-->
         <meta-data

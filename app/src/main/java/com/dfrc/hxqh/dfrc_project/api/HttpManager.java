@@ -36,6 +36,18 @@ public class HttpManager {
     }
 
     /**
+     * 根据班组获取设备
+     */
+    public static String getASSETURL1(String vaule, String n_crewid, int curpage, int showcount) {
+        if (vaule.equals("")) {
+            return "{'appid':'" + Constants.ASSET_APPID + "','objectname':'" + Constants.ASSET_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'ASSETNUM DESC','condition':{'N_CREWID':'=" + n_crewid + "'}}";
+
+        } else {
+            return "{'appid':'" + Constants.ASSET_APPID + "','objectname':'" + Constants.ASSET_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'ASSETNUM DESC','condition':{'N_CREWID':'=" + n_crewid + "'},'sinorsearch':{'ASSETNUM':'" + vaule + "','DESCRIPTION':'" + vaule + "'}}";
+        }
+    }
+
+    /**
      * 根据编号获取设备
      */
     public static String getASSETByNuMURL(String assetNum, String vaule, int curpage, int showcount) {
@@ -124,6 +136,18 @@ public class HttpManager {
     }
 
     /**
+     * 设置根据班组获取人员
+     */
+    public static String getPERSIONURL(String vaule, String crewid, int curpage, int showcount) {
+        if (vaule.equals("")) {
+            return "{'appid':'" + Constants.PERSON_APPID + "','objectname':'" + Constants.PERSON_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'PERSONID DESC','condition':{'N_CREWID':'=" + crewid + "'}}";
+
+        } else {
+            return "{'appid':'" + Constants.PERSON_APPID + "','objectname':'" + Constants.PERSON_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'PERSONID DESC','condition':{'N_CREWID':'=" + crewid + "'},'sinorsearch':{'PERSONID':'" + vaule + "','DISPLAYNAME':'" + vaule + "'}}";
+        }
+    }
+
+    /**
      * 设置获取人员
      */
     public static String getPERSIONByIDURL(String personid, int curpage, int showcount) {
@@ -183,6 +207,7 @@ public class HttpManager {
             return "{'appid':'" + Constants.N_WORKOR2 + "','objectname':'" + Constants.WORKORDER_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WONUM DESC','condition':{'SITEID':'=" + siteid + "'},'sinorsearch':{'WONUM':'" + vaule + "','DESCRIPTION':'" + vaule + "'}}";
         }
     }
+
     /**
      * 获取总库领料单
      */
@@ -234,6 +259,15 @@ public class HttpManager {
         }
     }
 
+    /**
+     * 获取选项值
+     */
+    public static String getALNDOMAINURL(String domainid) {
+
+        return "{'appid':'" + Constants.ALNDOMAIN_APPID + "','objectname':'" + Constants.ALNDOMAIN_NAME + "','option':'read','condition':{'DOMAINID':'=" + domainid + "'}}";
+
+
+    }
 
 
     /**

@@ -209,5 +209,8 @@
     <string name="zx_text">注销</string>
     <string name="add_text">新建</string>
     <string name="sys_text">扫一扫</string>
+    <string name="ddname_text">担当名称:</string>
+
+    <string name="get_type_text">获取选项值</string>
 
 </resources>

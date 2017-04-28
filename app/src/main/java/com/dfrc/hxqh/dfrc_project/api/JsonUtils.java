@@ -6,6 +6,7 @@ import android.util.Log;
 import com.dfrc.hxqh.dfrc_project.bean.LoginResults;
 import com.dfrc.hxqh.dfrc_project.bean.Results;
 import com.dfrc.hxqh.dfrc_project.constants.Constants;
+import com.dfrc.hxqh.dfrc_project.model.ALNDOMAIN;
 import com.dfrc.hxqh.dfrc_project.model.ASSET;
 import com.dfrc.hxqh.dfrc_project.model.FKWORKORDER;
 import com.dfrc.hxqh.dfrc_project.model.INVBALANCES;
@@ -719,6 +720,53 @@ public class JsonUtils {
 
                 }
                 list.add(po);
+            }
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+
+    /**
+     * ALNDOMAIN
+     */
+    public static ArrayList<ALNDOMAIN> parsingALNDOMAIN(String data) {
+        ArrayList<ALNDOMAIN> list = null;
+        ALNDOMAIN alndomain = null;
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            JSONObject jsonObject;
+            list = new ArrayList<ALNDOMAIN>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                alndomain = new ALNDOMAIN();
+                jsonObject = jsonArray.getJSONObject(i);
+                Field[] field = alndomain.getClass().getDeclaredFields();        //获取实体类的所有属性，返回Field数组
+                for (int j = 0; j < field.length; j++) {     //遍历所有属性
+                    field[j].setAccessible(true);
+                    String name = field[j].getName();    //获取属性的名字
+                    if (jsonObject.has(name) && jsonObject.getString(name) != null && !jsonObject.getString(name).equals("")) {
+                        try {
+                            // 调用getter方法获取属性值
+                            Method getOrSet = alndomain.getClass().getMethod("get" + name);
+                            Object value = getOrSet.invoke(alndomain);
+                            if (value == null) {
+                                //调用setter方法设属性值
+                                Class[] parameterTypes = new Class[1];
+                                parameterTypes[0] = field[j].getType();
+                                getOrSet = alndomain.getClass().getDeclaredMethod("set" + name, parameterTypes);
+                                getOrSet.invoke(alndomain, jsonObject.getString(name));
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+                list.add(alndomain);
             }
             return list;
         } catch (JSONException e) {
