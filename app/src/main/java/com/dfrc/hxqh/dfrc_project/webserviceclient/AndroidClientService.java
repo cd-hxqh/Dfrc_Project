@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.dfrc.hxqh.dfrc_project.constants.Constants;
+import com.dfrc.hxqh.dfrc_project.model.N_PROBLEM;
 import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
 
 import org.ksoap2.SoapEnvelope;
@@ -214,4 +215,49 @@ public class AndroidClientService {
         return obj;
     }
 
+
+
+
+    /**
+     * 问题点新增
+     */
+    public static String CreateProblem(final Context cxt, N_PROBLEM n_problem) {
+
+        String ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
+
+        SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        soapEnvelope.implicitTypes = true;
+        soapEnvelope.dotNet = true;
+        SoapObject soapReq = new SoapObject(NAMESPACE, "dflserviceCreateProblem");
+        soapReq.addProperty("PRODESC", n_problem.getPRODESC()); //问题点描述
+        soapReq.addProperty("CREWID", n_problem.getCREWID());//班组
+        soapReq.addProperty("FINDDATE", n_problem.getFINDDATE());//发现日期
+        soapReq.addProperty("RESPONSOR", n_problem.getRESPONSOR());// 担当
+        soapReq.addProperty("PL", n_problem.getPL());//生产线
+        soapReq.addProperty("POSITION", n_problem.getPOSITION());//部位
+        soapReq.addProperty("ASSETNUM", n_problem.getASSETNUM());//设备编号
+        soapReq.addProperty("REASON", n_problem.getREASON());//原因
+        soapReq.addProperty("SOLVE", n_problem.getSOLVE()); //对策
+        soapReq.addProperty("FINISHDATE", n_problem.getFINISHDATE());//完成日期
+        soapReq.addProperty("STATUS", n_problem.getSTATUS());//进展
+        soapReq.addProperty("ABC", n_problem.getABC()); //重要度
+        soapReq.addProperty("CONFIRMBY", n_problem.getCONFIRMBY()); //确认人
+        soapReq.addProperty("RESULT", n_problem.getRESULT());//整改结果
+        soapEnvelope.setOutputSoapObject(soapReq);
+        HttpTransportSE httpTransport = new HttpTransportSE(ip_adress, timeOut);
+        try {
+            httpTransport.call("urn:action", soapEnvelope);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        }
+        String obj = null;
+        try {
+            obj = soapEnvelope.getResponse().toString();
+        } catch (SoapFault soapFault) {
+            soapFault.printStackTrace();
+        }
+        return obj;
+    }
 }

@@ -13,6 +13,8 @@ public class WORKORDER extends Entity {
     public String STATUS;//状态
     public String WONUM;//编号
     public String YEAR;//年度
+    public String N_QTYOPEN;//未完成
+    public String N_QTYCOMP;//已完成
 
     public String getCHANGEBY() {
         return CHANGEBY;
@@ -76,5 +78,21 @@ public class WORKORDER extends Entity {
 
     public void setYEAR(String YEAR) {
         this.YEAR = YEAR;
+    }
+
+    public String getN_QTYOPEN() {
+        return N_QTYOPEN;
+    }
+
+    public void setN_QTYOPEN(String n_QTYOPEN) {
+        N_QTYOPEN = n_QTYOPEN;
+    }
+
+    public String getN_QTYCOMP() {
+        return N_QTYCOMP;
+    }
+
+    public void setN_QTYCOMP(String n_QTYCOMP) {
+        N_QTYCOMP = n_QTYCOMP;
     }
 }

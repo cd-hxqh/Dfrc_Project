@@ -301,7 +301,10 @@ public class N_problemActivity extends BaseActivity implements SwipeRefreshLayou
     private View.OnClickListener xjOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-
+            Intent intent = getIntent();
+            intent.setClass(N_problemActivity.this, N_ProblemAddActivity.class);
+            intent.putExtra("mark", PROBLEM_CODE);
+            startActivityForResult(intent, 0);
             popupWindow.dismiss();
         }
     };
