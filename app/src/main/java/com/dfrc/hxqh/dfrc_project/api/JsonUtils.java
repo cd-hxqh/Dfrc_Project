@@ -805,4 +805,55 @@ public class JsonUtils {
     }
 
 
+    /**
+     * 封装N_PROBLEM的json
+     */
+    public static String potoN_PROBLEM(N_PROBLEM n_problem) {
+
+        JSONObject json = new JSONObject();
+
+        try {
+            json.put("PRODESC", n_problem.getPRODESC());  //问题点描述
+            json.put("FINDDATE", n_problem.getFINDDATE()); //发现日期
+            json.put("RESPONSOR", n_problem.getRESPONSOR()); //担当
+            json.put("PL", n_problem.getPL()); //生产线
+            json.put("POSITION", n_problem.getPOSITION()); //部位
+            json.put("ASSETNUM", n_problem.getASSETNUM()); //设备编号
+            json.put("REASON", n_problem.getREASON()); //原因
+            json.put("SOLVE", n_problem.getSOLVE()); //对策
+            json.put("FINISHDATE", n_problem.getFINISHDATE()); //完成日期
+            json.put("STATUS", n_problem.getSTATUS()); //进展
+            json.put("ABC", n_problem.getABC()); //重要度
+            json.put("CONFIRMBY", n_problem.getCONFIRMBY()); //确认人
+            json.put("RESULT", n_problem.getRESULT()); //整改结果
+            JSONArray jsonArray = new JSONArray();
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("", "");
+            jsonArray.put(jsonObject);
+            json.put("relationShip", jsonArray);
+        } catch (JSONException e) {
+            return null;
+        }
+
+        Log.i(TAG, "json=" + json);
+        return json.toString();
+
+    }
+
+
+    //解析问题点修改的返回值
+    public static String showResults(String json) {
+        String success = null;
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+            if (jsonObject.has("success")) {
+                success = jsonObject.getString("success");
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return success;
+    }
+
 }

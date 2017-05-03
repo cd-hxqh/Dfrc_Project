@@ -21,8 +21,8 @@ public class N_PROBLEM extends Entity {
     public String RESPONSOR;//担当
     public String DISPLAYNAME;//担当名称
     public String RESULT;//整改结果
-    public String SOLVE;//进展
-    public String STATUS;//状态
+    public String SOLVE;//对策
+    public String STATUS;//进展
     public String WONUM;//工单
     public String WORKORDER_DESCRIPTION;//工单描述
 

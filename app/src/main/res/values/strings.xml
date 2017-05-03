@@ -212,5 +212,6 @@
     <string name="ddname_text">担当名称:</string>
 
     <string name="get_type_text">获取选项值</string>
+    <string name="finishdate1_text">完成日期:</string>
 
 </resources>

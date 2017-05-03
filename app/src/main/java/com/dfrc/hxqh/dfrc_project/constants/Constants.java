@@ -143,6 +143,8 @@ public class Constants {
 
     //进展
     public static final String WTDSTATUS = "WTDSTATUS";//进展
+    public static final String ABCTYPE = "N_ABC";//重要度
+    public static final String N_PRORESULT = "N_PRORESULT";//整改结果
 
 
 

@@ -162,6 +162,7 @@ public class AndroidClientService {
         String obj = null;
         try {
             obj = soapEnvelope.getResponse().toString();
+            Log.i(TAG,"obj="+obj);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
