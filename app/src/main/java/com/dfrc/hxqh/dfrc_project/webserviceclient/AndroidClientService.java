@@ -5,6 +5,8 @@ import android.content.Context;
 import android.util.Log;
 
 import com.dfrc.hxqh.dfrc_project.constants.Constants;
+import com.dfrc.hxqh.dfrc_project.model.MATRECTRANS;
+import com.dfrc.hxqh.dfrc_project.model.N_MATERIAL;
 import com.dfrc.hxqh.dfrc_project.model.N_PROBLEM;
 import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
 
@@ -243,6 +245,82 @@ public class AndroidClientService {
         soapReq.addProperty("ABC", n_problem.getABC()); //重要度
         soapReq.addProperty("CONFIRMBY", n_problem.getCONFIRMBY()); //确认人
         soapReq.addProperty("RESULT", n_problem.getRESULT());//整改结果
+        soapEnvelope.setOutputSoapObject(soapReq);
+        HttpTransportSE httpTransport = new HttpTransportSE(ip_adress, timeOut);
+        try {
+            httpTransport.call("urn:action", soapEnvelope);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        }
+        String obj = null;
+        try {
+            obj = soapEnvelope.getResponse().toString();
+        } catch (SoapFault soapFault) {
+            soapFault.printStackTrace();
+        }
+        return obj;
+    }
+
+
+
+    /**
+     * 物料接收新增
+     */
+    public static String INV02RecByPOLine(final Context cxt, MATRECTRANS matrectrans) {
+
+        String ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
+
+        SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        soapEnvelope.implicitTypes = true;
+        soapEnvelope.dotNet = true;
+        SoapObject soapReq = new SoapObject(NAMESPACE, "dflserviceINV02RecByPOLine");
+        soapReq.addProperty("userid", matrectrans.getENTERBY()); //输入人
+        soapReq.addProperty("ponum", matrectrans.getPONUM());//采购单号
+        soapReq.addProperty("polinenum", matrectrans.getPOLINENUM());//采购单行号
+        soapReq.addProperty("qty", matrectrans.getRECEIPTQUANTITY());// 数量
+        soapReq.addProperty("binnum", matrectrans.getBINNUM());//货柜
+        soapEnvelope.setOutputSoapObject(soapReq);
+        HttpTransportSE httpTransport = new HttpTransportSE(ip_adress, timeOut);
+        try {
+            httpTransport.call("urn:action", soapEnvelope);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        }
+        String obj = null;
+        try {
+            obj = soapEnvelope.getResponse().toString();
+        } catch (SoapFault soapFault) {
+            soapFault.printStackTrace();
+        }
+        return obj;
+    }
+
+
+    /**
+     * 总库领料单物料新增
+     */
+    public static String AddN_WORKOR2Line(final Context cxt, N_MATERIAL n_material) {
+
+        String ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
+
+        SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        soapEnvelope.implicitTypes = true;
+        soapEnvelope.dotNet = true;
+        SoapObject soapReq = new SoapObject(NAMESPACE, "dflserviceAddN_WORKOR2Line");
+        Log.i(TAG,"WONUM="+n_material.getWONUM()+",SITEID="+n_material.getSITEID()+",status="+n_material.getSTATUS()+",N_SAP1="+n_material.getN_SAP1()+",ITEMNUM="+n_material.getITEMNUM()+",REASON="+n_material.getN_REASON()+",N_SAP3="+n_material.getN_SAP3());
+
+        soapReq.addProperty("WONUM", n_material.getWONUM()); //工单号
+        soapReq.addProperty("SITEID", n_material.getSITEID());//站点
+        soapReq.addProperty("STATUS", n_material.getSTATUS());//状态
+        soapReq.addProperty("N_SAP1", n_material.getN_SAP1());// 数量
+        soapReq.addProperty("ITEMNUM", n_material.getITEMNUM());//物料号
+        soapReq.addProperty("REASON", n_material.getN_REASON());//领料原因
+        soapReq.addProperty("N_SAP3", n_material.getN_SAP3());//实际发放数量
+        soapReq.addProperty("N_SAP5", n_material.getN_SAP5());//申请数量
         soapEnvelope.setOutputSoapObject(soapReq);
         HttpTransportSE httpTransport = new HttpTransportSE(ip_adress, timeOut);
         try {

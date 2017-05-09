@@ -95,6 +95,10 @@ public class Constants {
 
     //采购接收的表名
     public static final String PO_NAME = "PO";
+    //采购单行的表名
+    public static final String POLINE_NAME = "POLINE";
+    //物料接收的表名
+    public static final String MATRECTRANS_NAME = "MATRECTRANS";
 
     //人员appid
     public static final String PERSON_APPID = "PERSON" ;

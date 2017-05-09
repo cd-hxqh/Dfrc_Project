@@ -188,7 +188,7 @@
     <string name="loc_text">位置:</string>
     <string name="sqlywlmx_text">申请领用物料明细</string>
     <string name="wlbm_text">物料编码:</string>
-    <string name="n_sap3_text">申请数量:</string>
+    <string name="n_sap5_text">申请数量:</string>
     <string name="curbal1_text">当前余量:</string>
     <string name="n_reason_text">领用原因:</string>
     <string name="lld_text">领料单号:</string>
@@ -215,5 +215,21 @@
     <string name="finishdate1_text">完成日期:</string>
     <string name="n_qtyopen_text">未完成项目数:</string>
     <string name="n_qtycomp_text">已完成项目数:</string>
+    <string name="poline_text">采购单行</string>
+    <string name="wljs_text">物料接收</string>
+    <string name="polinenum_text">行:</string>
+    <string name="storeloc_text">库存地点:</string>
+    <string name="issue_type_text">类型:</string>
+    <string name="xzth_text">要退回项目</string>
+    <string name="xzydg_text">已订购项目</string>
+    <string name="enterby1_text">输入人:</string>
+    <string name="xzwl_text">选择物料</string>
+    <string name="n_sap3_text">实际发放数量:</string>
+    <string name="n_happendate_text">发生日期:</string>
+    <string name="estdur_text">持续时间:</string>
+    <string name="n_plstoptime_text">生产线停止时间:</string>
+    <string name="n_failurproblem_text">故障现象:</string>
+    <string name="n_failurcause_text">故障原因:</string>
+    <string name="prodesc1_text">问题点描述:</string>
 
 </resources>

@@ -93,6 +93,8 @@ public class AssetDetailsActivity extends BaseActivity {
     private ASSET asset;
 
     LinearLayout bejjianLinearLayout; //备件
+    LinearLayout djLinearLayout; //点击问题点记录
+    LinearLayout gzLinearLayout; //故障记录
 
 
     @Override
@@ -214,7 +216,11 @@ public class AssetDetailsActivity extends BaseActivity {
         // 设置好参数之后再show
         popupWindow.showAsDropDown(view);
         bejjianLinearLayout = (LinearLayout) contentView.findViewById(R.id.beijian_linearlayout_id);
+        djLinearLayout = (LinearLayout) contentView.findViewById(R.id.djwtdjl_linearlayout_id);
+        gzLinearLayout = (LinearLayout) contentView.findViewById(R.id.gzjl_linearlayout_id);
         bejjianLinearLayout.setOnClickListener(beijianOnClickListener);
+        djLinearLayout.setOnClickListener(djOnClickListener);
+        gzLinearLayout.setOnClickListener(gzOnClickListener);
 
     }
 
@@ -222,6 +228,28 @@ public class AssetDetailsActivity extends BaseActivity {
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(AssetDetailsActivity.this, SparepartActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("assetnum", asset.getASSETNUM());
+            intent.putExtras(bundle);
+            startActivityForResult(intent, 1000);
+            popupWindow.dismiss();
+        }
+    };
+    private View.OnClickListener djOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(AssetDetailsActivity.this, N_problem1Activity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("assetnum", asset.getASSETNUM());
+            intent.putExtras(bundle);
+            startActivityForResult(intent, 1000);
+            popupWindow.dismiss();
+        }
+    };
+    private View.OnClickListener gzOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(AssetDetailsActivity.this, GzWorkorderActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable("assetnum", asset.getASSETNUM());
             intent.putExtras(bundle);

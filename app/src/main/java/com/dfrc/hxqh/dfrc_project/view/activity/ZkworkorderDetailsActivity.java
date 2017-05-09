@@ -154,6 +154,7 @@ public class ZkworkorderDetailsActivity extends BaseActivity {
             Intent intent = new Intent(ZkworkorderDetailsActivity.this, N_materialActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable("wonum", zkworkorder.getWONUM());
+            bundle.putSerializable("zkworkorder", zkworkorder);
             intent.putExtras(bundle);
             startActivityForResult(intent, 1000);
             popupWindow.dismiss();

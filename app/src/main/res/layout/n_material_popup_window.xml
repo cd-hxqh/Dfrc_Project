@@ -5,13 +5,12 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/invbalances_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/beijian_linearlayout_id"
+            android:id="@+id/add_linearlayout_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -21,13 +20,13 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/ic_beijian" />
+                android:src="@mipmap/ic_add" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dimen_5"
-                android:text="@string/beijian_text"
+                android:text="@string/add_text"
                 android:textSize="@dimen/dimens_16dp" />
 
         </LinearLayout>
@@ -39,7 +38,7 @@
             android:background="@mipmap/line" />
 
         <LinearLayout
-            android:id="@+id/djwtdjl_linearlayout_id"
+            android:id="@+id/code_linearlayout_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -49,43 +48,13 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/ic_wtd" />
+                android:src="@mipmap/ic_code" />
 
             <TextView
-                android:id="@+id/djwtdjl_text_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dimen_5"
-                android:text="@string/djwtdjl_text"
-                android:textSize="@dimen/dimens_16dp" />
-
-        </LinearLayout>
-
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dimens_line"
-            android:background="@mipmap/line" />
-
-        <LinearLayout
-            android:id="@+id/gzjl_linearlayout_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:padding="@dimen/size_10dp">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/ic_gzjl" />
-
-            <TextView
-                android:id="@+id/gzjl_text_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dimen_5"
-                android:text="@string/gzjl_text"
+                android:text="@string/sys_text"
                 android:textSize="@dimen/dimens_16dp" />
 
         </LinearLayout>

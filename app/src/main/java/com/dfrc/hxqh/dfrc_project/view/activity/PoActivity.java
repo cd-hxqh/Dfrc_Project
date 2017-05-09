@@ -43,7 +43,7 @@ import butterknife.OnClick;
  */
 
 public class PoActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
-    private static final String TAG = "AssetActivity";
+    private static final String TAG = "PoActivity";
     @Bind(R.id.title_name) //标题
             TextView titleTextView;
     LinearLayoutManager layoutManager;

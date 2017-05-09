@@ -9,13 +9,16 @@ import com.dfrc.hxqh.dfrc_project.constants.Constants;
 import com.dfrc.hxqh.dfrc_project.model.ALNDOMAIN;
 import com.dfrc.hxqh.dfrc_project.model.ASSET;
 import com.dfrc.hxqh.dfrc_project.model.FKWORKORDER;
+import com.dfrc.hxqh.dfrc_project.model.GZWORKORDER;
 import com.dfrc.hxqh.dfrc_project.model.INVBALANCES;
 import com.dfrc.hxqh.dfrc_project.model.INVENTORY;
+import com.dfrc.hxqh.dfrc_project.model.MATRECTRANS;
 import com.dfrc.hxqh.dfrc_project.model.MATUSETRANS;
 import com.dfrc.hxqh.dfrc_project.model.N_MATERIAL;
 import com.dfrc.hxqh.dfrc_project.model.N_PROBLEM;
 import com.dfrc.hxqh.dfrc_project.model.PERSON;
 import com.dfrc.hxqh.dfrc_project.model.PO;
+import com.dfrc.hxqh.dfrc_project.model.POLINE;
 import com.dfrc.hxqh.dfrc_project.model.SPAREPART;
 import com.dfrc.hxqh.dfrc_project.model.WORKORDER;
 import com.dfrc.hxqh.dfrc_project.model.WOTASK;
@@ -216,6 +219,51 @@ public class JsonUtils {
 
     }
 
+    /**
+     * 故障工单
+     */
+    public static ArrayList<GZWORKORDER> parsingGZWORKORDER(String data) {
+        ArrayList<GZWORKORDER> list = null;
+        GZWORKORDER gzworkorder = null;
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            JSONObject jsonObject;
+            list = new ArrayList<GZWORKORDER>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                gzworkorder = new GZWORKORDER();
+                jsonObject = jsonArray.getJSONObject(i);
+                Field[] field = gzworkorder.getClass().getDeclaredFields();        //获取实体类的所有属性，返回Field数组
+                for (int j = 0; j < field.length; j++) {     //遍历所有属性
+                    field[j].setAccessible(true);
+                    String name = field[j].getName();    //获取属性的名字
+                    if (jsonObject.has(name) && jsonObject.getString(name) != null && !jsonObject.getString(name).equals("")) {
+                        try {
+                            // 调用getter方法获取属性值
+                            Method getOrSet = gzworkorder.getClass().getMethod("get" + name);
+                            Object value = getOrSet.invoke(gzworkorder);
+                            if (value == null) {
+                                //调用setter方法设属性值
+                                Class[] parameterTypes = new Class[1];
+                                parameterTypes[0] = field[j].getType();
+                                getOrSet = gzworkorder.getClass().getDeclaredMethod("set" + name, parameterTypes);
+                                getOrSet.invoke(gzworkorder, jsonObject.getString(name));
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+                list.add(gzworkorder);
+            }
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
     /**
      * 定期点检工单
      */
@@ -730,6 +778,99 @@ public class JsonUtils {
     }
 
 
+
+    /**
+     * 采购单行
+     */
+    public static ArrayList<POLINE> parsingPOLINE(String data) {
+        ArrayList<POLINE> list = null;
+        POLINE poline = null;
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            JSONObject jsonObject;
+            list = new ArrayList<POLINE>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                poline = new POLINE();
+                jsonObject = jsonArray.getJSONObject(i);
+                Field[] field = poline.getClass().getDeclaredFields();        //获取实体类的所有属性，返回Field数组
+                for (int j = 0; j < field.length; j++) {     //遍历所有属性
+                    field[j].setAccessible(true);
+                    String name = field[j].getName();    //获取属性的名字
+                    if (jsonObject.has(name) && jsonObject.getString(name) != null && !jsonObject.getString(name).equals("")) {
+                        try {
+                            // 调用getter方法获取属性值
+                            Method getOrSet = poline.getClass().getMethod("get" + name);
+                            Object value = getOrSet.invoke(poline);
+                            if (value == null) {
+                                //调用setter方法设属性值
+                                Class[] parameterTypes = new Class[1];
+                                parameterTypes[0] = field[j].getType();
+                                getOrSet = poline.getClass().getDeclaredMethod("set" + name, parameterTypes);
+                                getOrSet.invoke(poline, jsonObject.getString(name));
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+                list.add(poline);
+            }
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+    /**
+     * 物料接收
+     */
+    public static ArrayList<MATRECTRANS> parsingMATRECTRANS(String data) {
+        ArrayList<MATRECTRANS> list = null;
+        MATRECTRANS matrectrans = null;
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            JSONObject jsonObject;
+            list = new ArrayList<MATRECTRANS>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                matrectrans = new MATRECTRANS();
+                jsonObject = jsonArray.getJSONObject(i);
+                Field[] field = matrectrans.getClass().getDeclaredFields();        //获取实体类的所有属性，返回Field数组
+                for (int j = 0; j < field.length; j++) {     //遍历所有属性
+                    field[j].setAccessible(true);
+                    String name = field[j].getName();    //获取属性的名字
+                    if (jsonObject.has(name) && jsonObject.getString(name) != null && !jsonObject.getString(name).equals("")) {
+                        try {
+                            // 调用getter方法获取属性值
+                            Method getOrSet = matrectrans.getClass().getMethod("get" + name);
+                            Object value = getOrSet.invoke(matrectrans);
+                            if (value == null) {
+                                //调用setter方法设属性值
+                                Class[] parameterTypes = new Class[1];
+                                parameterTypes[0] = field[j].getType();
+                                getOrSet = matrectrans.getClass().getDeclaredMethod("set" + name, parameterTypes);
+                                getOrSet.invoke(matrectrans, jsonObject.getString(name));
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+                list.add(matrectrans);
+            }
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+
     /**
      * ALNDOMAIN
      */
@@ -839,6 +980,10 @@ public class JsonUtils {
         return json.toString();
 
     }
+
+
+
+
 
 
     //解析问题点修改的返回值

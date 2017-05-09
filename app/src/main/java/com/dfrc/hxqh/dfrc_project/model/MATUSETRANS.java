@@ -95,4 +95,5 @@ public class MATUSETRANS extends Entity{
     public void setSTORELOC(String STORELOC) {
         this.STORELOC = STORELOC;
     }
+
 }

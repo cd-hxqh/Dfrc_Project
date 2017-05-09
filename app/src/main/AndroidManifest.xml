@@ -148,12 +148,38 @@
         <activity
             android:name=".view.activity.N_ProblemAddActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.PoLineActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.WljsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.Matrectrans_AddActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.N_material_AddActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.InvbalancesChooseActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.N_problem1Activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.GzWorkorderActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.GZworkorderDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.N_problem1DetailsActivity"
+            android:screenOrientation="portrait" />
 
         <!--设置蒲公英-->
         <meta-data
             android:name="PGYER_APPID"
-            android:value="44f4bd87c4c1396fd4c0b8669dfe8d1f" >
-        </meta-data>
+            android:value="44f4bd87c4c1396fd4c0b8669dfe8d1f"></meta-data>
 
         <provider
             android:name="android.support.v4.content.FileProvider"

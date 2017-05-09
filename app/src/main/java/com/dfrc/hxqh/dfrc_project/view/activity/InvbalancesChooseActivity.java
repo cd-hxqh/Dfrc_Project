@@ -10,18 +10,13 @@ import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
-import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.dfrc.hxqh.dfrc_project.R;
@@ -29,9 +24,9 @@ import com.dfrc.hxqh.dfrc_project.api.HttpManager;
 import com.dfrc.hxqh.dfrc_project.api.HttpRequestHandler;
 import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.bean.Results;
-import com.dfrc.hxqh.dfrc_project.model.N_MATERIAL;
+import com.dfrc.hxqh.dfrc_project.model.INVBALANCES;
 import com.dfrc.hxqh.dfrc_project.view.adapter.BaseQuickAdapter;
-import com.dfrc.hxqh.dfrc_project.view.adapter.N_materialListAdapter;
+import com.dfrc.hxqh.dfrc_project.view.adapter.Invbalances1ListAdapter;
 import com.dfrc.hxqh.dfrc_project.view.widght.SwipeRefreshLayout;
 
 import java.util.ArrayList;
@@ -43,32 +38,32 @@ import butterknife.OnClick;
 
 /**
  * Created by Administrator on 2017/2/15.
- * 申请领用物料明细
+ * 总库领料物料选择
  */
 
-public class N_materialActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
-    private static final String TAG = "N_materialActivity";
-    private static final int N_MATERIAL_CODE = 1005;
-    @Bind(R.id.title_name) //标题
-            TextView titleTextView;
-    @Bind(R.id.title_add)
-    ImageView menuImageView; //菜单
-    PopupWindow popupWindow;
+public class InvbalancesChooseActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
+    private static final String TAG = "InvbalancesChooseActivity";
+    public static final int INVBALANCES_CODE = 1003;
+    @Bind(R.id.title_name)
+    TextView titleTextView; //标题
+    @Bind(R.id.sbmittext_id)
+    ImageButton codeImageButton;
     LinearLayoutManager layoutManager;
 
-    @Bind(R.id.recyclerView_id)//RecyclerView
-            RecyclerView recyclerView;
+    @Bind(R.id.recyclerView_id)
+    RecyclerView recyclerView; //RecyclerView
     @Bind(R.id.have_not_data_id)
     LinearLayout nodatalayout; //暂无数据
+
     @Bind(R.id.swipe_container)
     SwipeRefreshLayout refresh_layout;//界面刷新
-
-    @Bind(R.id.search_edit)
-    EditText search;//编辑框
     /**
      * 适配器*
      */
-    private N_materialListAdapter n_materialListAdapter;
+    private Invbalances1ListAdapter invbalancesListAdapter;
+
+    @Bind(R.id.search_edit)
+    EditText search; //编辑框
     /**
      * 查询条件*
      */
@@ -76,11 +71,9 @@ public class N_materialActivity extends BaseActivity implements SwipeRefreshLayo
     private int page = 1;
 
 
-    ArrayList<N_MATERIAL> items = new ArrayList<N_MATERIAL>();
+    ArrayList<INVBALANCES> items = new ArrayList<INVBALANCES>();
+    private String location;
 
-    private String wonum;
-    private LinearLayout addLinearLayout;//新建
-    private LinearLayout sysLinearLayout;//扫一扫
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,23 +85,22 @@ public class N_materialActivity extends BaseActivity implements SwipeRefreshLayo
         initView();
     }
 
+
     private void initDate() {
-        wonum = getIntent().getExtras().getString("wonum");
+        location = getIntent().getExtras().getString("location");
 
     }
 
-
     @Override
     protected void findViewById() {
+
     }
 
 
     @Override
     protected void initView() {
-        titleTextView.setText(R.string.sqlywlmx_text);
+        titleTextView.setText(R.string.xzwl_text);
         setSearchEdit();
-        menuImageView.setVisibility(View.VISIBLE);
-        menuImageView.setImageResource(R.mipmap.ic_more);
 
         layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -123,34 +115,16 @@ public class N_materialActivity extends BaseActivity implements SwipeRefreshLayo
 
         refresh_layout.setOnRefreshListener(this);
         refresh_layout.setOnLoadListener(this);
-
         refresh_layout.setRefreshing(true);
-        initAdapter(new ArrayList<N_MATERIAL>());
+        initAdapter(new ArrayList<INVBALANCES>());
         items = new ArrayList<>();
         getData(searchText);
     }
 
-
     //返回事件
     @OnClick(R.id.title_back_id)
-    void setBackOnClickListener() {
+    void setBackImageViewOnClickListener() {
         finish();
-    }
-
-    //菜单事件
-    @OnClick(R.id.title_add)
-    void setMenuImageViewOnClickListener() {
-        showPopupWindow(menuImageView);
-    }
-
-
-    //二维码扫描
-    @OnClick(R.id.sbmittext_id)
-    void setCodeImageButtonOnClickListener() {
-        Intent intent = getIntent();
-        intent.setClass(N_materialActivity.this, MipcaActivityCapture.class);
-        intent.putExtra("mark", N_MATERIAL_CODE);
-        startActivityForResult(intent, 0);
     }
 
 
@@ -181,12 +155,12 @@ public class N_materialActivity extends BaseActivity implements SwipeRefreshLayo
                     // 先隐藏键盘
                     ((InputMethodManager) search.getContext().getSystemService(Context.INPUT_METHOD_SERVICE))
                             .hideSoftInputFromWindow(
-                                    N_materialActivity.this.getCurrentFocus()
+                                    InvbalancesChooseActivity.this.getCurrentFocus()
                                             .getWindowToken(),
                                     InputMethodManager.HIDE_NOT_ALWAYS);
                     searchText = search.getText().toString();
-                    n_materialListAdapter.removeAll(items);
-                    items = new ArrayList<N_MATERIAL>();
+                    invbalancesListAdapter.removeAll(items);
+                    items = new ArrayList<INVBALANCES>();
                     nodatalayout.setVisibility(View.GONE);
                     refresh_layout.setRefreshing(true);
                     page = 1;
@@ -203,18 +177,16 @@ public class N_materialActivity extends BaseActivity implements SwipeRefreshLayo
      * 获取数据*
      */
     private void getData(String search) {
-        String url = null;
-        url = HttpManager.getN_MATERIAL(search, wonum, page, 20);
 
-        HttpManager.getDataPagingInfo(N_materialActivity.this, url, new HttpRequestHandler<Results>() {
+
+        HttpManager.getDataPagingInfo(InvbalancesChooseActivity.this, HttpManager.getINVBALANCESURL1(location, search, page, 20), new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {
-                Log.i(TAG, "data=" + results);
             }
 
             @Override
             public void onSuccess(Results results, int totalPages, int currentPage) {
-                ArrayList<N_MATERIAL> item = JsonUtils.parsingN_MATERIAL(results.getResultlist());
+                ArrayList<INVBALANCES> item = JsonUtils.parsingINVBALANCES(results.getResultlist());
                 refresh_layout.setRefreshing(false);
                 refresh_layout.setLoading(false);
                 if (item == null || item.isEmpty()) {
@@ -223,7 +195,7 @@ public class N_materialActivity extends BaseActivity implements SwipeRefreshLayo
 
                     if (item != null || item.size() != 0) {
                         if (page == 1) {
-                            items = new ArrayList<N_MATERIAL>();
+                            items = new ArrayList<INVBALANCES>();
                             initAdapter(items);
                         }
                         for (int i = 0; i < item.size(); i++) {
@@ -250,80 +222,28 @@ public class N_materialActivity extends BaseActivity implements SwipeRefreshLayo
     /**
      * 获取数据*
      */
-    private void initAdapter(final List<N_MATERIAL> list) {
-        n_materialListAdapter = new N_materialListAdapter(N_materialActivity.this, R.layout.list_item_n_material, list);
-        recyclerView.setAdapter(n_materialListAdapter);
-        n_materialListAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
+    private void initAdapter(final List<INVBALANCES> list) {
+        invbalancesListAdapter = new Invbalances1ListAdapter(InvbalancesChooseActivity.this, R.layout.list_item_invbalances1, list);
+        recyclerView.setAdapter(invbalancesListAdapter);
+        invbalancesListAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+                Intent intent = getIntent();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("invbalances", items.get(position));
+                intent.putExtras(bundle);
+                setResult(INVBALANCES_CODE, intent);
+                finish();
             }
         });
+
     }
 
     /**
      * 添加数据*
      */
-    private void addData(final List<N_MATERIAL> list) {
-        n_materialListAdapter.addData(list);
+    private void addData(final List<INVBALANCES> list) {
+        invbalancesListAdapter.addData(list);
     }
-
-
-
-    /**
-     * 初始化showPopupWindow*
-     */
-    private void showPopupWindow(View view) {
-
-        // 一个自定义的布局，作为显示的内容
-        View contentView = LayoutInflater.from(N_materialActivity.this).inflate(
-                R.layout.n_material_popup_window, null);
-
-
-        popupWindow = new PopupWindow(contentView,
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        popupWindow.setTouchable(true);
-        popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return false;
-            }
-        });
-
-        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
-        // 我觉得这里是API的一个bug
-        popupWindow.setBackgroundDrawable(getResources().getDrawable(
-                R.drawable.popup_background_mtrl_mult));
-
-        // 设置好参数之后再show
-        popupWindow.showAsDropDown(view);
-        addLinearLayout = (LinearLayout) contentView.findViewById(R.id.add_linearlayout_id);
-        sysLinearLayout = (LinearLayout) contentView.findViewById(R.id.code_linearlayout_id);
-        addLinearLayout.setOnClickListener(addOnClickListener);
-        sysLinearLayout.setOnClickListener(sysOnClickListener);
-
-    }
-
-
-    private View.OnClickListener addOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent intent = getIntent();
-            intent.setClass(N_materialActivity.this, N_material_AddActivity.class);
-            startActivityForResult(intent, 1000);
-            popupWindow.dismiss();
-        }
-    };
-    private View.OnClickListener sysOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent intent = getIntent();
-            intent.setClass(N_materialActivity.this, MipcaActivityCapture.class);
-            intent.putExtra("mark", N_MATERIAL_CODE);
-            startActivityForResult(intent, 0);
-            popupWindow.dismiss();
-        }
-    };
 
 }

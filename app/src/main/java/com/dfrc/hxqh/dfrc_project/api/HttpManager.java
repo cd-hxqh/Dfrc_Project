@@ -59,6 +59,31 @@ public class HttpManager {
         }
     }
 
+    /**
+     * 设置根据资产编号获取问题点
+     */
+    public static String getN_PROBLEMURL(String assetnum,String vaule, int curpage, int showcount) {
+        if (vaule.equals("")) {
+            return "{'appid':'" + Constants.ASSET_APPID + "','objectname':'" + Constants.N_PROBLEM_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'N_PROBLEMNUM DESC','condition':{'ASSETNUM':'=" + assetnum + "'}}";
+
+        } else {
+            return "{'appid':'" + Constants.ASSET_APPID + "','objectname':'" + Constants.N_PROBLEM_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'N_PROBLEMNUM DESC','condition':{'ASSETNUM':'=" + assetnum + "'}','sinorsearch':{'N_PROBLEMNUM':'" + vaule + "','PRODESC':'" + vaule + "'}}";
+        }
+    }
+
+
+    /**
+     * 设置根据资产编号获取故障工单
+     */
+    public static String getGZWORKORDERURL(String assetnum, String vaule, int curpage, int showcount) {
+        if (vaule.equals("")) {
+            return "{'appid':'" + Constants.ASSET_APPID + "','objectname':'" + Constants.WORKORDER_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WONUM DESC','condition':{'WORKTYPE':'=FM','ASSETNUM':'=" + assetnum + "'}}";
+
+        } else {
+            return "{'appid':'" + Constants.ASSET_APPID + "','objectname':'" + Constants.WORKORDER_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WONUM DESC','condition':{'WORKTYPE':'=FM','ASSETNUM':'=" + assetnum + "'},'sinorsearch':{'WONUM':'" + vaule + "','DESCRIPTION':'" + vaule + "'}}";
+        }
+    }
+
 
     /**
      * 设置根据设备编号获取备件
@@ -71,6 +96,10 @@ public class HttpManager {
             return "{'appid':'" + Constants.ASSET_APPID + "','objectname':'" + Constants.SPAREPART_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'ASSETNUM':'=" + assetnum + "'},'sinorsearch':{'ITEMNUM':'" + vaule + "'}}";
         }
     }
+
+
+
+
 
 
     /**
@@ -221,6 +250,20 @@ public class HttpManager {
     }
 
 
+
+    /**
+     * 设置根据备件编号获取库存余量
+     */
+    public static String getINVBALANCESURL1(String location, String vaule, int curpage, int showcount) {
+        if (vaule.equals("")) {
+            return "{'appid':'" + Constants.INVBALANCES_NAME + "','objectname':'" + Constants.INVBALANCES_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'LOCATION':'=" + location + "'}}";
+
+        } else {
+            return "{'appid':'" + Constants.INVBALANCES_NAME + "','objectname':'" + Constants.INVBALANCES_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'LOCATION':'=" + location + "'},'sinorsearch':{'ITEMNUM':'" + vaule +"',''DESCRIPTION':'" + vaule + "'}}";
+        }
+
+    }
+
     /**
      * 获取分库领料单
      */
@@ -258,6 +301,31 @@ public class HttpManager {
             return "{'appid':'" + Constants.RECEIPTS_APPID + "','objectname':'" + Constants.PO_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'PONUM DESC','condition':{'SITEID':'=" + siteid + "'},'sinorsearch':{'PONUM':'" + vaule + "','DESCRIPTION':'" + vaule + "'}}";
         }
     }
+
+    /**
+     * 获取采购单行
+     */
+    public static String getPOLINEURL(String vaule, String ponum, int curpage, int showcount) {
+        if (vaule.equals("")) {
+            return "{'appid':'" + Constants.RECEIPTS_APPID + "','objectname':'" + Constants.POLINE_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'POLINENUM ASC','condition':{'PONUM':'=" + ponum + "'}}";
+
+        } else {
+            return "{'appid':'" + Constants.RECEIPTS_APPID + "','objectname':'" + Constants.POLINE_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'POLINENUM ASC','condition':{'PONUM':'=" + ponum + "'},'sinorsearch':{'POLINENUM':'=" + vaule+"','ITEMNUM':'" + vaule + "','DESCRIPTION':'" + vaule + "'}}";
+        }
+    }
+
+    /**
+     * 获取物料接收
+     */
+    public static String getMATUSETRANS1URL(String vaule, String ponum, int curpage, int showcount) {
+        if (vaule.equals("")) {
+            return "{'appid':'" + Constants.RECEIPTS_APPID + "','objectname':'" + Constants.MATRECTRANS_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'POLINENUM ASC','condition':{'PONUM':'=" + ponum + "'}}";
+
+        } else {
+            return "{'appid':'" + Constants.RECEIPTS_APPID + "','objectname':'" + Constants.MATRECTRANS_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'POLINENUM ASC','condition':{'PONUM':'=" + ponum + "'},'sinorsearch':{'POLINENUM':'=" + vaule+"','ITEMNUM':'" + vaule + "','DESCRIPTION':'" + vaule + "'}}";
+        }
+    }
+
 
     /**
      * 获取选项值
