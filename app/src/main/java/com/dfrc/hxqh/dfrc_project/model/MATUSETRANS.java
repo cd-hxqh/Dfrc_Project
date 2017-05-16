@@ -15,6 +15,9 @@ public class MATUSETRANS extends Entity{
     public String N_USEAREA;//使用区域
     public String POSITIVEQUANTITY;//数量
     public String STORELOC;//库房
+    public String WONUM;//领料单号
+    public String SITEID;//站点
+    public String STATUS;//状态
 
     public String getBINNUM() {
         return BINNUM;
@@ -96,4 +99,27 @@ public class MATUSETRANS extends Entity{
         this.STORELOC = STORELOC;
     }
 
+    public String getWONUM() {
+        return WONUM;
+    }
+
+    public void setWONUM(String WONUM) {
+        this.WONUM = WONUM;
+    }
+
+    public String getSITEID() {
+        return SITEID;
+    }
+
+    public void setSITEID(String SITEID) {
+        this.SITEID = SITEID;
+    }
+
+    public String getSTATUS() {
+        return STATUS;
+    }
+
+    public void setSTATUS(String STATUS) {
+        this.STATUS = STATUS;
+    }
 }

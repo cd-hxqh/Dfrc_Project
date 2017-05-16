@@ -291,7 +291,11 @@ public class WljsActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         // 设置好参数之后再show
         popupWindow.showAsDropDown(view);
         xjLinearLayout = (LinearLayout) contentView.findViewById(R.id.add_linearlayout_id);
+        thLinearLayout = (LinearLayout) contentView.findViewById(R.id.th_linearlayout_id);
+        ffLinearLayout = (LinearLayout) contentView.findViewById(R.id.ff_linearlayout_id);
         xjLinearLayout.setOnClickListener(addOnClickListener);
+        thLinearLayout.setOnClickListener(thOnClickListener);
+        ffLinearLayout.setOnClickListener(ffOnClickListener);
 
     }
 
@@ -300,6 +304,28 @@ public class WljsActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(WljsActivity.this, Matrectrans_AddActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("ponum", ponum);
+            intent.putExtras(bundle);
+            startActivityForResult(intent, 0);
+            popupWindow.dismiss();
+        }
+    };
+    private View.OnClickListener thOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(WljsActivity.this, UdcanrtnActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("ponum", ponum);
+            intent.putExtras(bundle);
+            startActivityForResult(intent, 0);
+            popupWindow.dismiss();
+        }
+    };
+    private View.OnClickListener ffOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(WljsActivity.this, PoChooseActivity.class);
             Bundle bundle = new Bundle();
             bundle.putString("ponum", ponum);
             intent.putExtras(bundle);

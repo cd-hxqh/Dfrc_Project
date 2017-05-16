@@ -13,6 +13,7 @@ public class FKWORKORDER extends Entity {
     public String STATUS;//状态
     public String STATUSDATE;//状态日期
     public String WONUM;//分库领料单
+    public String CREWID;//班组
 
 
     public String getDESCRIPTION() {
@@ -77,5 +78,13 @@ public class FKWORKORDER extends Entity {
 
     public void setWONUM(String WONUM) {
         this.WONUM = WONUM;
+    }
+
+    public String getCREWID() {
+        return CREWID;
+    }
+
+    public void setCREWID(String CREWID) {
+        this.CREWID = CREWID;
     }
 }

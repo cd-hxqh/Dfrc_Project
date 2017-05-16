@@ -231,5 +231,12 @@
     <string name="n_failurproblem_text">故障现象:</string>
     <string name="n_failurcause_text">故障原因:</string>
     <string name="prodesc1_text">问题点描述:</string>
+    <string name="mblocation_text">目标库房:</string>
+    <string name="ydsl_text">应到数量:</string>
+    <string name="dgl_text">订购量:</string>
+    <string name="image_text">图片上传</string>
+    <string name="please_choose_upload_image_text">请选择需要上传的图片</string>
+    <string name="attachment_details">图片查看</string>
+    <string name="work_commit">图片上传</string>
 
 </resources>

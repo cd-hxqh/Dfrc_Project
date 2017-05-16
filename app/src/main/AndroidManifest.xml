@@ -175,6 +175,27 @@
         <activity
             android:name=".view.activity.N_problem1DetailsActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.Fkmatusetrans_AddActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.PoChooseActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.PhotoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.WxDemoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.UdcanrtnActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.lzy.imagepicker.ui.ImagePreviewDelActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden"
+            android:theme="@style/ImagePickerThemeFullScreen"/>
 
         <!--设置蒲公英-->
         <meta-data

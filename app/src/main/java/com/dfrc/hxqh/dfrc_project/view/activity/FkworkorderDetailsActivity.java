@@ -145,7 +145,8 @@ public class FkworkorderDetailsActivity extends BaseActivity {
     private View.OnClickListener kcylOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(FkworkorderDetailsActivity.this, MatusetransActivity.class);
+            Intent intent = getIntent();
+            intent.setClass(FkworkorderDetailsActivity.this, MatusetransActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable("wonum", fkworkorder.getWONUM());
             intent.putExtras(bundle);

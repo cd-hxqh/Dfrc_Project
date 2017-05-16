@@ -6,8 +6,10 @@ import android.util.Log;
 
 import com.dfrc.hxqh.dfrc_project.constants.Constants;
 import com.dfrc.hxqh.dfrc_project.model.MATRECTRANS;
+import com.dfrc.hxqh.dfrc_project.model.MATUSETRANS;
 import com.dfrc.hxqh.dfrc_project.model.N_MATERIAL;
 import com.dfrc.hxqh.dfrc_project.model.N_PROBLEM;
+import com.dfrc.hxqh.dfrc_project.model.UDCANRTN;
 import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
 
 import org.ksoap2.SoapEnvelope;
@@ -165,7 +167,7 @@ public class AndroidClientService {
         String obj = null;
         try {
             obj = soapEnvelope.getResponse().toString();
-            Log.i(TAG,"obj="+obj);
+            Log.i(TAG, "obj=" + obj);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
@@ -218,8 +220,6 @@ public class AndroidClientService {
     }
 
 
-
-
     /**
      * 问题点新增
      */
@@ -264,7 +264,6 @@ public class AndroidClientService {
     }
 
 
-
     /**
      * 物料接收新增
      */
@@ -299,6 +298,41 @@ public class AndroidClientService {
         return obj;
     }
 
+    /**
+     * 物料退回新增
+     */
+    public static String INV02RecByPOLine1(final Context cxt, UDCANRTN matrectrans) {
+        Log.i(TAG, "userid=" + matrectrans.getENTERBY() + ",ponum=" + matrectrans.getPONUM() + ",polinenum=" + matrectrans.getPOLINENUM() + ",qty=" + matrectrans.getQUANTITY() + ",binnum=" + matrectrans.getTOBIN());
+        String ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
+
+        SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        soapEnvelope.implicitTypes = true;
+        soapEnvelope.dotNet = true;
+        SoapObject soapReq = new SoapObject(NAMESPACE, "dflserviceINV02RecByPOLine");
+        soapReq.addProperty("userid", matrectrans.getENTERBY()); //输入人
+        soapReq.addProperty("ponum", matrectrans.getPONUM());//采购单号
+        soapReq.addProperty("polinenum", matrectrans.getPOLINENUM());//采购单行号
+        soapReq.addProperty("qty", matrectrans.getQUANTITY());// 数量
+        soapReq.addProperty("binnum", matrectrans.getTOBIN());//货柜
+        soapEnvelope.setOutputSoapObject(soapReq);
+        HttpTransportSE httpTransport = new HttpTransportSE(ip_adress, timeOut);
+        try {
+            httpTransport.call("urn:action", soapEnvelope);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        }
+        String obj = null;
+        try {
+            obj = soapEnvelope.getResponse().toString();
+            Log.i(TAG, "obj=" + obj);
+        } catch (SoapFault soapFault) {
+            soapFault.printStackTrace();
+        }
+        return obj;
+    }
+
 
     /**
      * 总库领料单物料新增
@@ -311,7 +345,6 @@ public class AndroidClientService {
         soapEnvelope.implicitTypes = true;
         soapEnvelope.dotNet = true;
         SoapObject soapReq = new SoapObject(NAMESPACE, "dflserviceAddN_WORKOR2Line");
-        Log.i(TAG,"WONUM="+n_material.getWONUM()+",SITEID="+n_material.getSITEID()+",status="+n_material.getSTATUS()+",N_SAP1="+n_material.getN_SAP1()+",ITEMNUM="+n_material.getITEMNUM()+",REASON="+n_material.getN_REASON()+",N_SAP3="+n_material.getN_SAP3());
 
         soapReq.addProperty("WONUM", n_material.getWONUM()); //工单号
         soapReq.addProperty("SITEID", n_material.getSITEID());//站点
@@ -338,4 +371,82 @@ public class AndroidClientService {
         }
         return obj;
     }
+
+    /**
+     * 分库库领料单物料新增
+     */
+    public static String AddN_WORKORDLine(final Context cxt, MATUSETRANS matusetrans) {
+
+        String ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
+
+        SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        soapEnvelope.implicitTypes = true;
+        soapEnvelope.dotNet = true;
+        SoapObject soapReq = new SoapObject(NAMESPACE, "dflserviceAddN_WORKOR2Line");
+
+        soapReq.addProperty("WONUM", matusetrans.getWONUM()); //工单号
+        soapReq.addProperty("SITEID", matusetrans.getSITEID());//站点
+        soapReq.addProperty("STATUS", matusetrans.getSTATUS());//状态
+        soapReq.addProperty("ITEMNUM", matusetrans.getITEMNUM());// 物料号
+        soapReq.addProperty("ISSUETYPE", matusetrans.getISSUETYPE());//交易类型
+        soapReq.addProperty("STORELOC", matusetrans.getSTORELOC());//库房
+        soapReq.addProperty("BINNUM", matusetrans.getBINNUM());//货架
+        soapReq.addProperty("POSITIVEQUANTITY", matusetrans.getPOSITIVEQUANTITY());//申请数量
+        soapReq.addProperty("ENTERBY", matusetrans.getENTERBY());//领用人
+        soapReq.addProperty("N_USEAREA", matusetrans.getN_USEAREA());//使用区域
+        soapEnvelope.setOutputSoapObject(soapReq);
+        HttpTransportSE httpTransport = new HttpTransportSE(ip_adress, timeOut);
+        try {
+            httpTransport.call("urn:action", soapEnvelope);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        }
+        String obj = null;
+        try {
+            obj = soapEnvelope.getResponse().toString();
+        } catch (SoapFault soapFault) {
+            soapFault.printStackTrace();
+        }
+        return obj;
+    }
+
+
+    /**
+     * 通过webservice实现图片上传
+     *
+     * @param imageBuffer
+     */
+    /**
+     * 通用修改
+     */
+    public static String connectWebService(Context context, String filename, String image, String ownertable, String ownerid, String url) {
+
+        SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        soapEnvelope.implicitTypes = true;
+        soapEnvelope.dotNet = true;
+        SoapObject soapReq = new SoapObject(NAMESPACE, "mobileserviceuploadImage");
+        soapReq.addProperty("filename", filename);//文件名
+        soapReq.addProperty("image", image);//图片Json
+        soapReq.addProperty("ownertable", ownertable);//表名
+        soapReq.addProperty("ownerid", ownerid);//表主键值
+        soapEnvelope.setOutputSoapObject(soapReq);
+        HttpTransportSE httpTransport = new HttpTransportSE(AccountUtils.getIpAddress(context) + url, timeOut);
+        try {
+            httpTransport.call("urn:action", soapEnvelope);
+        } catch (IOException | XmlPullParserException e) {
+            return null;
+        }
+        String obj = null;
+        String webResult = null;
+        try {
+            webResult = soapEnvelope.getResponse().toString();
+            Log.i(TAG, "webResult=" + webResult);
+        } catch (SoapFault soapFault) {
+            soapFault.printStackTrace();
+        }
+        return webResult;
+    }
+
 }

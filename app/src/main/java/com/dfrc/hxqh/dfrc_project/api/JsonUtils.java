@@ -8,10 +8,12 @@ import com.dfrc.hxqh.dfrc_project.bean.Results;
 import com.dfrc.hxqh.dfrc_project.constants.Constants;
 import com.dfrc.hxqh.dfrc_project.model.ALNDOMAIN;
 import com.dfrc.hxqh.dfrc_project.model.ASSET;
+import com.dfrc.hxqh.dfrc_project.model.DOCLINKS;
 import com.dfrc.hxqh.dfrc_project.model.FKWORKORDER;
 import com.dfrc.hxqh.dfrc_project.model.GZWORKORDER;
 import com.dfrc.hxqh.dfrc_project.model.INVBALANCES;
 import com.dfrc.hxqh.dfrc_project.model.INVENTORY;
+import com.dfrc.hxqh.dfrc_project.model.LOCATIONS;
 import com.dfrc.hxqh.dfrc_project.model.MATRECTRANS;
 import com.dfrc.hxqh.dfrc_project.model.MATUSETRANS;
 import com.dfrc.hxqh.dfrc_project.model.N_MATERIAL;
@@ -20,6 +22,7 @@ import com.dfrc.hxqh.dfrc_project.model.PERSON;
 import com.dfrc.hxqh.dfrc_project.model.PO;
 import com.dfrc.hxqh.dfrc_project.model.POLINE;
 import com.dfrc.hxqh.dfrc_project.model.SPAREPART;
+import com.dfrc.hxqh.dfrc_project.model.UDCANRTN;
 import com.dfrc.hxqh.dfrc_project.model.WORKORDER;
 import com.dfrc.hxqh.dfrc_project.model.WOTASK;
 import com.dfrc.hxqh.dfrc_project.model.ZKWORKORDER;
@@ -869,6 +872,51 @@ public class JsonUtils {
         }
 
     }
+    /**
+     * 物料退回
+     */
+    public static ArrayList<UDCANRTN> parsingUDCANRTN(String data) {
+        ArrayList<UDCANRTN> list = null;
+        UDCANRTN udcanrtn = null;
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            JSONObject jsonObject;
+            list = new ArrayList<UDCANRTN>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                udcanrtn = new UDCANRTN();
+                jsonObject = jsonArray.getJSONObject(i);
+                Field[] field = udcanrtn.getClass().getDeclaredFields();        //获取实体类的所有属性，返回Field数组
+                for (int j = 0; j < field.length; j++) {     //遍历所有属性
+                    field[j].setAccessible(true);
+                    String name = field[j].getName();    //获取属性的名字
+                    if (jsonObject.has(name) && jsonObject.getString(name) != null && !jsonObject.getString(name).equals("")) {
+                        try {
+                            // 调用getter方法获取属性值
+                            Method getOrSet = udcanrtn.getClass().getMethod("get" + name);
+                            Object value = getOrSet.invoke(udcanrtn);
+                            if (value == null) {
+                                //调用setter方法设属性值
+                                Class[] parameterTypes = new Class[1];
+                                parameterTypes[0] = field[j].getType();
+                                getOrSet = udcanrtn.getClass().getDeclaredMethod("set" + name, parameterTypes);
+                                getOrSet.invoke(udcanrtn, jsonObject.getString(name));
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+                list.add(udcanrtn);
+            }
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
 
 
     /**
@@ -908,6 +956,98 @@ public class JsonUtils {
 
                 }
                 list.add(alndomain);
+            }
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+    /**
+     * 位置
+     */
+    public static ArrayList<LOCATIONS> parsingLOCATION(String data) {
+        ArrayList<LOCATIONS> list = null;
+        LOCATIONS locations = null;
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            JSONObject jsonObject;
+            list = new ArrayList<LOCATIONS>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                locations = new LOCATIONS();
+                jsonObject = jsonArray.getJSONObject(i);
+                Field[] field = locations.getClass().getDeclaredFields();        //获取实体类的所有属性，返回Field数组
+                for (int j = 0; j < field.length; j++) {     //遍历所有属性
+                    field[j].setAccessible(true);
+                    String name = field[j].getName();    //获取属性的名字
+                    if (jsonObject.has(name) && jsonObject.getString(name) != null && !jsonObject.getString(name).equals("")) {
+                        try {
+                            // 调用getter方法获取属性值
+                            Method getOrSet = locations.getClass().getMethod("get" + name);
+                            Object value = getOrSet.invoke(locations);
+                            if (value == null) {
+                                //调用setter方法设属性值
+                                Class[] parameterTypes = new Class[1];
+                                parameterTypes[0] = field[j].getType();
+                                getOrSet = locations.getClass().getDeclaredMethod("set" + name, parameterTypes);
+                                getOrSet.invoke(locations, jsonObject.getString(name));
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+                list.add(locations);
+            }
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+
+    /**
+     * 图片附件
+     */
+    public static ArrayList<DOCLINKS> parsingDOCLINKS(String data) {
+        ArrayList<DOCLINKS> list = null;
+        DOCLINKS doclinks = null;
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            JSONObject jsonObject;
+            list = new ArrayList<DOCLINKS>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                doclinks = new DOCLINKS();
+                jsonObject = jsonArray.getJSONObject(i);
+                Field[] field = doclinks.getClass().getDeclaredFields();        //获取实体类的所有属性，返回Field数组
+                for (int j = 0; j < field.length; j++) {     //遍历所有属性
+                    field[j].setAccessible(true);
+                    String name = field[j].getName();    //获取属性的名字
+                    if (jsonObject.has(name) && jsonObject.getString(name) != null && !jsonObject.getString(name).equals("")) {
+                        try {
+                            // 调用getter方法获取属性值
+                            Method getOrSet = doclinks.getClass().getMethod("get" + name);
+                            Object value = getOrSet.invoke(doclinks);
+                            if (value == null) {
+                                //调用setter方法设属性值
+                                Class[] parameterTypes = new Class[1];
+                                parameterTypes[0] = field[j].getType();
+                                getOrSet = doclinks.getClass().getDeclaredMethod("set" + name, parameterTypes);
+                                getOrSet.invoke(doclinks, jsonObject.getString(name));
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+                list.add(doclinks);
             }
             return list;
         } catch (JSONException e) {

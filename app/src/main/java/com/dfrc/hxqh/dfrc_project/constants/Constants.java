@@ -91,7 +91,7 @@ public class Constants {
     public static final String WOTASK_NAME = "WOTASK";
 
     //采购接收appid
-    public static final String RECEIPTS_APPID = "RECEIPTS" ;
+    public static final String RECEIPTS_APPID = "N_PO" ;
 
     //采购接收的表名
     public static final String PO_NAME = "PO";
@@ -99,6 +99,8 @@ public class Constants {
     public static final String POLINE_NAME = "POLINE";
     //物料接收的表名
     public static final String MATRECTRANS_NAME = "MATRECTRANS";
+    //物料退回的表名
+    public static final String UDCANRTN_NAME = "UDCANRTN";
 
     //人员appid
     public static final String PERSON_APPID = "PERSON" ;
@@ -120,6 +122,11 @@ public class Constants {
     public static final String ALNDOMAIN_APPID = "ALNDOMAIN" ;
     //ALNDOMAIN的表名
     public static final String ALNDOMAIN_NAME = "ALNDOMAIN" ;
+
+    /**附件appid**/
+    public static final String DOCLINKS_APPID = "N_PROB2";
+    /**附件表名**/
+    public static final String DOCLINKS_NAME = "DOCLINKS";
 
 
 

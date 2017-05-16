@@ -5,6 +5,7 @@ package com.dfrc.hxqh.dfrc_project.model;
  * 问题点管理
  */
 public class N_PROBLEM extends Entity {
+    public String N_PROBLEMID;//主键ID
     public String ABC;//重要度
     public String ASSETNUM;//设备编号
     public String ASSET_DESCRIPTION;//设备名称
@@ -26,6 +27,13 @@ public class N_PROBLEM extends Entity {
     public String WONUM;//工单
     public String WORKORDER_DESCRIPTION;//工单描述
 
+    public String getN_PROBLEMID() {
+        return N_PROBLEMID;
+    }
+
+    public void setN_PROBLEMID(String n_PROBLEMID) {
+        N_PROBLEMID = n_PROBLEMID;
+    }
 
     public String getABC() {
         return ABC;

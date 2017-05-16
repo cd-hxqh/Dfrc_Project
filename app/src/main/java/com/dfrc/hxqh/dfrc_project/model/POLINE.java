@@ -14,6 +14,7 @@ public class POLINE extends Entity {
     public String STORELOC;//库存地点
     public String UNITCOST;//单位成本
     public String VENDELIVERYDATE;//供应商日期
+    public String RECEIVEDQTY;//应到数量
 
 
     public String getDESCRIPTION() {
@@ -86,5 +87,13 @@ public class POLINE extends Entity {
 
     public void setVENDELIVERYDATE(String VENDELIVERYDATE) {
         this.VENDELIVERYDATE = VENDELIVERYDATE;
+    }
+
+    public String getRECEIVEDQTY() {
+        return RECEIVEDQTY;
+    }
+
+    public void setRECEIVEDQTY(String RECEIVEDQTY) {
+        this.RECEIVEDQTY = RECEIVEDQTY;
     }
 }

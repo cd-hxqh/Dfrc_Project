@@ -87,7 +87,7 @@ public class PoDetailsActivity extends BaseActivity {
             ponumTextView.setText(po.getPONUM());
             descriptionTextView.setText(po.getDESCRIPTION());
             orderdateTextView.setText(po.getORDERDATE());
-            receiptsTextView.setText(po.getSTATUS());
+            receiptsTextView.setText(po.getRECEIPTS());
             shiptoattnTextView.setText(po.getSHIPTOPERSON_DISPLAYNAME());
             statusTextView.setText(po.getSTATUS());
             siteidTextView.setText(po.getSITEID());

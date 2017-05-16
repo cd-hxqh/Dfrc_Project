@@ -34,7 +34,8 @@ public class PoListAdapter extends BaseQuickAdapter<PO> {
         helper.setText(R.id.workorder_sb_title, mContext.getString(R.string.ddh_text));
         helper.setText(R.id.assetnum_text_id, item.getPONUM());
         helper.setText(R.id.item_desc_text, item.getDESCRIPTION());
-        helper.setText(R.id.status_text_id, item.getSTATUS());
+        helper.setText(R.id.status_title_id, mContext.getString(R.string.receipts_text));
+        helper.setText(R.id.status_text_id, item.getRECEIPTS());
         helper.setText(R.id.family_displayname_text_id, item.getSHIPTOPERSON_DISPLAYNAME());
     }
 

@@ -144,14 +144,6 @@ public class N_materialActivity extends BaseActivity implements SwipeRefreshLayo
     }
 
 
-    //二维码扫描
-    @OnClick(R.id.sbmittext_id)
-    void setCodeImageButtonOnClickListener() {
-        Intent intent = getIntent();
-        intent.setClass(N_materialActivity.this, MipcaActivityCapture.class);
-        intent.putExtra("mark", N_MATERIAL_CODE);
-        startActivityForResult(intent, 0);
-    }
 
 
     @Override

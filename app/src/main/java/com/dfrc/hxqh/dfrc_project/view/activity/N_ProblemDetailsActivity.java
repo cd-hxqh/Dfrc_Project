@@ -4,11 +4,16 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.dfrc.hxqh.dfrc_project.R;
@@ -57,8 +62,9 @@ public class N_ProblemDetailsActivity extends BaseActivity {
     @Bind(R.id.title_name)
     TextView titleTextView; //标题
 
-    @Bind(R.id.sbmittext_id)  //保存
-            ImageButton sbmitBtn;
+    @Bind(R.id.title_add)
+    ImageView menuImageView; //菜单
+    PopupWindow popupWindow;
 
 
     @Bind(R.id.n_problemnum_text_id)
@@ -124,6 +130,10 @@ public class N_ProblemDetailsActivity extends BaseActivity {
     protected FlippingLoadingDialog mLoadingDialog;
 
 
+    private LinearLayout saveLinearLayout; //保存
+    private LinearLayout imageLinearLayout; //图片
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,7 +162,8 @@ public class N_ProblemDetailsActivity extends BaseActivity {
     @Override
     protected void initView() {
         titleTextView.setText(R.string.wtdgl_text);
-        sbmitBtn.setVisibility(View.VISIBLE);
+        menuImageView.setVisibility(View.VISIBLE);
+        menuImageView.setImageResource(R.mipmap.ic_more);
         if (n_problem != null) {
             n_problemnumTextView.setText(n_problem.getN_PROBLEMNUM());
             prodescTextView.setText(n_problem.getPRODESC());
@@ -179,6 +190,13 @@ public class N_ProblemDetailsActivity extends BaseActivity {
         finddateTextView.setOnClickListener(new MydateListener());
         finishdateTextView.setOnClickListener(new MydateListener());
 
+    }
+
+
+    //菜单事件
+    @OnClick(R.id.title_add)
+    void setMenuImageViewOnClickListener() {
+        showPopupWindow(menuImageView);
     }
 
 
@@ -285,32 +303,25 @@ public class N_ProblemDetailsActivity extends BaseActivity {
     }
 
 
-    //修改提交
-    @OnClick(R.id.sbmittext_id)
-    void setSbmitBtnOnClickListener() {
-        getLoadingDialog("正在提交").show();
-        saveAsyncTask();
-    }
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
+        switch (resultCode) {
             case RESPONSOR_REQUESTCODE:
                 PERSON person = (PERSON) data.getSerializableExtra("person");
-                responsorTextView.setText(person.getPERSONID());
-                responsorNameTextView.setText(person.getDISPLAYNAME());
+                if (requestCode == RESPONSOR_REQUESTCODE) {
+                    responsorTextView.setText(person.getPERSONID());
+                    responsorNameTextView.setText(person.getDISPLAYNAME());
+                } else if (requestCode == CONFIRMBY_REQUESTCODE) {
+                    confirmbyTextView.setText(person.getPERSONID());
+                }
                 break;
             case AssetChooseActivity.ASSET_CODE:
                 ASSET asset = (ASSET) data.getSerializableExtra("asset");
                 assetnumTextView.setText(asset.getASSETNUM());
                 sbmsTextView.setText(asset.getDESCRIPTION());
                 break;
-            case CONFIRMBY_REQUESTCODE:
-                PERSON person1 = (PERSON) data.getSerializableExtra("person");
-                confirmbyTextView.setText(person1.getPERSONID());
-                break;
+
         }
     }
 
@@ -470,4 +481,62 @@ public class N_ProblemDetailsActivity extends BaseActivity {
 
         return n_problem;
     }
+
+    /**
+     * 初始化showPopupWindow*
+     */
+    private void showPopupWindow(View view) {
+
+        // 一个自定义的布局，作为显示的内容
+        View contentView = LayoutInflater.from(N_ProblemDetailsActivity.this).inflate(
+                R.layout.n_problem1_popup_window, null);
+
+
+        popupWindow = new PopupWindow(contentView,
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        popupWindow.setTouchable(true);
+        popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
+            }
+        });
+
+        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
+        // 我觉得这里是API的一个bug
+        popupWindow.setBackgroundDrawable(getResources().getDrawable(
+                R.drawable.popup_background_mtrl_mult));
+
+        // 设置好参数之后再show
+        popupWindow.showAsDropDown(view);
+        saveLinearLayout = (LinearLayout) contentView.findViewById(R.id.add_linearLayout_id);
+        imageLinearLayout = (LinearLayout) contentView.findViewById(R.id.image_linearlayout_id);
+        saveLinearLayout.setOnClickListener(saveLinearLayoutOnClickListener);
+        imageLinearLayout.setOnClickListener(imageLinearLayoutOnClickListener);
+
+    }
+
+
+    private View.OnClickListener saveLinearLayoutOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            getLoadingDialog("正在提交").show();
+            saveAsyncTask();
+            popupWindow.dismiss();
+        }
+    };
+    private View.OnClickListener imageLinearLayoutOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(N_ProblemDetailsActivity.this, PhotoActivity.class);
+            intent.putExtra("ownertable", Constants.N_PROBLEM_NAME);
+            intent.putExtra("ownerid", n_problem.getN_PROBLEMID());
+            startActivityForResult(intent, 0);
+            popupWindow.dismiss();
+        }
+    };
+
+
 }

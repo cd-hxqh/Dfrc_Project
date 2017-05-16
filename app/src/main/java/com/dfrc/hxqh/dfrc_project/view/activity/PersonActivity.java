@@ -43,6 +43,9 @@ import butterknife.OnClick;
 
 public class PersonActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
     private static final String TAG = "PersonActivity";
+
+    public static final int PERSION_REQUESTCODE = 1000;
+
     @Bind(R.id.title_name) //标题
             TextView titleTextView;
     LinearLayoutManager layoutManager;
@@ -235,7 +238,7 @@ public class PersonActivity extends BaseActivity implements SwipeRefreshLayout.O
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("person", items.get(position));
                 intent.putExtras(bundle);
-                setResult(1000, intent);
+                setResult(PERSION_REQUESTCODE, intent);
                 finish();
             }
         });
