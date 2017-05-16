@@ -238,5 +238,14 @@
     <string name="please_choose_upload_image_text">请选择需要上传的图片</string>
     <string name="attachment_details">图片查看</string>
     <string name="work_commit">图片上传</string>
+    <string name="jfcreatedby_text">借方申请人:</string>
+    <string name="werks_text">借方工厂代码:</string>
+    <string name="jflocation_text">借方仓库代码:</string>
+    <string name="jfsited_text">借方地点:</string>
+    <string name="sqcreateddate_text">申请时间:</string>
+    <string name="n_werks_text">被借方工厂代码:</string>
+    <string name="n_location1_text">被借方仓库代码:</string>
+    <string name="n_stieid_text">被借方地点:</string>
+    <string name="jyxq_text">借用详情</string>
 
 </resources>

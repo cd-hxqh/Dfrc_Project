@@ -115,8 +115,12 @@ public class Constants {
 
     //分库领料单appid
     public static final String N_WORKORDE = "N_WORKORDE" ;
-    //总库领料单明细行的表名
+    //分库库领料单明细行的表名
     public static final String MATUSETRANS = "MATUSETRANS" ;
+    //备件借用appid
+    public static final String N_BORROW_APPID = "N_BORROW" ;
+    //备件借用的表名
+    public static final String N_BORROWHEAD_NAME = "N_BORROWHEAD" ;
 
     //ALNDOMAINappid
     public static final String ALNDOMAIN_APPID = "ALNDOMAIN" ;

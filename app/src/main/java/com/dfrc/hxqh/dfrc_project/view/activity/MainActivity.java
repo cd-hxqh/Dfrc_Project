@@ -47,7 +47,7 @@ public class MainActivity extends BaseActivity {
     private List<View> viewPagerList;//GridView作为一个View对象添加到ViewPager集合中
     private int currentPage;//当前页
     private ArrayList<String> list = new ArrayList<>();//appid集合
-    private String[] proName = {"设备查询", "计划保全", "备件管理", "设置"};
+    private String[] proName = {"设备查询", "定期点检工单", "问题点管理", "采购接收", "库存查询", "总库领料单", "分库领料单", "备件借用", "设置"};
 
 
     @Override
@@ -77,14 +77,29 @@ public class MainActivity extends BaseActivity {
             if (list.contains(Constants.ASSET_APPID)) {//设备管理
                 listDatas.add(new ProdctBean(proName[0], Constants.ASSET_APPID, R.mipmap.ic_asset));
             }
-            if (list.contains(Constants.N_PROB2_APPID) || list.contains(Constants.N_MATWO_APPID)) {//计划保全
-                listDatas.add(new ProdctBean(proName[1], Constants.N_PROB2_APPID, R.mipmap.ic_jhbq));
+            if (list.contains(Constants.N_MATWO_APPID)) {//定期点检工单
+                listDatas.add(new ProdctBean(proName[1], Constants.N_MATWO_APPID, R.mipmap.ic_ddjgd));
             }
-            if (list.contains(Constants.RECEIPTS_APPID)) {//备件管理
-                listDatas.add(new ProdctBean(proName[2], Constants.RECEIPTS_APPID, R.mipmap.ic_bjgl));
+            if (list.contains(Constants.N_PROB2_APPID) ) {//问题点管理
+                listDatas.add(new ProdctBean(proName[2], Constants.N_PROB2_APPID, R.mipmap.ic_wtdj));
+            }
+            if (list.contains(Constants.RECEIPTS_APPID)) {//采购接收
+                listDatas.add(new ProdctBean(proName[3], Constants.RECEIPTS_APPID, R.mipmap.ic_cgjs));
+            }
+            if (list.contains(Constants.INVENTOR_APPID)) {//库存查询
+                listDatas.add(new ProdctBean(proName[4], Constants.INVENTOR_APPID, R.mipmap.ic_kccx));
+            }
+            if (list.contains(Constants.N_WORKOR2)) {//总库领料单
+                listDatas.add(new ProdctBean(proName[5], Constants.N_WORKOR2, R.mipmap.ic_zklld));
+            }
+            if (list.contains(Constants.N_WORKORDE)) {//分库领料单
+                listDatas.add(new ProdctBean(proName[6], Constants.N_WORKORDE, R.mipmap.ic_zklld));
+            }
+            if (list.contains(Constants.N_BORROW_APPID)) {//备件借用
+                listDatas.add(new ProdctBean(proName[7], Constants.N_BORROW_APPID, R.mipmap.ic_bjjy));
             }
 
-            listDatas.add(new ProdctBean(proName[3], getString(R.string.setting_text), R.mipmap.ic_setting));
+            listDatas.add(new ProdctBean(proName[8], getString(R.string.setting_text), R.mipmap.ic_setting));
 
         }
         //总的页数向上取整
@@ -111,12 +126,34 @@ public class MainActivity extends BaseActivity {
                                 intent.putExtra("assetNum", "");
                                 startActivityForResult(intent, 0);
                                 break;
-                            case Constants.N_PROB2_APPID: //计划保全
-                                intent = new Intent(MainActivity.this, JhbqActivity.class);
+                            case Constants.N_MATWO_APPID: //定期点检工单
+                                intent = new Intent(MainActivity.this, WorkorderActivity.class);
                                 startActivityForResult(intent, 0);
                                 break;
-                            case Constants.RECEIPTS_APPID: //备件管理
-                                intent = new Intent(MainActivity.this, BjglActivity.class);
+                            case Constants.N_PROB2_APPID: //问题点管理
+                                intent = new Intent(MainActivity.this, N_problemActivity.class);
+                                intent.putExtra("assetNum", "");
+                                startActivityForResult(intent, 0);
+                                break;
+                            case Constants.RECEIPTS_APPID: //采购接收
+                                intent = new Intent(MainActivity.this, PoActivity.class);
+                                startActivityForResult(intent, 0);
+                                break;
+                            case Constants.INVENTOR_APPID: //库存查询
+                                intent = new Intent(MainActivity.this, Inventoryactivity.class);
+                                intent.putExtra("assetNum", "");
+                                startActivityForResult(intent, 0);
+                                break;
+                            case Constants.N_WORKOR2: //总库领料单
+                                intent = new Intent(MainActivity.this, ZkworkorderActivity.class);
+                                startActivityForResult(intent, 0);
+                                break;
+                            case Constants.N_WORKORDE: //分库领料单
+                                intent = new Intent(MainActivity.this, FkworkorderActivity.class);
+                                startActivityForResult(intent, 0);
+                                break;
+                            case Constants.N_BORROW_APPID: //备件借用
+                                intent = new Intent(MainActivity.this, N_borrowheadactivity.class);
                                 startActivityForResult(intent, 0);
                                 break;
                             case "设置": //设置

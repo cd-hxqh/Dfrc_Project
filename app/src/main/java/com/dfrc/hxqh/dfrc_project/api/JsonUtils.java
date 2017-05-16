@@ -16,6 +16,7 @@ import com.dfrc.hxqh.dfrc_project.model.INVENTORY;
 import com.dfrc.hxqh.dfrc_project.model.LOCATIONS;
 import com.dfrc.hxqh.dfrc_project.model.MATRECTRANS;
 import com.dfrc.hxqh.dfrc_project.model.MATUSETRANS;
+import com.dfrc.hxqh.dfrc_project.model.N_BORROWHEAD;
 import com.dfrc.hxqh.dfrc_project.model.N_MATERIAL;
 import com.dfrc.hxqh.dfrc_project.model.N_PROBLEM;
 import com.dfrc.hxqh.dfrc_project.model.PERSON;
@@ -917,6 +918,55 @@ public class JsonUtils {
         }
 
     }
+
+
+
+    /**
+     * 备件借用
+     */
+    public static ArrayList<N_BORROWHEAD> parsingN_BORROWHEAD(String data) {
+        ArrayList<N_BORROWHEAD> list = null;
+        N_BORROWHEAD n_borrowhead = null;
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            JSONObject jsonObject;
+            list = new ArrayList<N_BORROWHEAD>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                n_borrowhead = new N_BORROWHEAD();
+                jsonObject = jsonArray.getJSONObject(i);
+                Field[] field = n_borrowhead.getClass().getDeclaredFields();        //获取实体类的所有属性，返回Field数组
+                for (int j = 0; j < field.length; j++) {     //遍历所有属性
+                    field[j].setAccessible(true);
+                    String name = field[j].getName();    //获取属性的名字
+                    if (jsonObject.has(name) && jsonObject.getString(name) != null && !jsonObject.getString(name).equals("")) {
+                        try {
+                            // 调用getter方法获取属性值
+                            Method getOrSet = n_borrowhead.getClass().getMethod("get" + name);
+                            Object value = getOrSet.invoke(n_borrowhead);
+                            if (value == null) {
+                                //调用setter方法设属性值
+                                Class[] parameterTypes = new Class[1];
+                                parameterTypes[0] = field[j].getType();
+                                getOrSet = n_borrowhead.getClass().getDeclaredMethod("set" + name, parameterTypes);
+                                getOrSet.invoke(n_borrowhead, jsonObject.getString(name));
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+                list.add(n_borrowhead);
+            }
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
 
 
     /**

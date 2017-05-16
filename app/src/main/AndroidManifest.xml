@@ -190,6 +190,12 @@
         <activity
             android:name=".view.activity.UdcanrtnActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.N_borrowheadactivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.N_borrowheadDetailsActivity"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name="com.lzy.imagepicker.ui.ImagePreviewDelActivity"

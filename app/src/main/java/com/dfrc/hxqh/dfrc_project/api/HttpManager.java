@@ -320,6 +320,7 @@ public class HttpManager {
             return "{'appid':'" + Constants.RECEIPTS_APPID + "','objectname':'" + Constants.MATRECTRANS_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'POLINENUM ASC','condition':{'PONUM':'=" + ponum + "'},'sinorsearch':{'POLINENUM':'=" + vaule + "','ITEMNUM':'" + vaule + "','DESCRIPTION':'" + vaule + "'}}";
         }
     }
+
     /**
      * 获取物料接收
      */
@@ -328,7 +329,20 @@ public class HttpManager {
             return "{'appid':'" + Constants.RECEIPTS_APPID + "','objectname':'" + Constants.UDCANRTN_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'POLINENUM ASC','condition':{'PONUM':'=" + ponum + "','QUANTITY':'>0'}}";
 
         } else {
-            return "{'appid':'" + Constants.RECEIPTS_APPID + "','objectname':'" + Constants.UDCANRTN_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'POLINENUM ASC','condition':{'PONUM':'=" + ponum + "','QUANTITY':'>0''},'sinorsearch':{'POLINENUM':'=" + vaule + "','ITEMNUM':'" + vaule  + "'}}";
+            return "{'appid':'" + Constants.RECEIPTS_APPID + "','objectname':'" + Constants.UDCANRTN_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'POLINENUM ASC','condition':{'PONUM':'=" + ponum + "','QUANTITY':'>0''},'sinorsearch':{'POLINENUM':'=" + vaule + "','ITEMNUM':'" + vaule + "'}}";
+        }
+    }
+
+
+    /**
+     * 设置获取备件借用
+     */
+    public static String getN_BORROWHEAD(String vaule, String siteid, int curpage, int showcount) {
+        if (vaule.equals("")) {
+            return "{'appid':'" + Constants.N_BORROW_APPID + "','objectname':'" + Constants.N_BORROWHEAD_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'SITEID':'=" + siteid + "'}}";
+
+        } else {
+            return "{'appid':'" + Constants.N_BORROW_APPID + "','objectname':'" + Constants.N_BORROWHEAD_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'SITEID':'=" + siteid + "'},'sinorsearch':{'N_BORROWHEADNUM':'" + vaule + "','DESCRIPTION':'" + vaule + "'}}";
         }
     }
 
@@ -357,8 +371,8 @@ public class HttpManager {
     /**
      * 查询附件的接口
      */
-    public static String getDoclinks(String ownertable, String ownerid){
-        return "{'appid':'" + Constants.N_PROB2_APPID + "','objectname':'" + Constants.DOCLINKS_NAME  + "','option':'read','condition':{'OWNERTABLE':'=" + ownertable  + "','OWNERID':'=" + ownerid+"'}}";
+    public static String getDoclinks(String ownertable, String ownerid) {
+        return "{'appid':'" + Constants.N_PROB2_APPID + "','objectname':'" + Constants.DOCLINKS_NAME + "','option':'read','condition':{'OWNERTABLE':'=" + ownertable + "','OWNERID':'=" + ownerid + "'}}";
     }
 
 
