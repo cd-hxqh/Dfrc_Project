@@ -9,11 +9,12 @@
     <dimen name="dp_4">4dp</dimen>
     <dimen name="sp_14">14sp</dimen>
     <dimen name="dp_36">36dp</dimen>
-    <dimen name="dimens_16sp">16dp</dimen>
+    <dimen name="dimens_16sp">14sp</dimen>
     <dimen name="dimens_30dp">30dp</dimen>
-    <dimen name="dimens_20sp">20sp</dimen>
+    <dimen name="dimens_20sp">18sp</dimen>
     <dimen name="title_heiht_size">50dp</dimen>
     <dimen name="dimens_line">0.5dp</dimen>
     <dimen name="size_10dp">10dp</dimen>
     <dimen name="dimens_16dp">16dp</dimen>
+    <dimen name="dimens_50dp">50dp</dimen>
 </resources>

@@ -46,17 +46,22 @@ public class HttpManager {
             return "{'appid':'" + Constants.ASSET_APPID + "','objectname':'" + Constants.ASSET_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'ASSETNUM DESC','condition':{'N_CREWID':'=" + n_crewid + "'},'sinorsearch':{'ASSETNUM':'" + vaule + "','DESCRIPTION':'" + vaule + "'}}";
         }
     }
+    /**
+     * 根据班组设备编号获取设备
+     */
+    public static String getASSETURL2(String assetnum, String n_crewid, int curpage, int showcount) {
+            return "{'appid':'" + Constants.ASSET_APPID + "','objectname':'" + Constants.ASSET_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'ASSETNUM DESC','condition':{'N_CREWID':'=" + n_crewid + "','ASSETNUM':'="+assetnum+"'}}";
+
+
+    }
 
     /**
      * 根据编号获取设备
      */
-    public static String getASSETByNuMURL(String assetNum, String vaule, int curpage, int showcount) {
-        if (vaule.equals("")) {
+    public static String getASSETByNuMURL(String assetNum, int curpage, int showcount) {
             return "{'appid':'" + Constants.ASSET_APPID + "','objectname':'" + Constants.ASSET_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'ASSETNUM DESC','condition':{'ASSETNUM':'=" + assetNum + "'}}";
 
-        } else {
-            return "{'appid':'" + Constants.ASSET_APPID + "','objectname':'" + Constants.ASSET_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'ASSETNUM DESC','condition':{'ASSETNUM':'=" + assetNum + "'},'sinorsearch':{'ASSETNUM':'" + vaule + "','DESCRIPTION':'" + vaule + "'}}";
-        }
+
     }
 
     /**
@@ -67,7 +72,7 @@ public class HttpManager {
             return "{'appid':'" + Constants.ASSET_APPID + "','objectname':'" + Constants.N_PROBLEM_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'N_PROBLEMNUM DESC','condition':{'ASSETNUM':'=" + assetnum + "'}}";
 
         } else {
-            return "{'appid':'" + Constants.ASSET_APPID + "','objectname':'" + Constants.N_PROBLEM_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'N_PROBLEMNUM DESC','condition':{'ASSETNUM':'=" + assetnum + "'}','sinorsearch':{'N_PROBLEMNUM':'" + vaule + "','PRODESC':'" + vaule + "'}}";
+            return "{'appid':'" + Constants.ASSET_APPID + "','objectname':'" + Constants.N_PROBLEM_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'N_PROBLEMNUM DESC','condition':{'ASSETNUM':'=" + assetnum + "'},'sinorsearch':{'N_PROBLEMNUM':'" + vaule + "','PRODESC':'" + vaule + "'}}";
         }
     }
 
@@ -97,6 +102,11 @@ public class HttpManager {
         }
     }
 
+    public static String getSPAREPARTURL1( String assetnum, String itemnum,int curpage, int showcount) {
+            return "{'appid':'" + Constants.ASSET_APPID + "','objectname':'" + Constants.SPAREPART_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'ASSETNUM':'=" + assetnum + "','ITEMNUM':'="+itemnum+"'}}";
+
+    }
+
 
     /**
      * 设置定期点检工单
@@ -114,24 +124,24 @@ public class HttpManager {
     /**
      * 设置定期点检工单明细行
      */
-    public static String getWOTASKURL(String vaule, String wonum, int curpage, int showcount) {
+    public static String getWOTASKURL(String vaule, String wonum,String n_responsor, int curpage, int showcount) {
         if (vaule.equals("")) {
-            return "{'appid':'" + Constants.N_MATWO_APPID + "','objectname':'" + Constants.WOTASK_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WOSEQUENCE DESC','condition':{'WONUM':'=" + wonum + "'}}";
+            return "{'appid':'" + Constants.N_MATWO_APPID + "','objectname':'" + Constants.WOTASK_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WOTASKID DESC','condition':{'WONUM':'=" + wonum + "','N_RESPONSOR':'="+n_responsor+"'}}";
 
         } else {
-            return "{'appid':'" + Constants.N_MATWO_APPID + "','objectname':'" + Constants.WOTASK_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WOSEQUENCE DESC','condition':{'WONUM':'=" + wonum + "'},'sinorsearch':{'WOSEQUENCE':'" + vaule + "','ASSETNUM':'" + vaule + "'}}";
+            return "{'appid':'" + Constants.N_MATWO_APPID + "','objectname':'" + Constants.WOTASK_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WOTASKID DESC','condition':{'WONUM':'=" + wonum + "','N_RESPONSOR':'="+n_responsor+"'},'sinorsearch':{'WOSEQUENCE':'" + vaule + "','ASSETNUM':'" + vaule + "'}}";
         }
     }
 
     /**
      * 设置定期点检工单明细行
      */
-    public static String getWOTASKURL(String vaule, String wonum, String assetnum, int curpage, int showcount) {
+    public static String getWOTASKURL(String vaule, String wonum, String n_responsor,String assetnum, int curpage, int showcount) {
         if (vaule.equals("")) {
-            return "{'appid':'" + Constants.N_MATWO_APPID + "','objectname':'" + Constants.WOTASK_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WOSEQUENCE DESC','condition':{'WONUM':'=" + wonum + "','ASSETNUM':'=" + assetnum + "'}}";
+            return "{'appid':'" + Constants.N_MATWO_APPID + "','objectname':'" + Constants.WOTASK_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WOTASKID DESC','condition':{'WONUM':'=" + wonum + "','ASSETNUM':'=" + assetnum +  "','N_RESPONSOR':'="+n_responsor+"'}}";
 
         } else {
-            return "{'appid':'" + Constants.N_MATWO_APPID + "','objectname':'" + Constants.WOTASK_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WOSEQUENCE DESC','condition':{'WONUM':'=" + wonum + "','ASSETNUM':'=" + assetnum + "'},'sinorsearch':{'WOSEQUENCE':'" + vaule + "','ASSETNUM':'" + vaule + "'}}";
+            return "{'appid':'" + Constants.N_MATWO_APPID + "','objectname':'" + Constants.WOTASK_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WOTASKID DESC','condition':{'WONUM':'=" + wonum + "','ASSETNUM':'=" + assetnum +  "','N_RESPONSOR':'="+n_responsor+"'},'sinorsearch':{'WOSEQUENCE':'" + vaule + "','ASSETNUM':'" + vaule + "'}}";
         }
     }
 
@@ -145,6 +155,13 @@ public class HttpManager {
         } else {
             return "{'appid':'" + Constants.N_PROB2_APPID + "','objectname':'" + Constants.N_PROBLEM_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'N_PROBLEMNUM DESC','sinorsearch':{'N_PROBLEMNUM':'" + vaule + "','PRODESC':'" + vaule + "'}}";
         }
+    }
+    /**
+     * 设置根据设备编码查询问题点管理
+     */
+    public static String getByASSETNUMN_PROBLEMURL(String assetnum, int curpage, int showcount) {
+            return "{'appid':'" + Constants.N_PROB2_APPID + "','objectname':'" + Constants.N_PROBLEM_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'N_PROBLEMNUM DESC','condition':{'ASSETNUM':'=" + assetnum + "'}}";
+
     }
 
 
@@ -232,9 +249,13 @@ public class HttpManager {
             return "{'appid':'" + Constants.N_WORKOR2 + "','objectname':'" + Constants.WORKORDER_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WONUM DESC','condition':{'SITEID':'=" + siteid + "','N_APPTYPE':'=N_WORKOR2'},'sinorsearch':{'WONUM':'" + vaule + "','DESCRIPTION':'" + vaule + "'}}";
         }
     }
+    public static String getN_WORKORURL1(String siteid, String assetnum,int curpage, int showcount) {
+            return "{'appid':'" + Constants.N_WORKOR2 + "','objectname':'" + Constants.WORKORDER_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WONUM DESC','condition':{'SITEID':'=" + siteid + "','N_APPTYPE':'=N_WORKOR2','ASSETNUM':'"+assetnum+"'}}";
+
+    }
 
     /**
-     * 获取总库领料单
+     * 根据Wonum获取总库领料单
      */
     public static String getN_MATERIAL(String vaule, String wonum, int curpage, int showcount) {
         if (vaule.equals("")) {
@@ -473,7 +494,6 @@ public class HttpManager {
             @Override
             public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
                 Results result = JsonUtils.parsingResults(cxt, responseString);
-
                 SafeHandler.onSuccess(handler, result, result.getCurpage(), result.getShowcount());
             }
 

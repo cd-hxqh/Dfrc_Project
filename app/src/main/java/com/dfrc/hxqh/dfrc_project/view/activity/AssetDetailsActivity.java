@@ -49,6 +49,11 @@ public class AssetDetailsActivity extends BaseActivity {
     TextView n_specialtypeTextView; //设备类型
     @Bind(R.id.n_importance_text_id)
     TextView n_importanceTextView; //重要程度
+
+    @Bind(R.id.n_family_text_id)
+    TextView n_familyTextView; //维护人
+    @Bind(R.id.n_familyname_text_id)
+    TextView n_familynameTextView; //维护人名称
     @Bind(R.id.n_crewid_text_id)
     TextView n_crewidTextView; //使用班组
     @Bind(R.id.n_userdepartment_text_id)
@@ -136,6 +141,8 @@ public class AssetDetailsActivity extends BaseActivity {
             n_userdepartmentTextView.setText(asset.getN_USERDEPARTMENT());
             n_managementTextView.setText(asset.getN_MANAGEMENT());
             n_assetnumTextView.setText(asset.getN_ASSETNUM());
+            n_familyTextView.setText(asset.getN_FAMILY());
+            n_familynameTextView.setText(asset.getFAMILY_DISPLAYNAME());
             n_brandTextView.setText(asset.getN_BRAND());
             n_modelTextView.setText(asset.getN_MODEL());
             n_sortTextView.setText(asset.getN_SORT());

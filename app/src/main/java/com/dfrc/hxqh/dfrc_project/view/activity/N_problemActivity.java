@@ -7,9 +7,11 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -17,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -39,6 +42,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 
 /**
  * Created by Administrator on 2017/2/15.
@@ -67,8 +71,13 @@ public class N_problemActivity extends BaseActivity implements SwipeRefreshLayou
      */
     private N_problemListAdapter n_problemListAdapter;
 
-    @Bind(R.id.search_edit)
+    @Bind(R.id.edt_input)
     EditText search; //编辑框
+    @Bind(R.id.btn_delete)
+    Button deleteBtn; //删除
+
+    @Bind(R.id.add_btn_id)
+    Button addbtn;
     /**
      * 查询条件*
      */
@@ -79,11 +88,12 @@ public class N_problemActivity extends BaseActivity implements SwipeRefreshLayou
     ArrayList<N_PROBLEM> items = new ArrayList<N_PROBLEM>();
     private String assetNum;
 
+    private boolean isCodePda; //判断是扫描还是手输
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list);
+        setContentView(R.layout.activity_problem_list);
         ButterKnife.bind(this);
         initDate();
         findViewById();
@@ -140,6 +150,50 @@ public class N_problemActivity extends BaseActivity implements SwipeRefreshLayou
         showPopupWindow(menuImageView);
     }
 
+    //新建
+    @OnClick(R.id.add_btn_id)
+    void setAddBtnOnClickListener() {
+        Intent intent = getIntent();
+        intent.setClass(N_problemActivity.this, N_ProblemAddActivity.class);
+        intent.putExtra("mark", PROBLEM_CODE);
+        startActivityForResult(intent, 0);
+    }
+
+    @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.BEFORE_TEXT_CHANGED)
+    void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.TEXT_CHANGED)
+    void onTextChanged(CharSequence s, int start, int before, int count) {
+        if (start == 0 && before == 0 && count > 1) {
+            //扫描
+            isCodePda = true;
+        } else {
+            //手输
+            isCodePda = false;
+        }
+    }
+
+    @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
+    void afterTextChanged(Editable s) {
+        Log.i("isCodePda", "isCodePda=" + isCodePda);
+        if (s.length() > 0) {
+            deleteBtn.setVisibility(View.VISIBLE);
+        } else {
+            deleteBtn.setVisibility(View.GONE);
+        }
+        if (isCodePda) {
+            n_problemListAdapter.removeAll(items);
+            assetNum = parsingResult(s.toString());
+            items = new ArrayList<N_PROBLEM>();
+            nodatalayout.setVisibility(View.GONE);
+            refresh_layout.setRefreshing(true);
+            page = 1;
+            getData(assetNum);
+        }
+    }
+
 
     @Override
     public void onLoad() {
@@ -190,9 +244,14 @@ public class N_problemActivity extends BaseActivity implements SwipeRefreshLayou
      * 获取数据*
      */
     private void getData(String search) {
+        String url = null;
+        if (isCodePda && assetNum.equals("")) {
+            url = HttpManager.getN_PROBLEMURL(search, page, 20);
+        } else {
+            url = HttpManager.getByASSETNUMN_PROBLEMURL(assetNum, page, 20);
+        }
 
-
-        HttpManager.getDataPagingInfo(N_problemActivity.this, HttpManager.getN_PROBLEMURL(search, page, 20), new HttpRequestHandler<Results>() {
+        HttpManager.getDataPagingInfo(N_problemActivity.this, url, new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {
             }
@@ -289,25 +348,25 @@ public class N_problemActivity extends BaseActivity implements SwipeRefreshLayou
 
         // 设置好参数之后再show
         popupWindow.showAsDropDown(view);
-        LinearLayout xjLinearLayout = (LinearLayout) contentView.findViewById(R.id.add_text_id);
-        xjLinearLayout.setOnClickListener(xjOnClickListener);
+//        LinearLayout xjLinearLayout = (LinearLayout) contentView.findViewById(R.id.add_text_id);
+//        xjLinearLayout.setOnClickListener(xjOnClickListener);
         LinearLayout sysLinearLayout = (LinearLayout) contentView.findViewById(R.id.sys_text_id);
         sysLinearLayout.setOnClickListener(sysOnClickListener);
 
     }
 
 
-    //新建
-    private View.OnClickListener xjOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent intent = getIntent();
-            intent.setClass(N_problemActivity.this, N_ProblemAddActivity.class);
-            intent.putExtra("mark", PROBLEM_CODE);
-            startActivityForResult(intent, 0);
-            popupWindow.dismiss();
-        }
-    };
+    //    //新建
+//    private View.OnClickListener xjOnClickListener = new View.OnClickListener() {
+//        @Override
+//        public void onClick(View view) {
+//            Intent intent = getIntent();
+//            intent.setClass(N_problemActivity.this, N_ProblemAddActivity.class);
+//            intent.putExtra("mark", PROBLEM_CODE);
+//            startActivityForResult(intent, 0);
+//            popupWindow.dismiss();
+//        }
+//    };
     //扫一扫
     private View.OnClickListener sysOnClickListener = new View.OnClickListener() {
         @Override
@@ -319,5 +378,6 @@ public class N_problemActivity extends BaseActivity implements SwipeRefreshLayou
             popupWindow.dismiss();
         }
     };
+
 
 }

@@ -69,6 +69,7 @@
     <string name="n_specialtype_text">设备类型:</string>
     <string name="n_importance_text">重要程度(A/B/C):</string>
     <string name="n_family_text">维护人:</string>
+    <string name="n_familyname_text">维护人名称:</string>
     <string name="n_crewid_text">使用班组:</string>
     <string name="n_userdepartment_text">使用部门:</string>
     <string name="n_management_text">管理部门:</string>
@@ -247,5 +248,6 @@
     <string name="n_location1_text">被借方仓库代码:</string>
     <string name="n_stieid_text">被借方地点:</string>
     <string name="jyxq_text">借用详情</string>
+    <string name="avblbalance_text">可用量:</string>
 
 </resources>

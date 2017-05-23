@@ -270,7 +270,6 @@ public class AndroidClientService {
     public static String INV02RecByPOLine(final Context cxt, MATRECTRANS matrectrans) {
 
         String ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
-
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
         soapEnvelope.dotNet = true;
@@ -280,6 +279,7 @@ public class AndroidClientService {
         soapReq.addProperty("polinenum", matrectrans.getPOLINENUM());//采购单行号
         soapReq.addProperty("qty", matrectrans.getRECEIPTQUANTITY());// 数量
         soapReq.addProperty("binnum", matrectrans.getBINNUM());//货柜
+        soapReq.addProperty("issuetype", "接收");//交易类型
         soapEnvelope.setOutputSoapObject(soapReq);
         HttpTransportSE httpTransport = new HttpTransportSE(ip_adress, timeOut);
         try {
@@ -302,7 +302,6 @@ public class AndroidClientService {
      * 物料退回新增
      */
     public static String INV02RecByPOLine1(final Context cxt, UDCANRTN matrectrans) {
-        Log.i(TAG, "userid=" + matrectrans.getENTERBY() + ",ponum=" + matrectrans.getPONUM() + ",polinenum=" + matrectrans.getPOLINENUM() + ",qty=" + matrectrans.getQUANTITY() + ",binnum=" + matrectrans.getTOBIN());
         String ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
@@ -314,6 +313,7 @@ public class AndroidClientService {
         soapReq.addProperty("polinenum", matrectrans.getPOLINENUM());//采购单行号
         soapReq.addProperty("qty", matrectrans.getQUANTITY());// 数量
         soapReq.addProperty("binnum", matrectrans.getTOBIN());//货柜
+        soapReq.addProperty("issuetype", "接收");//交易类型
         soapEnvelope.setOutputSoapObject(soapReq);
         HttpTransportSE httpTransport = new HttpTransportSE(ip_adress, timeOut);
         try {
@@ -326,7 +326,6 @@ public class AndroidClientService {
         String obj = null;
         try {
             obj = soapEnvelope.getResponse().toString();
-            Log.i(TAG, "obj=" + obj);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
@@ -376,13 +375,11 @@ public class AndroidClientService {
      * 分库库领料单物料新增
      */
     public static String AddN_WORKORDLine(final Context cxt, MATUSETRANS matusetrans) {
-
         String ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
-
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
         soapEnvelope.dotNet = true;
-        SoapObject soapReq = new SoapObject(NAMESPACE, "dflserviceAddN_WORKOR2Line");
+        SoapObject soapReq = new SoapObject(NAMESPACE, "dflserviceAddN_WORKORDLine");
 
         soapReq.addProperty("WONUM", matusetrans.getWONUM()); //工单号
         soapReq.addProperty("SITEID", matusetrans.getSITEID());//站点
@@ -412,6 +409,37 @@ public class AndroidClientService {
         return obj;
     }
 
+
+    /**
+     * 获取主菜单的点击工单
+     */
+    public static String searchMaint2(final Context cxt, String key, String keyvalue) {
+        String ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
+        SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        soapEnvelope.implicitTypes = true;
+        soapEnvelope.dotNet = true;
+        SoapObject soapReq = new SoapObject(NAMESPACE, "dflservicesearchMaint2");
+
+        soapReq.addProperty("KEY", key); //key
+        soapReq.addProperty("KEYVALUE", keyvalue);//keyvalue
+        soapEnvelope.setOutputSoapObject(soapReq);
+        HttpTransportSE httpTransport = new HttpTransportSE(ip_adress, timeOut);
+        try {
+            httpTransport.call("urn:action", soapEnvelope);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        }
+        String obj = null;
+        try {
+            obj = soapEnvelope.getResponse().toString();
+            Log.i(TAG, "值:" + obj);
+        } catch (SoapFault soapFault) {
+            soapFault.printStackTrace();
+        }
+        return obj;
+    }
 
     /**
      * 通过webservice实现图片上传

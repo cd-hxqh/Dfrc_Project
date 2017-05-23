@@ -5,7 +5,7 @@ package com.dfrc.hxqh.dfrc_project.model;
  * 库存
  */
 public class INVENTORY extends Entity{
-    public String AVBLBALANCE;//当前余量
+    public String AVBLBALANCE;//可用量
     public String BINNUM;//存放位置
     public String CURBALTOTAL;//当前余量
     public String ISSUEUNIT;//发放单位

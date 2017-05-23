@@ -4,28 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
+
     <include layout="@layout/title_main"></include>
 
-    <RelativeLayout
-        android:id="@+id/edit_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/gray"
-        android:focusable="true"
-        android:focusableInTouchMode="true">
-
-        <EditText
-            android:id="@+id/search_edit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/editbox_background_normal"
-            android:gravity="center"
-            android:imeOptions="actionSearch"
-            android:maxLines="1"
-            android:singleLine="true" />
-    </RelativeLayout>
+    <include layout="@layout/edit_delete"></include>
 
     <include layout="@layout/work_list"></include>
 

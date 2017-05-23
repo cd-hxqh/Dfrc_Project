@@ -3,14 +3,10 @@ package com.dfrc.hxqh.dfrc_project.view.activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.dfrc.hxqh.dfrc_project.R;
@@ -43,9 +39,9 @@ public class WotaskDetailsActivity extends BaseActivity {
 
     @Bind(R.id.title_name)
     TextView titleTextView; //标题
-    @Bind(R.id.title_add)
-    ImageView menuImageView; //菜单
-    PopupWindow popupWindow;
+    @Bind(R.id.sbmittext_id)
+    ImageButton sbmitBtn; //保存
+
     @Bind(R.id.wosequence_text_id)
     TextView wosequenceTextView; //序号
     @Bind(R.id.assetnum_text_id)
@@ -116,8 +112,7 @@ public class WotaskDetailsActivity extends BaseActivity {
     @Override
     protected void initView() {
         titleTextView.setText(R.string.wotask_text);
-        menuImageView.setVisibility(View.VISIBLE);
-        menuImageView.setImageResource(R.mipmap.ic_more);
+        sbmitBtn.setVisibility(View.VISIBLE);
         if (wotask != null) {
             wosequenceTextView.setText(wotask.getWOSEQUENCE());
             assetnumTextView.setText(wotask.getASSETNUM());
@@ -141,95 +136,47 @@ public class WotaskDetailsActivity extends BaseActivity {
 
     }
 
-    //菜单事件
-    @OnClick(R.id.title_add)
-    void setMenuImageViewOnClickListener() {
-        showPopupWindow(menuImageView);
+    //保存
+    @OnClick(R.id.sbmittext_id)
+    void setSbmitBtnOnClickListener() {
+        getLoadingDialog("正在提交数据...").show();
+        saveAsyncTask();
     }
+
+    //OK
+    @OnClick(R.id.ok_btn_id)
+    void setOkBtnOnClickListener() {
+        getLoadingDialog("正在提交数据...").show();
+        startAsyncTask();
+    }
+
+    //NO
+    @OnClick(R.id.no_text_id)
+    void setNoBtnOnClickListener() {
+        Intent intent = getIntent();
+        intent.setClass(WotaskDetailsActivity.this, N_PB_AddActivity.class);
+        intent.putExtra("code", NO_CODE);
+        startActivityForResult(intent, 0);
+    }
+
+    //问题点
+    @OnClick(R.id.n_pb_text_id)
+    void setn_pbBtnOnClickListener() {
+        Intent intent = getIntent();
+        intent.setClass(WotaskDetailsActivity.this, N_PB_AddActivity.class);
+        intent.putExtra("code", WT_CODE);
+        startActivityForResult(intent, 0);
+    }
+
 
     //实施人员
     @OnClick(R.id.n_members_text_id)
     void setN_membersTextViewOnClickListener() {
-        Intent intent = new Intent(WotaskDetailsActivity.this, PersonActivity.class);
+        Intent intent = getIntent();
+        intent.setClass(WotaskDetailsActivity.this, PersonActivity.class);
         startActivityForResult(intent, 0);
     }
 
-    /**
-     * 初始化showPopupWindow*
-     */
-    private void showPopupWindow(View view) {
-
-        // 一个自定义的布局，作为显示的内容
-        View contentView = LayoutInflater.from(WotaskDetailsActivity.this).inflate(
-                R.layout.wotask_popup_window, null);
-
-
-        popupWindow = new PopupWindow(contentView,
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        popupWindow.setTouchable(true);
-        popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return false;
-            }
-        });
-
-        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
-        // 我觉得这里是API的一个bug
-        popupWindow.setBackgroundDrawable(getResources().getDrawable(
-                R.drawable.popup_background_mtrl_mult));
-
-        // 设置好参数之后再show
-        popupWindow.showAsDropDown(view);
-        saveLinearLayout = (LinearLayout) contentView.findViewById(R.id.save_linearlayout_id);
-        okLinearLayout = (LinearLayout) contentView.findViewById(R.id.ok_linearlayout_id);
-        noLinearLayout = (LinearLayout) contentView.findViewById(R.id.no_linearlayout_id);
-        n_pbLinearLayout = (LinearLayout) contentView.findViewById(R.id.n_pb_linearlayout_id);
-        saveLinearLayout.setOnClickListener(saveLinearLayoutOnClickListener);
-        okLinearLayout.setOnClickListener(okLinearLayoutOnClickListener);
-        noLinearLayout.setOnClickListener(noLinearLayoutOnClickListener);
-        n_pbLinearLayout.setOnClickListener(n_pbLinearLayoutOnClickListener);
-
-    }
-
-    private View.OnClickListener saveLinearLayoutOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            getLoadingDialog("正在提交数据...").show();
-            saveAsyncTask();
-            popupWindow.dismiss();
-        }
-    };
-    private View.OnClickListener okLinearLayoutOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            getLoadingDialog("正在提交数据...").show();
-            startAsyncTask();
-            popupWindow.dismiss();
-        }
-    };
-    private View.OnClickListener noLinearLayoutOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent intent = getIntent();
-            intent.setClass(WotaskDetailsActivity.this, N_PB_AddActivity.class);
-            intent.putExtra("code", NO_CODE);
-            startActivityForResult(intent, 0);
-            popupWindow.dismiss();
-        }
-    };
-    private View.OnClickListener n_pbLinearLayoutOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent intent = getIntent();
-            intent.setClass(WotaskDetailsActivity.this, N_PB_AddActivity.class);
-            intent.putExtra("code", WT_CODE);
-            startActivityForResult(intent, 0);
-            popupWindow.dismiss();
-        }
-    };
 
     private FlippingLoadingDialog getLoadingDialog(String msg) {
         if (mLoadingDialog == null)

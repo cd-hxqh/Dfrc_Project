@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
@@ -13,6 +14,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -32,6 +34,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 
 /**
  * Created by Administrator on 2017/2/15.
@@ -57,8 +60,10 @@ public class SparepartActivity extends BaseActivity implements SwipeRefreshLayou
      */
     private SparepartListAdapter sparepartListAdapter;
 
-    @Bind(R.id.search_edit)
+    @Bind(R.id.edt_input)
     EditText search; //编辑框
+    @Bind(R.id.btn_delete)
+    Button deleteBtn; //删除
     /**
      * 查询条件*
      */
@@ -69,6 +74,9 @@ public class SparepartActivity extends BaseActivity implements SwipeRefreshLayou
     ArrayList<SPAREPART> items = new ArrayList<SPAREPART>();
 
     private String assetnum; //设备编号
+    private String itemnum=""; //物料编码
+
+    private boolean isCodePda; //判断是扫描还是手输
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +89,7 @@ public class SparepartActivity extends BaseActivity implements SwipeRefreshLayou
     }
 
     private void initData() {
-        assetnum=getIntent().getExtras().getString("assetnum");
+        assetnum = getIntent().getExtras().getString("assetnum");
     }
 
 
@@ -121,7 +129,45 @@ public class SparepartActivity extends BaseActivity implements SwipeRefreshLayou
         finish();
     }
 
+    @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.BEFORE_TEXT_CHANGED)
+    void beforeTextChanged(CharSequence s, int start, int before, int count) {
+        if (start == 0 && before == 0 && count > 1) {
+            //扫描
+            isCodePda = true;
+        } else {
+            //手输
+            isCodePda = false;
+        }
+    }
 
+    @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.TEXT_CHANGED)
+    void onTextChanged(CharSequence s, int start, int before, int count) {
+    }
+
+    @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
+    void afterTextChanged(Editable s) {
+        if (s.length() > 0) {
+            deleteBtn.setVisibility(View.VISIBLE);
+        } else {
+            deleteBtn.setVisibility(View.GONE);
+        }
+        if (isCodePda) {
+            itemnum = parsingResult(s.toString());
+            sparepartListAdapter.removeAll(items);
+            items = new ArrayList<SPAREPART>();
+            nodatalayout.setVisibility(View.GONE);
+            refresh_layout.setRefreshing(true);
+            page = 1;
+            getData(parsingResult(s.toString()));
+        }
+    }
+
+
+    //删除
+    @OnClick(R.id.btn_delete)
+    void setDeleteBtnOnClickListener() {
+        search.setText("");
+    }
 
     @Override
     public void onLoad() {
@@ -172,9 +218,15 @@ public class SparepartActivity extends BaseActivity implements SwipeRefreshLayou
      * 获取数据*
      */
     private void getData(String search) {
+        String url = null;
+        if (!isCodePda && itemnum.equals("")) {
+            url = HttpManager.getSPAREPARTURL(search, assetnum, page, 20);
+        } else {
+            url = HttpManager.getSPAREPARTURL1(assetnum, itemnum, page, 20);
+            itemnum="";
+        }
 
-
-        HttpManager.getDataPagingInfo(SparepartActivity.this, HttpManager.getSPAREPARTURL(search, assetnum, page, 20), new HttpRequestHandler<Results>() {
+        HttpManager.getDataPagingInfo(SparepartActivity.this, url, new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {
             }
@@ -229,5 +281,6 @@ public class SparepartActivity extends BaseActivity implements SwipeRefreshLayou
     private void addData(final List<SPAREPART> list) {
         sparepartListAdapter.addData(list);
     }
+
 
 }

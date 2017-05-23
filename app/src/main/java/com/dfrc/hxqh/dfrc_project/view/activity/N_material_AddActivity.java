@@ -3,8 +3,10 @@ package com.dfrc.hxqh.dfrc_project.view.activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -19,6 +21,7 @@ import com.dfrc.hxqh.dfrc_project.webserviceclient.AndroidClientService;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 
 
 /**
@@ -47,10 +50,11 @@ public class N_material_AddActivity extends BaseActivity {
     TextView descTextView; //描述
     @Bind(R.id.n_reason_text_id)
     TextView n_reasonTextView; //领用原因
-    @Bind(R.id.n_sap3_text_id)
-    TextView n_sap3TextView; //申请数量
     @Bind(R.id.n_sap5_text_id)
-    TextView n_sap5TextView; //实际发放数量
+    EditText n_sap5TextView; //申请数量
+    @Bind(R.id.n_sap3_text_id)
+    EditText n_sap3TextView; //实际发放数量
+
 
     private ZKWORKORDER zkworkorder;
     protected FlippingLoadingDialog mLoadingDialog;
@@ -83,6 +87,24 @@ public class N_material_AddActivity extends BaseActivity {
         titleTextView.setText(R.string.add_text);
         sbmitImageButton.setVisibility(View.VISIBLE);
 
+
+    }
+
+    @OnTextChanged(value = R.id.n_sap5_text_id, callback = OnTextChanged.Callback.BEFORE_TEXT_CHANGED)
+    void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @OnTextChanged(value = R.id.n_sap5_text_id, callback = OnTextChanged.Callback.TEXT_CHANGED)
+    void onTextChanged(CharSequence s, int start, int before, int count) {
+        Log.i(TAG, "s=" + s);
+//        n_sap3TextView.setText(s);
+    }
+
+    @OnTextChanged(value = R.id.n_sap5_text_id, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
+    void afterTextChanged(Editable s) {
+        Log.i(TAG, "ssss=" + s.toString());
+        n_sap3TextView.setText(s);
     }
 
     @OnClick(R.id.itemnum_text_id)

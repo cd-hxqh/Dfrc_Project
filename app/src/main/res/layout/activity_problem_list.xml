@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/title_relativelayout_id"
+        layout="@layout/title_main"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_heiht_size"></include>
+
+    <include
+        android:layout_below="@+id/title_relativelayout_id"
+        android:id="@+id/edit_detele_id"
+        layout="@layout/edit_delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></include>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_detele_id"
+        android:layout_marginBottom="40dp">
+
+        <com.dfrc.hxqh.dfrc_project.view.widght.SwipeRefreshLayout
+            android:id="@+id/swipe_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/chooseitem_relativelayout"
+            android:layout_below="@+id/relativeLayout_id">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView_id"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@color/white"></android.support.v7.widget.RecyclerView>
+        </com.dfrc.hxqh.dfrc_project.view.widght.SwipeRefreshLayout>
+
+        <LinearLayout
+            android:id="@+id/have_not_data_id"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/have_not_data_txt"
+                android:textSize="@dimen/abc_action_bar_content_inset_material" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/add_btn_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/checkBox"
+            android:background="@drawable/btn_enable_green"
+            android:paddingBottom="7dp"
+            android:paddingTop="7dp"
+            android:text="@string/add_text"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+</RelativeLayout>

@@ -33,8 +33,8 @@ public class InventoryListAdapter extends BaseQuickAdapter<INVENTORY> {
         CardView cardView = helper.getView(R.id.card_container);
         helper.setText(R.id.assetnum_text_id, item.getITEMNUM());
         helper.setText(R.id.item_desc_text, item.getDESCRIPTION());
-        helper.setText(R.id.status_text_id, item.getSTATUS());
-        helper.setText(R.id.family_displayname_text_id, item.getSITEID());
+        helper.setText(R.id.status_text_id, item.getLOCATION());
+        helper.setText(R.id.family_displayname_text_id, item.getCURBALTOTAL());
     }
 
 

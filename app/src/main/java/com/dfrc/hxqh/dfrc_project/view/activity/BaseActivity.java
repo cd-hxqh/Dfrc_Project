@@ -84,4 +84,11 @@ public abstract class BaseActivity extends ActionBarActivity {
      */
     protected abstract void initView();
 
+    //解析设备编号
+    public String parsingResult(String result) {
+        String[] s = result.split("\\n");
+        String assetNum = s[0].substring(s[0].indexOf("：") + 1);
+        return assetNum;
+    }
+
 }

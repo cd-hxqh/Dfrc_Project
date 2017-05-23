@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
@@ -14,6 +15,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -34,6 +36,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 
 /**
  * Created by Administrator on 2017/2/15.
@@ -53,8 +56,10 @@ public class PoLineActivity extends BaseActivity implements SwipeRefreshLayout.O
     @Bind(R.id.swipe_container)
     SwipeRefreshLayout refresh_layout;//界面刷新
 
-    @Bind(R.id.search_edit)
-    EditText search;//编辑框
+    @Bind(R.id.edt_input)
+    EditText search; //编辑框
+    @Bind(R.id.btn_delete)
+    Button deleteBtn; //删除
     /**
      * 适配器*
      */
@@ -83,7 +88,7 @@ public class PoLineActivity extends BaseActivity implements SwipeRefreshLayout.O
 
     //采购单号
     private void initData() {
-        ponum=getIntent().getExtras().getString("ponum");
+        ponum = getIntent().getExtras().getString("ponum");
     }
 
 
@@ -122,6 +127,30 @@ public class PoLineActivity extends BaseActivity implements SwipeRefreshLayout.O
     @OnClick(R.id.title_back_id)
     void setBackOnClickListener() {
         finish();
+    }
+
+
+    @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.BEFORE_TEXT_CHANGED)
+    void beforeTextChanged(CharSequence s, int start, int before, int count) {
+    }
+
+    @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.TEXT_CHANGED)
+    void onTextChanged(CharSequence s, int start, int before, int count) {
+    }
+
+    @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
+    void afterTextChanged(Editable s) {
+        if (s.length() > 0) {
+            deleteBtn.setVisibility(View.VISIBLE);
+        } else {
+            deleteBtn.setVisibility(View.GONE);
+        }
+    }
+
+    //删除
+    @OnClick(R.id.btn_delete)
+    void setDeleteBtnOnClickListener() {
+        search.setText("");
     }
 
 
@@ -174,7 +203,7 @@ public class PoLineActivity extends BaseActivity implements SwipeRefreshLayout.O
      * 获取数据*
      */
     private void getData(String search) {
-        String url = HttpManager.getPOLINEURL(search,ponum, page, 20);
+        String url = HttpManager.getPOLINEURL(search, ponum, page, 20);
 
         HttpManager.getDataPagingInfo(PoLineActivity.this, url, new HttpRequestHandler<Results>() {
             @Override

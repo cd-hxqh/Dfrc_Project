@@ -18,6 +18,7 @@ public class N_MATERIAL extends Entity {
     public String STATUS;//状态
     public String N_SAP1;//发货仓库
     public String N_SAP3;//申请数量
+    public String ITEM_DESCRIPTION;//描述
 
 
     public String getCURBAL() {
@@ -122,5 +123,13 @@ public class N_MATERIAL extends Entity {
 
     public void setN_SAP5(String n_SAP5) {
         N_SAP5 = n_SAP5;
+    }
+
+    public String getITEM_DESCRIPTION() {
+        return ITEM_DESCRIPTION;
+    }
+
+    public void setITEM_DESCRIPTION(String ITEM_DESCRIPTION) {
+        this.ITEM_DESCRIPTION = ITEM_DESCRIPTION;
     }
 }

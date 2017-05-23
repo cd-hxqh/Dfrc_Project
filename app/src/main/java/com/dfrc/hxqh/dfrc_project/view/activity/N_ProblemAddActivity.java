@@ -263,20 +263,21 @@ public class N_ProblemAddActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
+        switch (resultCode) {
             case RESPONSOR_REQUESTCODE:
-                PERSON person = (PERSON) data.getSerializableExtra("person");
-                responsorTextView.setText(person.getPERSONID());
-                responsorNameTextView.setText(person.getDISPLAYNAME());
+                if (requestCode == RESPONSOR_REQUESTCODE) {
+                    PERSON person = (PERSON) data.getSerializableExtra("person");
+                    responsorTextView.setText(person.getPERSONID());
+                    responsorNameTextView.setText(person.getDISPLAYNAME());
+                } else if (requestCode == CONFIRMBY_REQUESTCODE) {
+                    PERSON person1 = (PERSON) data.getSerializableExtra("person");
+                    confirmbyTextView.setText(person1.getPERSONID());
+                }
                 break;
             case AssetChooseActivity.ASSET_CODE:
                 ASSET asset = (ASSET) data.getSerializableExtra("asset");
                 assetnumTextView.setText(asset.getASSETNUM());
                 sbmsTextView.setText(asset.getDESCRIPTION());
-                break;
-            case CONFIRMBY_REQUESTCODE:
-                PERSON person1 = (PERSON) data.getSerializableExtra("person");
-                confirmbyTextView.setText(person1.getPERSONID());
                 break;
         }
     }

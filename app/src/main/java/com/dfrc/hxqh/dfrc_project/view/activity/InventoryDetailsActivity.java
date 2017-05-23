@@ -52,6 +52,10 @@ public class InventoryDetailsActivity extends BaseActivity {
     TextView statusTextView; //状态
     @Bind(R.id.siteid_text_id)
     TextView siteidTextView; //站点
+    @Bind(R.id.curbaltotal_text_id)
+    TextView curbaltotalTextView; //当前余量
+    @Bind(R.id.avblbalance_text_id)
+    TextView avblbalanceTextView; //可用量
 
 
     private INVENTORY inventory;
@@ -96,6 +100,8 @@ public class InventoryDetailsActivity extends BaseActivity {
             issueunitTextView.setText(inventory.getISSUEUNIT());
             statusTextView.setText(inventory.getSTATUS());
             siteidTextView.setText(inventory.getSITEID());
+            curbaltotalTextView.setText(inventory.getCURBALTOTAL());
+            avblbalanceTextView.setText(inventory.getAVBLBALANCE());
 
         }
 

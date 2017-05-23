@@ -1,15 +1,21 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light_gray"
     android:orientation="vertical">
 
-    <include layout="@layout/title_main"></include>
+    <include
+        android:id="@+id/title_relativelayout_id"
+        layout="@layout/title_main"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimens_50dp"></include>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/title_relativelayout_id"
+        android:layout_marginBottom="@dimen/dimens_50dp"
         android:scrollbars="vertical">
 
         <LinearLayout
@@ -27,6 +33,101 @@
                 android:orientation="vertical"
                 android:paddingLeft="@dimen/dimen_10"
                 android:paddingRight="@dimen/dimen_10">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/dimen_10">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/n_result_text"
+                        android:textColor="@color/light_black"
+                        android:textSize="@dimen/dimens_16sp" />
+
+                    <EditText
+                        android:id="@+id/n_result_text_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:background="@color/transparent"
+                        android:gravity="right"
+                        android:hint="@string/have_not_data"
+                        android:textColor="@color/light_black"
+                        android:textSize="@dimen/dimens_16sp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimens_line"
+                    android:background="@mipmap/line"></View>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/dimen_10">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/n_note_text"
+                        android:textColor="@color/light_black"
+                        android:textSize="@dimen/dimens_16sp" />
+
+                    <EditText
+                        android:id="@+id/n_note_text_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:background="@color/transparent"
+                        android:gravity="right"
+                        android:hint="@string/have_not_data"
+                        android:textColor="@color/light_black"
+                        android:textSize="@dimen/dimens_16sp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimens_line"
+                    android:background="@mipmap/line"></View>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/dimen_10">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/n_members_text"
+                        android:textColor="@color/light_black"
+                        android:textSize="@dimen/dimens_16sp" />
+
+                    <TextView
+                        android:id="@+id/n_members_text_id"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:background="@color/sb__transparent"
+                        android:drawableRight="@mipmap/item_more"
+                        android:gravity="right"
+                        android:hint="@string/have_not_data"
+                        android:textColor="@color/light_black"
+                        android:textSize="@dimen/dimens_16sp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimens_line"
+                    android:background="@mipmap/line"></View>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -433,67 +534,6 @@
                     android:layout_height="@dimen/dimens_line"
                     android:background="@mipmap/line"></View>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/dimen_10">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/n_result_text"
-                        android:textColor="@color/light_black"
-                        android:textSize="@dimen/dimens_16sp" />
-
-                    <EditText
-                        android:id="@+id/n_result_text_id"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:background="@color/transparent"
-                        android:gravity="right"
-                        android:hint="@string/have_not_data"
-                        android:textColor="@color/light_black"
-                        android:textSize="@dimen/dimens_16sp" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimens_line"
-                    android:background="@mipmap/line"></View>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/dimen_10">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/n_note_text"
-                        android:textColor="@color/light_black"
-                        android:textSize="@dimen/dimens_16sp" />
-
-                    <EditText
-                        android:id="@+id/n_note_text_id"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:background="@color/transparent"
-                        android:gravity="right"
-                        android:hint="@string/have_not_data"
-                        android:textColor="@color/light_black"
-                        android:textSize="@dimen/dimens_16sp" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimens_line"
-                    android:background="@mipmap/line"></View>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -521,37 +561,6 @@
                         android:textSize="@dimen/dimens_16sp" />
                 </LinearLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimens_line"
-                    android:background="@mipmap/line"></View>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/dimen_10">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/n_members_text"
-                        android:textColor="@color/light_black"
-                        android:textSize="@dimen/dimens_16sp" />
-
-                    <TextView
-                        android:id="@+id/n_members_text_id"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:background="@color/sb__transparent"
-                        android:drawableRight="@mipmap/item_more"
-                        android:gravity="right"
-                        android:hint="@string/have_not_data"
-                        android:textColor="@color/light_black"
-                        android:textSize="@dimen/dimens_16sp" />
-                </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
@@ -565,5 +574,47 @@
         </LinearLayout>
     </ScrollView>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimens_50dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
 
-</LinearLayout>
+        <Button
+            android:id="@+id/ok_btn_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_enable_green"
+            android:gravity="center"
+            android:padding="@dimen/dimen_5"
+            android:text="@string/ok_text"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/dimens_16sp" />
+
+        <Button
+            android:id="@+id/no_text_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_enable_green"
+            android:gravity="center"
+            android:padding="@dimen/dimen_5"
+            android:text="@string/no_text"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/dimens_16sp" />
+
+        <Button
+            android:id="@+id/n_pb_text_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_enable_green"
+            android:gravity="center"
+            android:padding="@dimen/dimen_5"
+            android:text="@string/n_pb_text"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/dimens_16sp" />
+    </LinearLayout>
+
+</RelativeLayout>

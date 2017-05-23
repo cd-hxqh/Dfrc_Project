@@ -1,8 +1,10 @@
 package com.dfrc.hxqh.dfrc_project.view.activity;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -18,6 +20,7 @@ import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
 import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
 import com.dfrc.hxqh.dfrc_project.view.adapter.MyGridViewAdpter;
 import com.dfrc.hxqh.dfrc_project.view.adapter.MyViewPagerAdapter;
+import com.dfrc.hxqh.dfrc_project.webserviceclient.AndroidClientService;
 import com.mpt.hxqh.dfrc_project.AppManager;
 
 import java.util.ArrayList;
@@ -66,6 +69,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void findViewById() {
+//        startAsyncTask();
     }
 
 
@@ -80,7 +84,7 @@ public class MainActivity extends BaseActivity {
             if (list.contains(Constants.N_MATWO_APPID)) {//定期点检工单
                 listDatas.add(new ProdctBean(proName[1], Constants.N_MATWO_APPID, R.mipmap.ic_ddjgd));
             }
-            if (list.contains(Constants.N_PROB2_APPID) ) {//问题点管理
+            if (list.contains(Constants.N_PROB2_APPID)) {//问题点管理
                 listDatas.add(new ProdctBean(proName[2], Constants.N_PROB2_APPID, R.mipmap.ic_wtdj));
             }
             if (list.contains(Constants.RECEIPTS_APPID)) {//采购接收
@@ -218,5 +222,30 @@ public class MainActivity extends BaseActivity {
             AppManager.AppExit(MainActivity.this);
         }
     }
+
+
+    /**
+     * 提交数据*
+     */
+    private void startAsyncTask() {
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... strings) {
+                return AndroidClientService.searchMaint2(MainActivity.this, "ASSETNUM", "H2-Z2-CP-047");
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                Log.i("MainActivity", "s=" + s);
+                MessageUtils.showMiddleToast(MainActivity.this, s);
+
+
+            }
+        }.execute();
+
+
+    }
+
 
 }

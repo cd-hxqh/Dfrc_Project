@@ -59,7 +59,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.activity.AssetActivity"
-            android:screenOrientation="portrait" />
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".view.activity.AssetDetailsActivity"
             android:label="PermissionsActivity"
@@ -69,28 +71,40 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.activity.SparepartActivity"
-            android:screenOrientation="portrait" />
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".view.activity.WorkorderActivity"
-            android:screenOrientation="portrait" />
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".view.activity.WorkOrderDetailsActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.activity.WotaskActivity"
-            android:screenOrientation="portrait" />
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".view.activity.N_problemActivity"
-            android:screenOrientation="portrait" />
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".view.activity.WotaskDetailsActivity"
-            android:screenOrientation="portrait" />
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".view.activity.BjglActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.activity.N_ProblemDetailsActivity"
-            android:screenOrientation="portrait" />
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".view.activity.MipcaActivityCapture"
             android:screenOrientation="portrait" />
@@ -99,13 +113,19 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.activity.N_PB_AddActivity"
-            android:screenOrientation="portrait" />
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".view.activity.PersonActivity"
-            android:screenOrientation="portrait" />
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".view.activity.Inventoryactivity"
-            android:screenOrientation="portrait" />
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".view.activity.InventoryDetailsActivity"
             android:screenOrientation="portrait" />
@@ -114,22 +134,30 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.activity.ZkworkorderActivity"
-            android:screenOrientation="portrait" />
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".view.activity.ZkworkorderDetailsActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.activity.N_materialActivity"
-            android:screenOrientation="portrait" />
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".view.activity.FkworkorderActivity"
-            android:screenOrientation="portrait" />
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".view.activity.FkworkorderDetailsActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.activity.MatusetransActivity"
-            android:screenOrientation="portrait" />
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".view.activity.MatusetransDetailsActivity"
             android:screenOrientation="portrait" />
@@ -147,7 +175,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.activity.N_ProblemAddActivity"
-            android:screenOrientation="portrait" />
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".view.activity.PoLineActivity"
             android:screenOrientation="portrait" />
@@ -165,13 +195,19 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.activity.N_problem1Activity"
-            android:screenOrientation="portrait" />
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".view.activity.GzWorkorderActivity"
-            android:screenOrientation="portrait" />
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".view.activity.GZworkorderDetailsActivity"
-            android:screenOrientation="portrait" />
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".view.activity.N_problem1DetailsActivity"
             android:screenOrientation="portrait" />
@@ -180,7 +216,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.activity.PoChooseActivity"
-            android:screenOrientation="portrait" />
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".view.activity.PhotoActivity"
             android:screenOrientation="portrait" />
@@ -200,8 +238,8 @@
         <activity
             android:name="com.lzy.imagepicker.ui.ImagePreviewDelActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan|stateHidden"
-            android:theme="@style/ImagePickerThemeFullScreen"/>
+            android:theme="@style/ImagePickerThemeFullScreen"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
 
         <!--设置蒲公英-->
         <meta-data

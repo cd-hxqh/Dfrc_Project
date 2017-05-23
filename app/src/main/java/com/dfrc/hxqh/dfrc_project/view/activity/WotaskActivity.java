@@ -7,13 +7,16 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -25,6 +28,7 @@ import com.dfrc.hxqh.dfrc_project.api.HttpRequestHandler;
 import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.bean.Results;
 import com.dfrc.hxqh.dfrc_project.model.WOTASK;
+import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
 import com.dfrc.hxqh.dfrc_project.view.adapter.BaseQuickAdapter;
 import com.dfrc.hxqh.dfrc_project.view.adapter.WotaskListAdapter;
 import com.dfrc.hxqh.dfrc_project.view.widght.SwipeRefreshLayout;
@@ -35,6 +39,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 
 /**
  * Created by Administrator on 2017/2/15.
@@ -64,8 +69,10 @@ public class WotaskActivity extends BaseActivity implements SwipeRefreshLayout.O
      */
     private WotaskListAdapter wotaskListAdapter;
 
-    @Bind(R.id.search_edit)
+    @Bind(R.id.edt_input)
     EditText search; //编辑框
+    @Bind(R.id.btn_delete)
+    Button deleteBtn; //删除
     /**
      * 查询条件*
      */
@@ -78,7 +85,7 @@ public class WotaskActivity extends BaseActivity implements SwipeRefreshLayout.O
     private String wonum; //工单编号
     private String assetNum; //设备编号
 
-
+    private boolean isCodePda; //判断是扫描还是手输
     @OnClick(R.id.title_back_id)
     public void setBackOnClickListener() {
         finish();
@@ -115,6 +122,47 @@ public class WotaskActivity extends BaseActivity implements SwipeRefreshLayout.O
         startActivityForResult(intent, 0);
     }
 
+    @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.BEFORE_TEXT_CHANGED)
+    void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.TEXT_CHANGED)
+    void onTextChanged(CharSequence s, int start, int before, int count) {
+        if (start == 0 && before == 0 && count > 1) {
+            //扫描
+            isCodePda = true;
+        } else {
+            //手输
+            isCodePda = false;
+        }
+    }
+
+    @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
+    void afterTextChanged(Editable s) {
+        Log.i("isCodePda", "isCodePda=" + isCodePda);
+        if (s.length() > 0) {
+            deleteBtn.setVisibility(View.VISIBLE);
+        } else {
+            deleteBtn.setVisibility(View.GONE);
+        }
+        if (isCodePda) {
+            assetNum = parsingResult(s.toString());
+            wotaskListAdapter.removeAll(items);
+            items = new ArrayList<WOTASK>();
+            nodatalayout.setVisibility(View.GONE);
+            refresh_layout.setRefreshing(true);
+            page = 1;
+            getData(parsingResult(s.toString()));
+        }
+    }
+
+    //删除
+    @OnClick(R.id.btn_delete)
+    void setDeleteBtnOnClickListener() {
+        search.setText("");
+    }
+
     @Override
     protected void initView() {
         titleTextView.setText(R.string.wotask_text);
@@ -140,7 +188,6 @@ public class WotaskActivity extends BaseActivity implements SwipeRefreshLayout.O
         items = new ArrayList<>();
         getData(searchText);
     }
-
 
 
     @Override
@@ -194,9 +241,9 @@ public class WotaskActivity extends BaseActivity implements SwipeRefreshLayout.O
     private void getData(String search) {
         String url = null;
         if (assetNum.equals("")) {
-            url = HttpManager.getWOTASKURL(search, wonum, page, 20);
+            url = HttpManager.getWOTASKURL(search, wonum, AccountUtils.getloginUserName(WotaskActivity.this), page, 20);
         } else {
-            url = HttpManager.getWOTASKURL(search, wonum, assetNum, page, 20);
+            url = HttpManager.getWOTASKURL("", wonum, AccountUtils.getloginUserName(WotaskActivity.this), assetNum, page, 20);
         }
 
         HttpManager.getDataPagingInfo(WotaskActivity.this, url, new HttpRequestHandler<Results>() {
@@ -243,7 +290,7 @@ public class WotaskActivity extends BaseActivity implements SwipeRefreshLayout.O
      * 获取数据*
      */
     private void initAdapter(final List<WOTASK> list) {
-        wotaskListAdapter = new WotaskListAdapter(WotaskActivity.this, R.layout.list_item_asset, list);
+        wotaskListAdapter = new WotaskListAdapter(WotaskActivity.this, R.layout.list_item_wotask, list);
         recyclerView.setAdapter(wotaskListAdapter);
         wotaskListAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override
@@ -266,5 +313,6 @@ public class WotaskActivity extends BaseActivity implements SwipeRefreshLayout.O
     private void addData(final List<WOTASK> list) {
         wotaskListAdapter.addData(list);
     }
+
 
 }

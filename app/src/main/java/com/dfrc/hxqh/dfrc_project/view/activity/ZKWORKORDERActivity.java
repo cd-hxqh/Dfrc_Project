@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
@@ -15,6 +16,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -36,6 +38,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 
 /**
  * Created by Administrator on 2017/2/15.
@@ -58,8 +61,10 @@ public class ZkworkorderActivity extends BaseActivity implements SwipeRefreshLay
     @Bind(R.id.swipe_container)
     SwipeRefreshLayout refresh_layout;//界面刷新
 
-    @Bind(R.id.search_edit)
-    EditText search;//编辑框
+    @Bind(R.id.edt_input)
+    EditText search; //编辑框
+    @Bind(R.id.btn_delete)
+    Button deleteBtn; //删除
     /**
      * 适配器*
      */
@@ -69,11 +74,15 @@ public class ZkworkorderActivity extends BaseActivity implements SwipeRefreshLay
      */
     private String searchText = "";
     private int page = 1;
+    private boolean isCodePda; //判断是扫描还是手输
 
 
     ArrayList<ZKWORKORDER> items = new ArrayList<ZKWORKORDER>();
 
     private int mark;
+
+
+    private String assetnum; //设备编码
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +129,48 @@ public class ZkworkorderActivity extends BaseActivity implements SwipeRefreshLay
     @OnClick(R.id.title_back_id)
     void setBackOnClickListener() {
         finish();
+    }
+
+    @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.BEFORE_TEXT_CHANGED)
+    void beforeTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.TEXT_CHANGED)
+    void onTextChanged(CharSequence s, int start, int before, int count) {
+        if (start == 0 && before == 0 && count > 1) {
+            //扫描
+            isCodePda = true;
+        } else {
+            //手输
+            isCodePda = false;
+        }
+    }
+
+    @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
+    void afterTextChanged(Editable s) {
+        Log.i("isCodePda", "isCodePda=" + isCodePda);
+        if (s.length() > 0) {
+            deleteBtn.setVisibility(View.VISIBLE);
+        } else {
+            deleteBtn.setVisibility(View.GONE);
+        }
+        if (isCodePda) {
+            assetnum = parsingResult(s.toString());
+            zkworkOrderListAdapter.removeAll(items);
+            items = new ArrayList<ZKWORKORDER>();
+            nodatalayout.setVisibility(View.GONE);
+            refresh_layout.setRefreshing(true);
+            page = 1;
+            getData(parsingResult(s.toString()));
+        }
+    }
+
+
+    //删除
+    @OnClick(R.id.btn_delete)
+    void setDeleteBtnOnClickListener() {
+        search.setText("");
     }
 
 
@@ -172,7 +223,12 @@ public class ZkworkorderActivity extends BaseActivity implements SwipeRefreshLay
      * 获取数据*
      */
     private void getData(String search) {
-        String url = HttpManager.getN_WORKORURL(search, AccountUtils.getloginSite(ZkworkorderActivity.this), page, 20);
+        String url = null;
+        if (!isCodePda && assetnum.equals("")) {
+            url = HttpManager.getN_WORKORURL(search, AccountUtils.getloginSite(ZkworkorderActivity.this), page, 20);
+        } else {
+            url = HttpManager.getN_WORKORURL1(AccountUtils.getloginSite(ZkworkorderActivity.this), assetnum, page, 20);
+        }
 
         HttpManager.getDataPagingInfo(ZkworkorderActivity.this, url, new HttpRequestHandler<Results>() {
             @Override

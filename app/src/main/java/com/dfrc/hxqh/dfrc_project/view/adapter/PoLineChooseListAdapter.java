@@ -45,13 +45,12 @@ public class PoLineChooseListAdapter extends BaseQuickAdapter<POLINE> {
         helper.setText(R.id.item_desc_text, item.getITEMNUM());
         helper.setText(R.id.desc_text, item.getDESCRIPTION());
         helper.setText(R.id.storeloc_text_id, item.getSTORELOC());
-        helper.setText(R.id.receivedqty_text_id, item.getRECEIVEDQTY());
+        helper.setText(R.id.receivedqty_text_id, item.getORDERQTY());
         helper.setText(R.id.dgl_text_id, item.getORDERQTY());
         final EditText t = (EditText) helper.getView(R.id.receivedqty_text_id);
         helper.setOnCheckedChangeListener(R.id.checkbox_text_id, new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                Log.i(TAG, "Position=" + helper.getPosition());
                 onCheckedChangeListener.cOnCheckedChangeListener(b, helper.getPosition(),t.getText().toString());
             }
         });

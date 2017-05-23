@@ -3,6 +3,7 @@ package com.dfrc.hxqh.dfrc_project.view.adapter;
 import android.animation.Animator;
 import android.content.Context;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 
 import com.dfrc.hxqh.dfrc_project.R;
 import com.dfrc.hxqh.dfrc_project.model.WOTASK;
@@ -31,13 +32,18 @@ public class WotaskListAdapter extends BaseQuickAdapter<WOTASK> {
     @Override
     protected void convert(BaseViewHolder helper, WOTASK item) {
         CardView cardView = helper.getView(R.id.card_container);
-        helper.setText(R.id.workorder_sb_title, mContext.getString(R.string.wosequence_text));
-        helper.setText(R.id.assetnum_text_id, item.getWOSEQUENCE());
-        helper.setText(R.id.item_desc_title, mContext.getString(R.string.assetnum_text));
-        helper.setText(R.id.item_desc_text, item.getASSETNUM());
-        helper.setText(R.id.status_title_id, mContext.getString(R.string.type_text));
-        helper.setText(R.id.status_text_id, item.getREFBOOKLINE_TYPE());
-        helper.setText(R.id.family_displayname_text_id, item.getRESPONSOR_DISPLAYNAME());
+        helper.setText(R.id.wosequence_text_id, item.getWOSEQUENCE());
+        helper.setText(R.id.assetnum_text_id, item.getASSETNUM());
+        helper.setText(R.id.item_text_id, item.getITEM());
+        if (null != item.getN_RESULT() && item.getN_RESULT().equals("NG")) {
+            helper.setTextColorRes(R.id.n_result_title_id, R.color.red);
+            helper.setTextColorRes(R.id.n_result_text_id, R.color.red);
+        }else{
+            helper.setTextColorRes(R.id.n_result_title_id, R.color.black);
+            helper.setTextColorRes(R.id.n_result_text_id, R.color.black);
+        }
+
+        helper.setText(R.id.n_result_text_id, item.getN_RESULT());
     }
 
 

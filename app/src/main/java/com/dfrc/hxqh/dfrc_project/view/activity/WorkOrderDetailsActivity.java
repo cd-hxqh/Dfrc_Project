@@ -2,13 +2,6 @@ package com.dfrc.hxqh.dfrc_project.view.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.dfrc.hxqh.dfrc_project.R;
@@ -26,9 +19,6 @@ public class WorkOrderDetailsActivity extends BaseActivity {
 
     @Bind(R.id.title_name)
     TextView titleTextView; //标题
-    @Bind(R.id.title_add)
-    ImageView menuImageView; //菜单
-    PopupWindow popupWindow;
     @Bind(R.id.wonum_text_id)
     TextView wonumTextView; //工单
     @Bind(R.id.description_text_id)
@@ -50,9 +40,9 @@ public class WorkOrderDetailsActivity extends BaseActivity {
     @Bind(R.id.n_qtycomp_text_id)
     TextView n_qtycompTextView; //已完成项目数
 
-    private WORKORDER workorder;
 
-    LinearLayout mxhLinearLayout; //点检明细行点检明细行
+
+    private WORKORDER workorder;
 
 
     @Override
@@ -80,8 +70,6 @@ public class WorkOrderDetailsActivity extends BaseActivity {
     @Override
     protected void initView() {
         titleTextView.setText(R.string.ddjgd_text);
-        menuImageView.setVisibility(View.VISIBLE);
-        menuImageView.setImageResource(R.mipmap.ic_more);
         if (workorder != null) {
             wonumTextView.setText(workorder.getWONUM());
             descriptionTextView.setText(workorder.getDESCRIPTION());
@@ -104,58 +92,18 @@ public class WorkOrderDetailsActivity extends BaseActivity {
         finish();
     }
 
-    //菜单事件
-    @OnClick(R.id.title_add)
-    void setMenuImageViewOnClickListener() {
-        showPopupWindow(menuImageView);
+    //点击明细行
+    @OnClick(R.id.wotask_btn_id)
+    void setWotaskBtnOnClickListener() {
+        Intent intent = new Intent(WorkOrderDetailsActivity.this, WotaskActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("wonum", workorder.getWONUM());
+        bundle.putSerializable("crewid", workorder.getCREWID());
+        bundle.putString("assetNum", "");
+        intent.putExtras(bundle);
+        startActivityForResult(intent, 1000);
     }
 
 
-    /**
-     * 初始化showPopupWindow*
-     */
-    private void showPopupWindow(View view) {
-
-        // 一个自定义的布局，作为显示的内容
-        View contentView = LayoutInflater.from(WorkOrderDetailsActivity.this).inflate(
-                R.layout.workorder_popup_window, null);
-
-
-        popupWindow = new PopupWindow(contentView,
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        popupWindow.setTouchable(true);
-        popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return false;
-            }
-        });
-
-        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
-        // 我觉得这里是API的一个bug
-        popupWindow.setBackgroundDrawable(getResources().getDrawable(
-                R.drawable.popup_background_mtrl_mult));
-
-        // 设置好参数之后再show
-        popupWindow.showAsDropDown(view);
-        mxhLinearLayout = (LinearLayout) contentView.findViewById(R.id.beijian_linearlayout_id);
-        mxhLinearLayout.setOnClickListener(beijianOnClickListener);
-
-    }
-
-    private View.OnClickListener beijianOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent intent = new Intent(WorkOrderDetailsActivity.this, WotaskActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("wonum", workorder.getWONUM());
-            bundle.putString("assetNum", "");
-            intent.putExtras(bundle);
-            startActivityForResult(intent, 1000);
-            popupWindow.dismiss();
-        }
-    };
 
 }

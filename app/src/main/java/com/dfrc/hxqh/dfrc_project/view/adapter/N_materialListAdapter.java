@@ -32,7 +32,7 @@ public class N_materialListAdapter extends BaseQuickAdapter<N_MATERIAL> {
     protected void convert(BaseViewHolder helper, N_MATERIAL item) {
         CardView cardView = helper.getView(R.id.card_container);
         helper.setText(R.id.wlbm_text_id, item.getITEMNUM());
-        helper.setText(R.id.desc_text_id, item.getDESCRIPTION());
+        helper.setText(R.id.desc_text_id, item.getITEM_DESCRIPTION());
         helper.setText(R.id.n_sap3_text_id, item.getN_SAP3());
         helper.setText(R.id.curbal_text_id, item.getCURBAL());
         helper.setText(R.id.binnum_text_id, item.getDESCRIPTION1());

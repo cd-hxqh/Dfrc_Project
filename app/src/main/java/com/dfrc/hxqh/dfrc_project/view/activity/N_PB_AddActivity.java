@@ -95,6 +95,7 @@ public class N_PB_AddActivity extends BaseActivity {
     protected void initView() {
         titleTextView.setText(R.string.wtdll_text);
         sbmitImageButton.setVisibility(View.VISIBLE);
+        improverTextView.setText(AccountUtils.getloginUserName(N_PB_AddActivity.this));
         setDataListener();
         n_finishdateTextView.setOnClickListener(new MydateListener());
 
