@@ -3,6 +3,7 @@ package com.dfrc.hxqh.dfrc_project.view.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +12,7 @@ import android.text.Editable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -30,7 +32,9 @@ import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
 import com.dfrc.hxqh.dfrc_project.view.adapter.BaseQuickAdapter;
 import com.dfrc.hxqh.dfrc_project.view.adapter.WorkOrderListAdapter;
 import com.dfrc.hxqh.dfrc_project.view.widght.SwipeRefreshLayout;
+import com.dfrc.hxqh.dfrc_project.webserviceclient.AndroidClientService;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,7 +79,9 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
 
 
     ArrayList<WORKORDER> items = new ArrayList<WORKORDER>();
+    private boolean isCodePda; //判断是扫描还是手输
 
+    private String assetNum; //设备编号
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,6 +139,13 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
 
     @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.TEXT_CHANGED)
     void onTextChanged(CharSequence s, int start, int before, int count) {
+        if (start == 0 && before == 0 && count > 1) {
+            //扫描
+            isCodePda = true;
+        } else {
+            //手输
+            isCodePda = false;
+        }
     }
 
     @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
@@ -141,6 +154,16 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
             deleteBtn.setVisibility(View.VISIBLE);
         }else{
             deleteBtn.setVisibility(View.GONE);
+        }
+
+        if (isCodePda) {
+            assetNum = parsingResult(s.toString());
+            workOrderListAdapter.removeAll(items);
+            items = new ArrayList<WORKORDER>();
+            nodatalayout.setVisibility(View.GONE);
+            refresh_layout.setRefreshing(true);
+            page = 1;
+            startAsyncTask();
         }
     }
 
@@ -153,14 +176,23 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
 
     @Override
     public void onLoad() {
-        page++;
-        getData(searchText);
+        if(!isCodePda){
+            page++;
+            getData(searchText);
+        }else{
+            refresh_layout.setLoading(false);
+        }
+
     }
 
     @Override
     public void onRefresh() {
-        page = 1;
-        getData(searchText);
+        if(!isCodePda) {
+            page = 1;
+            getData(searchText);
+        }else{
+            refresh_layout.setRefreshing(false);
+        }
     }
 
 
@@ -253,7 +285,7 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
                 Intent intent = getIntent();
                 intent.setClass(WorkorderActivity.this, WorkOrderDetailsActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("workorder", items.get(position));
+                bundle.putSerializable("workorder", (Serializable) workOrderListAdapter.getData().get(position));
                 intent.putExtras(bundle);
                 startActivityForResult(intent, 0);
             }
@@ -266,6 +298,41 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
      */
     private void addData(final List<WORKORDER> list) {
         workOrderListAdapter.addData(list);
+    }
+
+
+    /**
+     * 根据设备查询编号*
+     */
+    private void startAsyncTask() {
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... strings) {
+                Log.i(TAG,"assetnum="+assetNum);
+                return AndroidClientService.searchMaint2(WorkorderActivity.this, "ASSETNUM", "H2-Z2-CP-047","line"); //根据设备获取定期点检工单
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                refresh_layout.setRefreshing(false);
+                refresh_layout.setLoading(false);
+                String result = JsonUtils.parsingsearchMaint2(s);
+                if (result.equals("暂无数据")) {
+                    nodatalayout.setVisibility(View.VISIBLE);
+                } else {
+                    ArrayList<WORKORDER> item = JsonUtils.parsingWORKORDER(s);
+
+                    if (item == null || item.isEmpty()) {
+                        nodatalayout.setVisibility(View.VISIBLE);
+                    } else {
+                        addData(item);
+                    }
+                }
+            }
+        }.execute();
+
+
     }
 
 }

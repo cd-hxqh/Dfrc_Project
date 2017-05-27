@@ -19,7 +19,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="@dimen/dimen_5">
 
             <TextView
                 android:id="@+id/workorder_wonum_id"
@@ -31,10 +32,6 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/sp_14" />
 
-            <View
-                android:layout_width="2px"
-                android:layout_height="@dimen/dimens_30dp"
-                android:background="@color/light_gray" />
 
             <TextView
                 android:id="@+id/workorder_desc_text_id"
@@ -46,18 +43,6 @@
                 android:text="2016年12月总装第4周工作"
                 android:textColor="@color/black"
                 android:textSize="@dimen/sp_14" />
-
-            <View
-                android:layout_width="2px"
-                android:layout_height="@dimen/dimens_30dp"
-                android:background="@color/light_gray" />
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/transparent"
-                android:src="@mipmap/item_more" />
 
 
         </LinearLayout>
@@ -72,21 +57,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="@dimen/dimen_5">
 
             <TextView
                 android:id="@+id/workorder_status_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:text="状态:进行中"
                 android:textColor="@color/black"
                 android:textSize="@dimen/sp_14" />
 
-            <View
-                android:layout_width="2px"
-                android:layout_height="@dimen/dimens_30dp"
-                android:background="@color/light_gray" />
 
             <TextView
                 android:id="@+id/n_qtyopen_text_id"
@@ -99,10 +82,6 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/sp_14" />
 
-            <View
-                android:layout_width="2px"
-                android:layout_height="@dimen/dimens_30dp"
-                android:background="@color/light_gray" />
 
             <TextView
                 android:id="@+id/n_qtycomp_text_id"

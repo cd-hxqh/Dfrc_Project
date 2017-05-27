@@ -90,40 +90,6 @@
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="@string/n_sap5_text"
-                android:textColor="@color/black"
-                android:textSize="@dimen/dimens_16sp" />
-
-            <TextView
-                android:id="@+id/n_sap3_text_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="5dp"
-                android:ellipsize="end"
-                android:ems="14"
-                android:hint="@string/hint_item_desc_title"
-                android:singleLine="true"
-                android:textColor="@color/black"
-                android:textSize="@dimen/dimens_16sp" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dimens_line"
-            android:background="@color/light_gray" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:orientation="horizontal"
-            android:padding="5dp">
-
-            <TextView
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:text="@string/curbal1_text"
                 android:textColor="@color/black"
                 android:textSize="@dimen/dimens_16sp" />
@@ -158,12 +124,109 @@
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="@string/binnum_text"
+                android:text="@string/n_sap5_text"
                 android:textColor="@color/black"
                 android:textSize="@dimen/dimens_16sp" />
 
             <TextView
-                android:id="@+id/binnum_text_id"
+                android:id="@+id/n_sap5_text_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:ems="14"
+                android:inputType="numberDecimal"
+                android:padding="@dimen/dimen_5"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimens_16sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimens_line"
+            android:background="@color/light_gray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/n_sap3_text"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimens_16sp" />
+
+            <EditText
+                android:id="@+id/n_sap3_text_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/editsharp_03"
+                android:ellipsize="end"
+                android:ems="14"
+                android:inputType="numberDecimal"
+                android:padding="@dimen/dimen_5"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimens_16sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimens_line"
+            android:background="@color/light_gray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/fk_tobin_text"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimens_16sp" />
+
+            <TextView
+                android:id="@+id/fk_tobin_text_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:ems="14"
+                android:padding="@dimen/dimen_5"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimens_16sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimens_line"
+            android:background="@color/light_gray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/zk_frombin"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimens_16sp" />
+
+            <TextView
+                android:id="@+id/zk_frombin_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
@@ -175,6 +238,7 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/dimens_16sp" />
         </LinearLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimens_line"
@@ -199,12 +263,9 @@
                 android:id="@+id/n_reason_text_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="5dp"
                 android:ellipsize="end"
                 android:ems="14"
-                android:hint="@string/hint_item_desc_title"
-                android:singleLine="true"
+                android:padding="@dimen/dimen_5"
                 android:textColor="@color/black"
                 android:textSize="@dimen/dimens_16sp" />
         </LinearLayout>

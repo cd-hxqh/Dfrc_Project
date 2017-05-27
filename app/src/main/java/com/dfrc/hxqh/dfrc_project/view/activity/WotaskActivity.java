@@ -11,7 +11,6 @@ import android.text.Editable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -140,7 +139,6 @@ public class WotaskActivity extends BaseActivity implements SwipeRefreshLayout.O
 
     @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
     void afterTextChanged(Editable s) {
-        Log.i("isCodePda", "isCodePda=" + isCodePda);
         if (s.length() > 0) {
             deleteBtn.setVisibility(View.VISIBLE);
         } else {

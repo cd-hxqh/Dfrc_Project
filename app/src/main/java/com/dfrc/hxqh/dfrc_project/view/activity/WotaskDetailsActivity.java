@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dfrc.hxqh.dfrc_project.R;
@@ -78,10 +77,7 @@ public class WotaskDetailsActivity extends BaseActivity {
     private WOTASK wotask;
     private String wonum;
 
-    private LinearLayout saveLinearLayout; //保存
-    private LinearLayout okLinearLayout; //OK
-    private LinearLayout noLinearLayout; //NO
-    private LinearLayout n_pbLinearLayout; //问题点
+
 
     protected FlippingLoadingDialog mLoadingDialog;
 
@@ -204,6 +200,7 @@ public class WotaskDetailsActivity extends BaseActivity {
                 super.onPostExecute(s);
                 mLoadingDialog.dismiss();
                 MessageUtils.showMiddleToast(WotaskDetailsActivity.this, s);
+                finish();
 
 
             }
@@ -230,7 +227,7 @@ public class WotaskDetailsActivity extends BaseActivity {
                 super.onPostExecute(s);
                 mLoadingDialog.dismiss();
                 MessageUtils.showMiddleToast(WotaskDetailsActivity.this, s);
-
+                finish();
 
             }
         }.execute();
@@ -245,7 +242,7 @@ public class WotaskDetailsActivity extends BaseActivity {
         switch (resultCode) {
             case 1000:
                 PERSON person = (PERSON) data.getSerializableExtra("person");
-                n_membersTextView.setText(person.getPERSONID());
+                n_membersTextView.setText(person.getDISPLAYNAME());
                 break;
         }
     }

@@ -22,7 +22,7 @@
             android:padding="5dp">
 
             <TextView
-                android:id="@+id/workorder_sb_title"
+                android:id="@+id/title1_text_id"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:text="@string/persionid_text"
@@ -52,6 +52,7 @@
             android:padding="5dp">
 
             <TextView
+                android:id="@+id/title2_text_id"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/workorder_sb_title"
@@ -88,6 +89,7 @@
             android:padding="5dp">
 
             <TextView
+                android:id="@+id/title3_text_id"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"

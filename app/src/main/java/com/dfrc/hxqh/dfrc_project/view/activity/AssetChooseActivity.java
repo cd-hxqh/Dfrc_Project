@@ -227,7 +227,7 @@ public class AssetChooseActivity extends BaseActivity implements SwipeRefreshLay
      */
     private void getData(String search) {
         String url = null;
-        if (isCodePda && assetNum.equals("")) {
+        if (!isCodePda && assetNum.equals("")) {
             url = HttpManager.getASSETURL1(search, crewid, page, 20);
         } else {
             url = HttpManager.getASSETURL2(assetNum, crewid, page, 20);

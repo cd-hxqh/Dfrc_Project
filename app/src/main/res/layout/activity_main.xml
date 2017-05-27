@@ -17,7 +17,7 @@
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/img_member"
             android:layout_width="70dp"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             android:layout_gravity="center"
             android:src="@mipmap/ic_avatar" />
 
@@ -46,7 +46,7 @@
     </LinearLayout>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="180dp"
         android:background="@color/light_gray" >
 
         <android.support.v4.view.ViewPager
@@ -63,13 +63,14 @@
             android:orientation="horizontal" />
     </RelativeLayout>
 
+
+
     <RelativeLayout
         android:id="@+id/list_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/editsharp_03"
-        android:visibility="gone">
-
+        >
 
         <include layout="@layout/work_list"></include>
     </RelativeLayout>

@@ -43,6 +43,25 @@ public class JsonUtils {
     private static final String TAG = "JsonUtils";
 
 
+    //解析返回的数据格式
+
+    public static String parsingsearchMaint2(String data) {
+        Log.i(TAG, "data=" + data);
+        String message = "";
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            JSONObject json = jsonArray.getJSONObject(0);
+            if (json.has("message")) {
+                message = json.getString("message");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return message;
+        }
+        return message;
+    }
+
+
     /**
      * 解析登录信息*
      */
@@ -268,6 +287,7 @@ public class JsonUtils {
         }
 
     }
+
     /**
      * 定期点检工单
      */
@@ -278,6 +298,7 @@ public class JsonUtils {
             JSONArray jsonArray = new JSONArray(data);
             JSONObject jsonObject;
             list = new ArrayList<WORKORDER>();
+            Log.i(TAG, "jsonArray=" + jsonArray.toString());
             for (int i = 0; i < jsonArray.length(); i++) {
                 workorder = new WORKORDER();
                 jsonObject = jsonArray.getJSONObject(i);
@@ -782,7 +803,6 @@ public class JsonUtils {
     }
 
 
-
     /**
      * 采购单行
      */
@@ -828,6 +848,7 @@ public class JsonUtils {
         }
 
     }
+
     /**
      * 物料接收
      */
@@ -873,6 +894,7 @@ public class JsonUtils {
         }
 
     }
+
     /**
      * 物料退回
      */
@@ -918,7 +940,6 @@ public class JsonUtils {
         }
 
     }
-
 
 
     /**
@@ -968,7 +989,6 @@ public class JsonUtils {
     }
 
 
-
     /**
      * ALNDOMAIN
      */
@@ -1014,6 +1034,7 @@ public class JsonUtils {
         }
 
     }
+
     /**
      * 位置
      */
@@ -1172,7 +1193,28 @@ public class JsonUtils {
     }
 
 
+    /**
+     * 封装N_MATERIAL的json
+     */
+    public static String potoN_MATERIAL(String n_sap3) {
+        Log.i(TAG,"n_sap3="+n_sap3);
+        JSONObject json = new JSONObject();
 
+        try {
+            json.put("n_sap3", n_sap3); //实际数量
+            JSONArray jsonArray = new JSONArray();
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("", "");
+            jsonArray.put(jsonObject);
+            json.put("relationShip", jsonArray);
+        } catch (JSONException e) {
+            return null;
+        }
+
+        Log.i(TAG, "json=" + json);
+        return json.toString();
+
+    }
 
 
 

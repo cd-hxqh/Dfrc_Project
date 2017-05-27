@@ -33,16 +33,16 @@ public class WorkOrderListAdapter extends BaseQuickAdapter<WORKORDER> {
         CardView cardView = helper.getView(R.id.card_container);
         helper.setText(R.id.workorder_wonum_id, item.getWONUM());
         helper.setText(R.id.workorder_desc_text_id, item.getDESCRIPTION());
-        helper.setText(R.id.workorder_status_id, "状态:" + item.getSTATUS());
+        helper.setText(R.id.workorder_status_id, item.getSTATUS());
         if (item.getN_QTYOPEN() == null) {
-            helper.setText(R.id.n_qtyopen_text_id, "未完成项目数:" + "0");
+            helper.setText(R.id.n_qtyopen_text_id, "未完成:" + "0");
         } else {
-            helper.setText(R.id.n_qtyopen_text_id, "未完成项目数:" + item.getN_QTYOPEN().replace(",", ""));
+            helper.setText(R.id.n_qtyopen_text_id, "未完成:" + item.getN_QTYOPEN().replace(",", ""));
         }
         if (item.getN_QTYCOMP() == null) {
-            helper.setText(R.id.n_qtycomp_text_id, "已完成项目数:" + "0");
+            helper.setText(R.id.n_qtycomp_text_id, "已完成:" + "0");
         } else {
-            helper.setText(R.id.n_qtycomp_text_id, "已完成项目数:" + item.getN_QTYCOMP().replace(",", ""));
+            helper.setText(R.id.n_qtycomp_text_id, "已完成:" + item.getN_QTYCOMP().replace(",", ""));
         }
     }
 

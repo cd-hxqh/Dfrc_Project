@@ -26,7 +26,7 @@
                 android:id="@+id/workorder_sb_title"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:text="@string/item_text"
+                android:text="@string/assetnum_text"
                 android:textColor="@color/black"
                 android:textSize="@dimen/dimens_16sp" />
 
@@ -74,59 +74,71 @@
                 android:layout_marginTop="5dp"
                 android:background="@color/light_gray" />
 
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/view_1_id"
-                >
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/location_text_id"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:textColor="@color/black"
+                    android:orientation="horizontal"
+                    android:paddingBottom="@dimen/dimen_5"
+                    android:paddingTop="@dimen/dimen_5">
 
-                    android:text="库房:9130"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/dimens_16sp" />
+                    <TextView
+                        android:id="@+id/status_text_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="状态:等待批准"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/dimens_16sp" />
 
-                <TextView
-                    android:id="@+id/curbal_text_id"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/location_text_id"
-                    android:gravity="center"
-                    android:text="余量:40"
-                    android:layout_weight="1"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/dimens_16sp" />
-                <TextView
-                    android:id="@+id/binnum_text_id"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/curbal_text_id"
-                    android:ellipsize="end"
-                    android:gravity="center"
-                    android:layout_weight="1"
-                    android:text="货柜:ABC"
-                    android:hint="@string/have_not_data"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/dimens_16sp" />
+                    <TextView
+                        android:id="@+id/reportdate_text_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="1"
+                        android:text="报告日期:17-5-25 14:39:56"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/dimens_16sp" />
 
-                <TextView
-                    android:id="@+id/siteid_text_id"
-                    android:layout_width="wrap_content"
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="地点:HD2"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/dimens_16sp" />
+                    android:orientation="horizontal"
+                    android:paddingBottom="@dimen/dimen_5"
+                    android:paddingTop="@dimen/dimen_5">
+
+                    <TextView
+                        android:id="@+id/reportedbyid_text_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="申请人:MAXADMIN"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/dimens_16sp" />
+
+                    <TextView
+                        android:id="@+id/crewid_text_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="1"
+                        android:text="班组:ZK"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/dimens_16sp" />
+
+
+                </LinearLayout>
             </LinearLayout>
         </RelativeLayout>
     </RelativeLayout>

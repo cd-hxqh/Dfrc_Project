@@ -96,6 +96,7 @@ public class AndroidClientService {
         return obj;
     }
 
+
     /**
      * 定期检查单NO
      */
@@ -139,6 +140,43 @@ public class AndroidClientService {
         }
         return obj;
     }
+
+    /**
+     * 总库领料单确认发放
+     */
+    public static String INV03Issue(final Context cxt, String userid, String wonum, String itemnum, String n_sap1, String crewid, String siteid) {
+        Log.i(TAG, "userid=" + userid + ",wonum=" + wonum + ",itemnum=" + itemnum + ",n_sap1=" + n_sap1 + ",crewid=" + crewid + ",siteid=" + siteid);
+        String ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
+
+        SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        soapEnvelope.implicitTypes = true;
+        soapEnvelope.dotNet = true;
+        SoapObject soapReq = new SoapObject(NAMESPACE, "dflserviceINV03Issue");
+        soapReq.addProperty("userid", userid);
+        soapReq.addProperty("wonum", wonum);
+        soapReq.addProperty("itemnum", itemnum);
+        soapReq.addProperty("n_sap1", n_sap1);
+        soapReq.addProperty("crewid", crewid);
+        soapReq.addProperty("siteid", siteid);
+        soapEnvelope.setOutputSoapObject(soapReq);
+        HttpTransportSE httpTransport = new HttpTransportSE(ip_adress, timeOut);
+        try {
+            httpTransport.call("urn:action", soapEnvelope);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        }
+        String obj = null;
+        try {
+            obj = soapEnvelope.getResponse().toString();
+            Log.i(TAG, "obj=" + obj);
+        } catch (SoapFault soapFault) {
+            soapFault.printStackTrace();
+        }
+        return obj;
+    }
+
 
     /**
      * 通用修改
@@ -353,6 +391,7 @@ public class AndroidClientService {
         soapReq.addProperty("REASON", n_material.getN_REASON());//领料原因
         soapReq.addProperty("N_SAP3", n_material.getN_SAP3());//实际发放数量
         soapReq.addProperty("N_SAP5", n_material.getN_SAP5());//申请数量
+        soapReq.addProperty("TOBIN", n_material.getTOBIN());//分库
         soapEnvelope.setOutputSoapObject(soapReq);
         HttpTransportSE httpTransport = new HttpTransportSE(ip_adress, timeOut);
         try {
@@ -413,7 +452,8 @@ public class AndroidClientService {
     /**
      * 获取主菜单的点击工单
      */
-    public static String searchMaint2(final Context cxt, String key, String keyvalue) {
+    public static String searchMaint2(final Context cxt, String key, String keyvalue, String type) {
+        Log.i(TAG, "key=" + key + ",keyvalue=" + keyvalue + ",type=" + type);
         String ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -422,6 +462,7 @@ public class AndroidClientService {
 
         soapReq.addProperty("KEY", key); //key
         soapReq.addProperty("KEYVALUE", keyvalue);//keyvalue
+        soapReq.addProperty("TYPE", type);//type
         soapEnvelope.setOutputSoapObject(soapReq);
         HttpTransportSE httpTransport = new HttpTransportSE(ip_adress, timeOut);
         try {
@@ -434,12 +475,93 @@ public class AndroidClientService {
         String obj = null;
         try {
             obj = soapEnvelope.getResponse().toString();
-            Log.i(TAG, "值:" + obj);
+            Log.i(TAG, "obj=" + obj);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
         return obj;
     }
+
+
+    /**
+     * 库房新增
+     */
+    public static String INV05InvAdd(final Context cxt, String userid, String itemnum, String qty, String storeroom, String binnum, String siteid) {
+        String ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
+        SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        soapEnvelope.implicitTypes = true;
+        soapEnvelope.dotNet = true;
+        SoapObject soapReq = new SoapObject(NAMESPACE, "dflserviceINV05InvAdd");
+
+        soapReq.addProperty("USERID", userid); //userid
+        soapReq.addProperty("ITEMNUM", itemnum);//itemnum
+        soapReq.addProperty("QTY", qty);//qty
+        soapReq.addProperty("STOREROOM", storeroom);//storeroom
+        soapReq.addProperty("BINNUM", binnum);//binnum
+        soapReq.addProperty("SITEID", siteid);//siteid
+        soapEnvelope.setOutputSoapObject(soapReq);
+        HttpTransportSE httpTransport = new HttpTransportSE(ip_adress, timeOut);
+        try {
+            httpTransport.call("urn:action", soapEnvelope);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        }
+        String obj = null;
+        try {
+            obj = soapEnvelope.getResponse().toString();
+            Log.i(TAG, "obj=" + obj);
+        } catch (SoapFault soapFault) {
+            soapFault.printStackTrace();
+        }
+        return obj;
+    }
+
+    /**
+     * 库位转移
+     *
+     * @userid 用户ID
+     * @itemnum 项目
+     * @qty 数量
+     * @storeroom1 库房
+     * @binnum1 原货柜
+     * @storeroom2 目标库房
+     * @binnum2 目标货柜
+     */
+    public static String INV05Invtrans(final Context cxt, String userid, String itemnum, String qty, String storeroom1, String binnum1, String storeroom2, String binnum2) {
+        String ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
+        SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        soapEnvelope.implicitTypes = true;
+        soapEnvelope.dotNet = true;
+        SoapObject soapReq = new SoapObject(NAMESPACE, "dflserviceINV05Invtrans");
+
+        soapReq.addProperty("userid", userid); //userid
+        soapReq.addProperty("itemnum", itemnum);//itemnum
+        soapReq.addProperty("qty", qty);//qty
+        soapReq.addProperty("storeroom1", storeroom1);//storeroom
+        soapReq.addProperty("binnum1", binnum1);//binnum
+        soapReq.addProperty("storeroom2", storeroom2);//siteid
+        soapReq.addProperty("binnum2", binnum2);//siteid
+        soapEnvelope.setOutputSoapObject(soapReq);
+        HttpTransportSE httpTransport = new HttpTransportSE(ip_adress, timeOut);
+        try {
+            httpTransport.call("urn:action", soapEnvelope);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        }
+        String obj = null;
+        try {
+            obj = soapEnvelope.getResponse().toString();
+            Log.i(TAG, "obj=" + obj);
+        } catch (SoapFault soapFault) {
+            soapFault.printStackTrace();
+        }
+        return obj;
+    }
+
 
     /**
      * 通过webservice实现图片上传

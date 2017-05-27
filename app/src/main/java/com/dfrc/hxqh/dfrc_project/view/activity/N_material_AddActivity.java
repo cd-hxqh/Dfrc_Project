@@ -42,18 +42,24 @@ public class N_material_AddActivity extends BaseActivity {
     TextView titleTextView; //标题
     @Bind(R.id.sbmittext_id)
     ImageButton sbmitImageButton; //提交
-
-
     @Bind(R.id.itemnum_text_id)
     TextView itemnumTextView; //物料号
     @Bind(R.id.desc_text_id)
     TextView descTextView; //描述
-    @Bind(R.id.n_reason_text_id)
-    TextView n_reasonTextView; //领用原因
+    @Bind(R.id.curbal_text_id)
+    TextView curbalTextView; //当前余量
     @Bind(R.id.n_sap5_text_id)
     EditText n_sap5TextView; //申请数量
-    @Bind(R.id.n_sap3_text_id)
-    EditText n_sap3TextView; //实际发放数量
+    @Bind(R.id.fk_tobin_text_id)
+    EditText tobinTextView; //分库
+    @Bind(R.id.zk_frombin_id)
+    TextView frombinTextView; //总库
+    @Bind(R.id.n_reason_text_id)
+    EditText n_reasonTextView; //领用原因
+    @Bind(R.id.source_text_id)
+    TextView sourceTextView; //来源
+    @Bind(R.id.lyms_text_id)
+    TextView lymsTextView; //来源描述
 
 
     private ZKWORKORDER zkworkorder;
@@ -98,13 +104,11 @@ public class N_material_AddActivity extends BaseActivity {
     @OnTextChanged(value = R.id.n_sap5_text_id, callback = OnTextChanged.Callback.TEXT_CHANGED)
     void onTextChanged(CharSequence s, int start, int before, int count) {
         Log.i(TAG, "s=" + s);
-//        n_sap3TextView.setText(s);
     }
 
     @OnTextChanged(value = R.id.n_sap5_text_id, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
     void afterTextChanged(Editable s) {
         Log.i(TAG, "ssss=" + s.toString());
-        n_sap3TextView.setText(s);
     }
 
     @OnClick(R.id.itemnum_text_id)
@@ -129,7 +133,7 @@ public class N_material_AddActivity extends BaseActivity {
             case INVBALANCES_CODE:
                 INVBALANCES invbalances = (INVBALANCES) data.getSerializableExtra("invbalances");
                 itemnumTextView.setText(invbalances.getITEMNUM());
-                descTextView.setText(invbalances.getDESCRIPTION());
+                descTextView.setText(invbalances.getITEMNUMNAME());
                 break;
         }
     }
@@ -172,12 +176,12 @@ public class N_material_AddActivity extends BaseActivity {
     private N_MATERIAL getN_MATERIAL() {
         N_MATERIAL n_material = new N_MATERIAL();
         String itemnum = itemnumTextView.getText().toString();
+        String tobin = frombinTextView.getText().toString();
         String n_reason = n_reasonTextView.getText().toString();
-        String n_sap3 = n_sap3TextView.getText().toString();
         String n_sap5 = n_sap5TextView.getText().toString();
         n_material.setITEMNUM(itemnum);
+        n_material.setTOBIN(tobin);
         n_material.setN_REASON(n_reason);
-        n_material.setN_SAP3(n_sap3);
         n_material.setN_SAP5(n_sap5);
         n_material.setN_SAP1(zkworkorder.getN_SAP1());
         n_material.setWONUM(zkworkorder.getWONUM());

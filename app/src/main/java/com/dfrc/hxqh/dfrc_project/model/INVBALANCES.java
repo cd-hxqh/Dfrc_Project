@@ -2,18 +2,19 @@ package com.dfrc.hxqh.dfrc_project.model;
 
 /**
  * Created by think on 2016/7/1.
- * 库存余量
+ * 库存
  */
 public class INVBALANCES extends Entity {
     public String BINNUM;//货柜
-    public String CURBAL;//
-    public String CURBALTOTAL;//
-    public String DESCRIPTION;//描述
-    public String ITEMNUM;//项目
-    public String LOCATION_DESCRIPTION;//位置描述
-    public String N_BRAND;//
-    public String ORDERUNIT;//
-    public String UDUNITCOST;//
+    public String CURBAL;//当前余量
+    public String ITEMNUM;//物料编号
+    public String ITEMNUMNAME;//物料名称
+    public String LOCATION;//库房
+    public String LOCATION2;//库房描述
+    public String SITEID;//位置
+    public String INVENTORY_ISSUEUNIT;//发放单位
+    public String INVENTORY_UDUNITCOST;//单价
+
 
     public String getBINNUM() {
         return BINNUM;
@@ -31,22 +32,6 @@ public class INVBALANCES extends Entity {
         this.CURBAL = CURBAL;
     }
 
-    public String getCURBALTOTAL() {
-        return CURBALTOTAL;
-    }
-
-    public void setCURBALTOTAL(String CURBALTOTAL) {
-        this.CURBALTOTAL = CURBALTOTAL;
-    }
-
-    public String getDESCRIPTION() {
-        return DESCRIPTION;
-    }
-
-    public void setDESCRIPTION(String DESCRIPTION) {
-        this.DESCRIPTION = DESCRIPTION;
-    }
-
     public String getITEMNUM() {
         return ITEMNUM;
     }
@@ -55,35 +40,51 @@ public class INVBALANCES extends Entity {
         this.ITEMNUM = ITEMNUM;
     }
 
-    public String getLOCATION_DESCRIPTION() {
-        return LOCATION_DESCRIPTION;
+    public String getITEMNUMNAME() {
+        return ITEMNUMNAME;
     }
 
-    public void setLOCATION_DESCRIPTION(String LOCATION_DESCRIPTION) {
-        this.LOCATION_DESCRIPTION = LOCATION_DESCRIPTION;
+    public void setITEMNUMNAME(String ITEMNUMNAME) {
+        this.ITEMNUMNAME = ITEMNUMNAME;
     }
 
-    public String getN_BRAND() {
-        return N_BRAND;
+    public String getLOCATION() {
+        return LOCATION;
     }
 
-    public void setN_BRAND(String n_BRAND) {
-        N_BRAND = n_BRAND;
+    public void setLOCATION(String LOCATION) {
+        this.LOCATION = LOCATION;
     }
 
-    public String getORDERUNIT() {
-        return ORDERUNIT;
+    public String getLOCATION2() {
+        return LOCATION2;
     }
 
-    public void setORDERUNIT(String ORDERUNIT) {
-        this.ORDERUNIT = ORDERUNIT;
+    public void setLOCATION2(String LOCATION2) {
+        this.LOCATION2 = LOCATION2;
     }
 
-    public String getUDUNITCOST() {
-        return UDUNITCOST;
+    public String getSITEID() {
+        return SITEID;
     }
 
-    public void setUDUNITCOST(String UDUNITCOST) {
-        this.UDUNITCOST = UDUNITCOST;
+    public void setSITEID(String SITEID) {
+        this.SITEID = SITEID;
+    }
+
+    public String getINVENTORY_ISSUEUNIT() {
+        return INVENTORY_ISSUEUNIT;
+    }
+
+    public void setINVENTORY_ISSUEUNIT(String INVENTORY_ISSUEUNIT) {
+        this.INVENTORY_ISSUEUNIT = INVENTORY_ISSUEUNIT;
+    }
+
+    public String getINVENTORY_UDUNITCOST() {
+        return INVENTORY_UDUNITCOST;
+    }
+
+    public void setINVENTORY_UDUNITCOST(String INVENTORY_UDUNITCOST) {
+        this.INVENTORY_UDUNITCOST = INVENTORY_UDUNITCOST;
     }
 }

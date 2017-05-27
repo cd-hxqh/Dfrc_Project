@@ -5,20 +5,23 @@ package com.dfrc.hxqh.dfrc_project.model;
  * 申请领用物料明细
  */
 public class N_MATERIAL extends Entity {
+    public String N_MATERIALID;//ID
     public String DESCRIPTION;//描述
     public String DESCRIPTION1;//存放位置
     public String ITEMNUM;//物料编码
     public String LINECOST;//行成本
     public String N_REASON;//领用原因
-    public String N_SAP5;//实际发放数量
+    public String N_SAP3;//实际数量
     public String UNITCOST;//单价
     public String CURBAL;//当前数量
     public String WONUM;//工单号
     public String SITEID;//站点
     public String STATUS;//状态
     public String N_SAP1;//发货仓库
-    public String N_SAP3;//申请数量
+    public String N_SAP5;//申请数量
     public String ITEM_DESCRIPTION;//描述
+    public String TOBIN;//分库存放货柜
+    public String FROMBIN;//总库存放货柜
 
 
     public String getCURBAL() {
@@ -131,5 +134,29 @@ public class N_MATERIAL extends Entity {
 
     public void setITEM_DESCRIPTION(String ITEM_DESCRIPTION) {
         this.ITEM_DESCRIPTION = ITEM_DESCRIPTION;
+    }
+
+    public String getTOBIN() {
+        return TOBIN;
+    }
+
+    public void setTOBIN(String TOBIN) {
+        this.TOBIN = TOBIN;
+    }
+
+    public String getFROMBIN() {
+        return FROMBIN;
+    }
+
+    public void setFROMBIN(String FROMBIN) {
+        this.FROMBIN = FROMBIN;
+    }
+
+    public String getN_MATERIALID() {
+        return N_MATERIALID;
+    }
+
+    public void setN_MATERIALID(String n_MATERIALID) {
+        N_MATERIALID = n_MATERIALID;
     }
 }

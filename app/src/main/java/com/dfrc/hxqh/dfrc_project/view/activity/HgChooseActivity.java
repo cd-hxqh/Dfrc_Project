@@ -1,8 +1,8 @@
 package com.dfrc.hxqh.dfrc_project.view.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,14 +26,10 @@ import com.dfrc.hxqh.dfrc_project.api.HttpManager;
 import com.dfrc.hxqh.dfrc_project.api.HttpRequestHandler;
 import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.bean.Results;
-import com.dfrc.hxqh.dfrc_project.dialog.FlippingLoadingDialog;
-import com.dfrc.hxqh.dfrc_project.model.N_MATERIAL;
-import com.dfrc.hxqh.dfrc_project.model.ZKWORKORDER;
-import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
-import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
-import com.dfrc.hxqh.dfrc_project.view.adapter.N_materialListAdapter;
+import com.dfrc.hxqh.dfrc_project.model.INVBALANCES;
+import com.dfrc.hxqh.dfrc_project.view.adapter.BaseQuickAdapter;
+import com.dfrc.hxqh.dfrc_project.view.adapter.HgListAdapter;
 import com.dfrc.hxqh.dfrc_project.view.widght.SwipeRefreshLayout;
-import com.dfrc.hxqh.dfrc_project.webserviceclient.AndroidClientService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,12 +41,14 @@ import butterknife.OnTextChanged;
 
 /**
  * Created by Administrator on 2017/2/15.
- * 申请领用物料明细
+ * 货柜选择
  */
 
-public class N_materialActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
-    private static final String TAG = "N_materialActivity";
-    private static final int N_MATERIAL_CODE = 1005;
+public class HgChooseActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
+    private static final String TAG = "HgChooseActivity";
+
+    public static final int HG_RESULTCODE = 1006;
+
     @Bind(R.id.title_name) //标题
             TextView titleTextView;
     LinearLayoutManager layoutManager;
@@ -66,12 +64,10 @@ public class N_materialActivity extends BaseActivity implements SwipeRefreshLayo
     EditText search; //编辑框
     @Bind(R.id.btn_delete)
     Button deleteBtn; //删除
-
-
     /**
      * 适配器*
      */
-    private N_materialListAdapter n_materialListAdapter;
+    private HgListAdapter hgListAdapter;
     /**
      * 查询条件*
      */
@@ -79,34 +75,31 @@ public class N_materialActivity extends BaseActivity implements SwipeRefreshLayo
     private int page = 1;
 
 
-    ArrayList<N_MATERIAL> items = new ArrayList<N_MATERIAL>();
+    ArrayList<INVBALANCES> items = new ArrayList<INVBALANCES>();
 
-    ArrayList<N_MATERIAL> chooseItems = new ArrayList<N_MATERIAL>(); //修改的记录
+    private String crewid;
 
-    private String wonum;
-    private ZKWORKORDER zkworkorder;
-
-    protected FlippingLoadingDialog mLoadingDialog;
-
-    private boolean isCodePda; //判断是扫描还是手输
-    private String itemnum; //物料编码
+    private INVBALANCES invbalances;
+    private int hgbs;
+    private String mbLocation; //目标库房
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_material_list);
+        setContentView(R.layout.activity_list);
         ButterKnife.bind(this);
-        initDate();
+        geiIntentData();
         findViewById();
         initView();
     }
 
-    private void initDate() {
-        wonum = getIntent().getExtras().getString("wonum");
-        zkworkorder = (ZKWORKORDER) getIntent().getSerializableExtra("zkworkorder");
-
+    private void geiIntentData() {
+        hgbs = getIntent().getExtras().getInt("hgbs");
+        if (hgbs == InventoryAddActivity.MBHG_REQUESTCODE) {
+            mbLocation = getIntent().getExtras().getString("mbkf");
+        }
+        invbalances = (INVBALANCES) getIntent().getSerializableExtra("invbalances");
     }
-
 
     @Override
     protected void findViewById() {
@@ -115,7 +108,7 @@ public class N_materialActivity extends BaseActivity implements SwipeRefreshLayo
 
     @Override
     protected void initView() {
-        titleTextView.setText(R.string.sqlywlmx_text);
+        titleTextView.setText(R.string.xzhg_text);
         setSearchEdit();
 
         layoutManager = new LinearLayoutManager(this);
@@ -133,7 +126,7 @@ public class N_materialActivity extends BaseActivity implements SwipeRefreshLayo
         refresh_layout.setOnLoadListener(this);
 
         refresh_layout.setRefreshing(true);
-        initAdapter(new ArrayList<N_MATERIAL>());
+        initAdapter(new ArrayList<INVBALANCES>());
         items = new ArrayList<>();
         getData(searchText);
     }
@@ -145,20 +138,12 @@ public class N_materialActivity extends BaseActivity implements SwipeRefreshLayo
         finish();
     }
 
-
     @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.BEFORE_TEXT_CHANGED)
     void beforeTextChanged(CharSequence s, int start, int before, int count) {
     }
 
     @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.TEXT_CHANGED)
     void onTextChanged(CharSequence s, int start, int before, int count) {
-        if (start == 0 && before == 0 && count > 1) {
-            //扫描
-            isCodePda = true;
-        } else {
-            //手输
-            isCodePda = false;
-        }
     }
 
     @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
@@ -168,30 +153,12 @@ public class N_materialActivity extends BaseActivity implements SwipeRefreshLayo
         } else {
             deleteBtn.setVisibility(View.GONE);
         }
-        if (isCodePda) {
-            itemnum = parsingResult(s.toString());
-            n_materialListAdapter.removeAll(items);
-            items = new ArrayList<N_MATERIAL>();
-            nodatalayout.setVisibility(View.GONE);
-            refresh_layout.setRefreshing(true);
-            page = 1;
-            getData(parsingResult(s.toString()));
-        }
     }
 
     //删除
     @OnClick(R.id.btn_delete)
     void setDeleteBtnOnClickListener() {
         search.setText("");
-    }
-
-
-    //确认发放
-    @OnClick(R.id.sureff_btn_id)
-    void setSureffBtnOnClickListener() {
-        getLoadingDialog("正在提交...").show();
-        updateAsyncTask();
-
     }
 
 
@@ -222,12 +189,12 @@ public class N_materialActivity extends BaseActivity implements SwipeRefreshLayo
                     // 先隐藏键盘
                     ((InputMethodManager) search.getContext().getSystemService(Context.INPUT_METHOD_SERVICE))
                             .hideSoftInputFromWindow(
-                                    N_materialActivity.this.getCurrentFocus()
+                                    HgChooseActivity.this.getCurrentFocus()
                                             .getWindowToken(),
                                     InputMethodManager.HIDE_NOT_ALWAYS);
                     searchText = search.getText().toString();
-                    n_materialListAdapter.removeAll(items);
-                    items = new ArrayList<N_MATERIAL>();
+                    hgListAdapter.removeAll(items);
+                    items = new ArrayList<INVBALANCES>();
                     nodatalayout.setVisibility(View.GONE);
                     refresh_layout.setRefreshing(true);
                     page = 1;
@@ -244,14 +211,14 @@ public class N_materialActivity extends BaseActivity implements SwipeRefreshLayo
      * 获取数据*
      */
     private void getData(String search) {
-        String url = null;
-        if (isCodePda && itemnum!=null) {
-            url = HttpManager.getN_MATERIAL1(itemnum, wonum, page, 20);
-        } else {
-            url = HttpManager.getN_MATERIAL(search, wonum, page, 20);
-        }
 
-        HttpManager.getDataPagingInfo(N_materialActivity.this, url, new HttpRequestHandler<Results>() {
+        String url = null;
+        if (hgbs == InventoryAddActivity.MBHG_REQUESTCODE) {
+            url = HttpManager.getINVBALANCES(search, invbalances.getITEMNUM(), invbalances.getSITEID(), mbLocation, page, 20);
+        } else {
+            url = HttpManager.getINVBALANCES(search, invbalances.getITEMNUM(), invbalances.getSITEID(), invbalances.getLOCATION(), page, 20);
+        }
+        HttpManager.getDataPagingInfo(HgChooseActivity.this, url, new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {
                 Log.i(TAG, "data=" + results);
@@ -259,7 +226,7 @@ public class N_materialActivity extends BaseActivity implements SwipeRefreshLayo
 
             @Override
             public void onSuccess(Results results, int totalPages, int currentPage) {
-                ArrayList<N_MATERIAL> item = JsonUtils.parsingN_MATERIAL(results.getResultlist());
+                ArrayList<INVBALANCES> item = JsonUtils.parsingINVBALANCES(results.getResultlist());
                 refresh_layout.setRefreshing(false);
                 refresh_layout.setLoading(false);
                 if (item == null || item.isEmpty()) {
@@ -268,7 +235,7 @@ public class N_materialActivity extends BaseActivity implements SwipeRefreshLayo
 
                     if (item != null || item.size() != 0) {
                         if (page == 1) {
-                            items = new ArrayList<N_MATERIAL>();
+                            items = new ArrayList<INVBALANCES>();
                             initAdapter(items);
                         }
                         for (int i = 0; i < item.size(); i++) {
@@ -295,90 +262,27 @@ public class N_materialActivity extends BaseActivity implements SwipeRefreshLayo
     /**
      * 获取数据*
      */
-    private void initAdapter(final List<N_MATERIAL> list) {
-        n_materialListAdapter = new N_materialListAdapter(N_materialActivity.this, R.layout.list_item_n_material, list);
-        recyclerView.setAdapter(n_materialListAdapter);
-        n_materialListAdapter.setOnclicklistener(new N_materialListAdapter.OnClickListener() {
+    private void initAdapter(final List<INVBALANCES> list) {
+        hgListAdapter = new HgListAdapter(HgChooseActivity.this, R.layout.list_item_person, list);
+        recyclerView.setAdapter(hgListAdapter);
+        hgListAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override
-            public void cOnClickListener(int postion, String t) {
-                N_MATERIAL n_material = (N_MATERIAL) n_materialListAdapter.getData().get(postion);
-                n_material.setN_SAP3(t);
+            public void onItemClick(View view, int position) {
+                Intent intent = getIntent();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("invbalances", items.get(position));
+                intent.putExtras(bundle);
+                setResult(HG_RESULTCODE, intent);
+                finish();
             }
         });
-
     }
 
     /**
      * 添加数据*
      */
-    private void addData(final List<N_MATERIAL> list) {
-        n_materialListAdapter.addData(list);
+    private void addData(final List<INVBALANCES> list) {
+        hgListAdapter.addData(list);
     }
-
-
-    /**
-     * 修改数据
-     */
-    private void updateAsyncTask() {
-        new AsyncTask<String, String, String>() {
-            @Override
-            protected String doInBackground(String... strings) {
-                List<N_MATERIAL> list = n_materialListAdapter.getData();
-                for (N_MATERIAL item : list) {
-                    AndroidClientService.UpdateMbo(N_materialActivity.this, JsonUtils.potoN_MATERIAL(item.getN_SAP3()), "N_MATERIAL", "N_MATERIALID", item.getN_MATERIALID());
-                }
-                Log.i(TAG, "size=" + n_materialListAdapter.getItemCount());
-                if (list.size() == n_materialListAdapter.getItemCount()) {
-                    return "提交成功";
-                }
-                return "提交失败";
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-                Log.i(TAG, "s=" + s);
-                QueRenAsyncTask();
-
-
-            }
-        }.execute();
-
-
-    }
-
-    //确认发放
-    private void QueRenAsyncTask() {
-        new AsyncTask<String, String, String>() {
-            @Override
-            protected String doInBackground(String... strings) {
-                if (n_materialListAdapter.getItemCount() == 1) {
-                    N_MATERIAL n_material = (N_MATERIAL) n_materialListAdapter.getData().get(0);
-                    return AndroidClientService.INV03Issue(N_materialActivity.this, AccountUtils.getloginUserName(N_materialActivity.this), wonum, n_material.getITEMNUM(), zkworkorder.getN_SAP1(), zkworkorder.getCREWID(), zkworkorder.getSITEID());
-                }
-                return AndroidClientService.INV03Issue(N_materialActivity.this, AccountUtils.getloginUserName(N_materialActivity.this), wonum, "", zkworkorder.getN_SAP1(), zkworkorder.getCREWID(), zkworkorder.getSITEID());
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-                Log.i(TAG, "s=" + s);
-                mLoadingDialog.dismiss();
-                MessageUtils.showMiddleToast(N_materialActivity.this, s);
-
-
-            }
-        }.execute();
-
-
-    }
-
-
-    private FlippingLoadingDialog getLoadingDialog(String msg) {
-        if (mLoadingDialog == null)
-            mLoadingDialog = new FlippingLoadingDialog(this, msg);
-        return mLoadingDialog;
-    }
-
 
 }

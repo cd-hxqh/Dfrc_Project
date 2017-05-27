@@ -13,10 +13,10 @@ import java.util.List;
 
 /**
  * Created by apple on 15/10/26
- * 库存查询
+ * 货柜选择
  */
-public class InventoryListAdapter extends BaseQuickAdapter<INVBALANCES> {
-    public InventoryListAdapter(Context context, int layoutResId, List data) {
+public class HgListAdapter extends BaseQuickAdapter<INVBALANCES> {
+    public HgListAdapter(Context context, int layoutResId, List data) {
         super(context, layoutResId, data);
     }
 
@@ -31,12 +31,12 @@ public class InventoryListAdapter extends BaseQuickAdapter<INVBALANCES> {
     @Override
     protected void convert(BaseViewHolder helper, INVBALANCES item) {
         CardView cardView = helper.getView(R.id.card_container);
-        helper.setText(R.id.assetnum_text_id, item.getITEMNUM());
-        helper.setText(R.id.item_desc_text, item.getITEMNUMNAME());
-        helper.setText(R.id.location_text_id, "库房:" + item.getLOCATION());
-        helper.setText(R.id.curbal_text_id, "余量:" + item.getCURBAL());
-        helper.setText(R.id.binnum_text_id, "货柜:" + item.getBINNUM());
-        helper.setText(R.id.siteid_text_id, "地点:" + item.getSITEID());
+        helper.setText(R.id.title1_text_id, mContext.getString(R.string.hg_text));
+        helper.setText(R.id.persionid_text_id, item.getBINNUM());
+        helper.setText(R.id.title2_text_id,  mContext.getString(R.string.curbal_text));
+        helper.setText(R.id.displaname_text_id, item.getCURBAL());
+        helper.setText(R.id.title3_text_id, mContext.getString(R.string.siteid_text));
+        helper.setText(R.id.bz_text_id, item.getSITEID());
     }
 
 

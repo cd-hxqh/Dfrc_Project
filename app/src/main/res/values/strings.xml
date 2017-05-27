@@ -225,7 +225,7 @@
     <string name="xzydg_text">已订购项目</string>
     <string name="enterby1_text">输入人:</string>
     <string name="xzwl_text">选择物料</string>
-    <string name="n_sap3_text">实际发放数量:</string>
+    <string name="n_sap3_text">实际数量:</string>
     <string name="n_happendate_text">发生日期:</string>
     <string name="estdur_text">持续时间:</string>
     <string name="n_plstoptime_text">生产线停止时间:</string>
@@ -249,5 +249,31 @@
     <string name="n_stieid_text">被借方地点:</string>
     <string name="jyxq_text">借用详情</string>
     <string name="avblbalance_text">可用量:</string>
+    <string name="bjbm_text">备件编码:</string>
+    <string name="yl_text">余量:</string>
+    <string name="zydqxm_text">转移当前项目</string>
+    <string name="new_hj_text">新增货架</string>
+    <string name="kwxz_text">库位新增</string>
+    <string name="mbdd_text_id">目标地点:</string>
+    <string name="ybinnum_text">原货柜:</string>
+    <string name="mbinnum_text">目标货柜:</string>
+    <string name="dwcb_text">单位成本:</string>
+    <string name="bwl_text">备忘录:</string>
+    <string name="kwzt_text">库位转移</string>
+    <string name="kf_text">库房</string>
+    <string name="xzhg_text">选择货柜</string>
+    <string name="n_kostl_text">成本中心:</string>
+    <string name="n_site_text">工厂代码:</string>
+    <string name="outtype_text">总库移动类型:</string>
+    <string name="sumwobudget_text">领用年预算:</string>
+    <string name="wobudget_text">领用月预算:</string>
+    <string name="expwo_text">本月领用支出(实际):</string>
+    <string name="actyearexpwo_text">当年领用支出(实际):</string>
+    <string name="qrff_text">确认发放</string>
+    <string name="add_line_text">新建行</string>
+    <string name="fk_tobin_text">分库存放货柜:</string>
+    <string name="zk_frombin">总库存放货柜:</string>
+    <string name="source_text">来源:</string>
+    <string name="lyms_text">来源描述:</string>
 
 </resources>

@@ -197,6 +197,33 @@
                         android:textColor="@color/black"
                         android:textSize="@dimen/dimens_16sp" />
                 </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="@dimen/dimen_5">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/hg_text"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/dimens_16sp" />
+
+                    <EditText
+                        android:id="@+id/binnum_text_id"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="5dp"
+                        android:background="@drawable/editsharp_03"
+                        android:ellipsize="end"
+                        android:ems="14"
+                        android:hint="@string/have_not_data"
+                        android:padding="@dimen/dimen_5"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/dimens_16sp" />
+                </LinearLayout>
             </LinearLayout>
 
 

@@ -15,6 +15,15 @@ public class WORKORDER extends Entity {
     public String YEAR;//年度
     public String N_QTYOPEN;//未完成
     public String N_QTYCOMP;//已完成
+    public String SITEID;//地点
+
+    public String getSITEID() {
+        return SITEID;
+    }
+
+    public void setSITEID(String SITEID) {
+        this.SITEID = SITEID;
+    }
 
     public String getCHANGEBY() {
         return CHANGEBY;

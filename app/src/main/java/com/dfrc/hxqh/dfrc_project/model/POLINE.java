@@ -15,7 +15,15 @@ public class POLINE extends Entity {
     public String UNITCOST;//单位成本
     public String VENDELIVERYDATE;//供应商日期
     public String RECEIVEDQTY;//应到数量
+    public String BINNUM;//货柜
 
+    public String getBINNUM() {
+        return BINNUM;
+    }
+
+    public void setBINNUM(String BINNUM) {
+        this.BINNUM = BINNUM;
+    }
 
     public String getDESCRIPTION() {
         return DESCRIPTION;

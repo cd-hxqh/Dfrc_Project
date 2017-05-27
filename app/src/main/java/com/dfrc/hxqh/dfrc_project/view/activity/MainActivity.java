@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -14,15 +16,21 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dfrc.hxqh.dfrc_project.R;
+import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.constants.Constants;
 import com.dfrc.hxqh.dfrc_project.model.ProdctBean;
+import com.dfrc.hxqh.dfrc_project.model.WORKORDER;
 import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
 import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
+import com.dfrc.hxqh.dfrc_project.view.adapter.BaseQuickAdapter;
 import com.dfrc.hxqh.dfrc_project.view.adapter.MyGridViewAdpter;
 import com.dfrc.hxqh.dfrc_project.view.adapter.MyViewPagerAdapter;
+import com.dfrc.hxqh.dfrc_project.view.adapter.WorkOrderListAdapter;
+import com.dfrc.hxqh.dfrc_project.view.widght.SwipeRefreshLayout;
 import com.dfrc.hxqh.dfrc_project.webserviceclient.AndroidClientService;
 import com.mpt.hxqh.dfrc_project.AppManager;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,8 +58,24 @@ public class MainActivity extends BaseActivity {
     private List<View> viewPagerList;//GridView作为一个View对象添加到ViewPager集合中
     private int currentPage;//当前页
     private ArrayList<String> list = new ArrayList<>();//appid集合
-    private String[] proName = {"设备查询", "定期点检工单", "问题点管理", "采购接收", "库存查询", "总库领料单", "分库领料单", "备件借用", "设置"};
+    private String[] proName = {"设备查询", "定期点检", "问题管理", "采购接收", "库存查询", "总库领料", "分库领料", "备件借用", "设置"};
 
+
+    LinearLayoutManager layoutManager;
+    @Bind(R.id.recyclerView_id)
+    RecyclerView recyclerView;//RecyclerView
+    @Bind(R.id.have_not_data_id)
+    LinearLayout nodatalayout;//暂无数据
+    @Bind(R.id.swipe_container)
+    SwipeRefreshLayout refresh_layout;//界面刷新
+
+    /**
+     * 适配器*
+     */
+    private WorkOrderListAdapter workorderListAdapter;
+
+
+    ArrayList<WORKORDER> items = new ArrayList<WORKORDER>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +93,20 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void findViewById() {
-//        startAsyncTask();
+
+        layoutManager = new LinearLayoutManager(MainActivity.this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        layoutManager.scrollToPosition(0);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        refresh_layout.setColor(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+        refresh_layout.setRefreshing(false);
+        refresh_layout.setEnabled(false);
+        initAdapter(new ArrayList<WORKORDER>());
+        startAsyncTask();
     }
 
 
@@ -231,20 +268,57 @@ public class MainActivity extends BaseActivity {
         new AsyncTask<String, String, String>() {
             @Override
             protected String doInBackground(String... strings) {
-                return AndroidClientService.searchMaint2(MainActivity.this, "ASSETNUM", "H2-Z2-CP-047");
+                return AndroidClientService.searchMaint2(MainActivity.this, "N_RESPONSOR", AccountUtils.getloginUserName(MainActivity.this),"index"); //获取周点检工单
             }
 
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                Log.i("MainActivity", "s=" + s);
-                MessageUtils.showMiddleToast(MainActivity.this, s);
-
-
+                String result = JsonUtils.parsingsearchMaint2(s);
+                if (result.equals("暂无数据")) {
+                    nodatalayout.setVisibility(View.VISIBLE);
+                } else {
+                    ArrayList<WORKORDER> item = JsonUtils.parsingWORKORDER(s);
+                    refresh_layout.setRefreshing(false);
+                    refresh_layout.setLoading(false);
+                    if (item == null || item.isEmpty()) {
+                        nodatalayout.setVisibility(View.VISIBLE);
+                    } else {
+                        addData(item);
+                    }
+                }
             }
         }.execute();
 
 
+    }
+
+    /**
+     * 获取数据*
+     */
+    private void initAdapter(List<WORKORDER> list) {
+        workorderListAdapter = new WorkOrderListAdapter(MainActivity.this, R.layout.list_item_workorder, list);
+        recyclerView.setAdapter(workorderListAdapter);
+        workorderListAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = getIntent();
+                intent.setClass(MainActivity.this, WorkOrderDetailsActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("workorder", (Serializable) workorderListAdapter.getData().get(position));
+                intent.putExtras(bundle);
+                startActivityForResult(intent, 0);
+            }
+        });
+
+    }
+
+    /**
+     * 添加数据*
+     */
+    private void addData(final List<WORKORDER> list) {
+        workorderListAdapter.addData(list);
+        workorderListAdapter.notifyDataSetChanged();
     }
 
 

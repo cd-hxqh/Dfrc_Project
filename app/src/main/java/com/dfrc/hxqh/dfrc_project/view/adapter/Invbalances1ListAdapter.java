@@ -32,8 +32,8 @@ public class Invbalances1ListAdapter extends BaseQuickAdapter<INVBALANCES> {
     protected void convert(BaseViewHolder helper, INVBALANCES item) {
         CardView cardView = helper.getView(R.id.card_container);
         helper.setText(R.id.item_text_id, item.getITEMNUM());
-        helper.setText(R.id.desc_text_id, item.getDESCRIPTION());
-        helper.setText(R.id.quantity_text_id, item.getCURBALTOTAL());
+        helper.setText(R.id.desc_text_id, item.getITEMNUMNAME());
+//        helper.setText(R.id.quantity_text_id, item.getCURBALTOTAL());
     }
 
 

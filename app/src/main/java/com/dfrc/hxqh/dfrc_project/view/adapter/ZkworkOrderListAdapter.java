@@ -34,8 +34,10 @@ public class ZkworkOrderListAdapter extends BaseQuickAdapter<ZKWORKORDER> {
         helper.setText(R.id.workorder_sb_title, mContext.getString(R.string.lld_text));
         helper.setText(R.id.assetnum_text_id, item.getWONUM());
         helper.setText(R.id.item_desc_text, item.getDESCRIPTION());
-        helper.setText(R.id.status_text_id, item.getSTATUS());
-        helper.setText(R.id.family_displayname_text_id, item.getREPORTEDBYNAME());
+        helper.setText(R.id.status_text_id, mContext.getString(R.string.status_text)+item.getSTATUS());
+        helper.setText(R.id.reportdate_text_id, mContext.getString(R.string.reportdate_text)+item.getSTATUS());
+        helper.setText(R.id.reportedbyid_text_id,  mContext.getString(R.string.tbr_text)+item.getREPORTEDBYNAME());
+        helper.setText(R.id.crewid_text_id,  mContext.getString(R.string.bz_text)+item.getCREWID());
     }
 
 

@@ -27,7 +27,7 @@ import com.dfrc.hxqh.dfrc_project.api.HttpManager;
 import com.dfrc.hxqh.dfrc_project.api.HttpRequestHandler;
 import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.bean.Results;
-import com.dfrc.hxqh.dfrc_project.model.INVENTORY;
+import com.dfrc.hxqh.dfrc_project.model.INVBALANCES;
 import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
 import com.dfrc.hxqh.dfrc_project.view.adapter.BaseQuickAdapter;
 import com.dfrc.hxqh.dfrc_project.view.adapter.InventoryListAdapter;
@@ -43,7 +43,7 @@ import butterknife.OnTextChanged;
 
 /**
  * Created by Administrator on 2017/2/15.
- * 库存
+ * 库存查询
  */
 
 public class Inventoryactivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
@@ -77,10 +77,12 @@ public class Inventoryactivity extends BaseActivity implements SwipeRefreshLayou
     private int page = 1;
 
 
-    ArrayList<INVENTORY> items = new ArrayList<INVENTORY>();
+    ArrayList<INVBALANCES> items = new ArrayList<INVBALANCES>();
 
     private int mark;
     private String assetNum;
+
+    private boolean isCodePda; //判断是扫描还是手输
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,7 +127,7 @@ public class Inventoryactivity extends BaseActivity implements SwipeRefreshLayou
         refresh_layout.setOnLoadListener(this);
 
         refresh_layout.setRefreshing(true);
-        initAdapter(new ArrayList<INVENTORY>());
+        initAdapter(new ArrayList<INVBALANCES>());
         items = new ArrayList<>();
         getData(searchText);
     }
@@ -153,6 +155,13 @@ public class Inventoryactivity extends BaseActivity implements SwipeRefreshLayou
 
     @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.TEXT_CHANGED)
     void onTextChanged(CharSequence s, int start, int before, int count) {
+        if (start == 0 && before == 0 && count > 1) {
+            //扫描
+            isCodePda = true;
+        } else {
+            //手输
+            isCodePda = false;
+        }
     }
 
     @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
@@ -161,6 +170,15 @@ public class Inventoryactivity extends BaseActivity implements SwipeRefreshLayou
             deleteBtn.setVisibility(View.VISIBLE);
         } else {
             deleteBtn.setVisibility(View.GONE);
+        }
+        if (isCodePda) {
+            assetNum = parsingResult(s.toString());
+            inventoryListAdapter.removeAll(items);
+            items = new ArrayList<INVBALANCES>();
+            nodatalayout.setVisibility(View.GONE);
+            refresh_layout.setRefreshing(true);
+            page = 1;
+            getData(parsingResult(s.toString()));
         }
     }
 
@@ -203,7 +221,7 @@ public class Inventoryactivity extends BaseActivity implements SwipeRefreshLayou
                                     InputMethodManager.HIDE_NOT_ALWAYS);
                     searchText = search.getText().toString();
                     inventoryListAdapter.removeAll(items);
-                    items = new ArrayList<INVENTORY>();
+                    items = new ArrayList<INVBALANCES>();
                     nodatalayout.setVisibility(View.GONE);
                     refresh_layout.setRefreshing(true);
                     page = 1;
@@ -221,10 +239,10 @@ public class Inventoryactivity extends BaseActivity implements SwipeRefreshLayou
      */
     private void getData(String search) {
         String url = null;
-        if (assetNum.equals("")) {
+        if (!isCodePda&&assetNum.equals("")) {
             url = HttpManager.getINVETORYURL(search, AccountUtils.getloginSite(Inventoryactivity.this), page, 20);
         } else {
-            url = HttpManager.getINVETORYIDURL(assetNum, search, page, 20);
+            url = HttpManager.getINVETORYIDURL(assetNum, page, 20);
         }
 
         HttpManager.getDataPagingInfo(Inventoryactivity.this, url, new HttpRequestHandler<Results>() {
@@ -235,7 +253,7 @@ public class Inventoryactivity extends BaseActivity implements SwipeRefreshLayou
 
             @Override
             public void onSuccess(Results results, int totalPages, int currentPage) {
-                ArrayList<INVENTORY> item = JsonUtils.parsingINVENTORY(results.getResultlist());
+                ArrayList<INVBALANCES> item = JsonUtils.parsingINVBALANCES(results.getResultlist());
                 refresh_layout.setRefreshing(false);
                 refresh_layout.setLoading(false);
                 if (item == null || item.isEmpty()) {
@@ -244,7 +262,7 @@ public class Inventoryactivity extends BaseActivity implements SwipeRefreshLayou
 
                     if (item != null || item.size() != 0) {
                         if (page == 1) {
-                            items = new ArrayList<INVENTORY>();
+                            items = new ArrayList<INVBALANCES>();
                             initAdapter(items);
                         }
                         for (int i = 0; i < item.size(); i++) {
@@ -271,7 +289,7 @@ public class Inventoryactivity extends BaseActivity implements SwipeRefreshLayou
     /**
      * 获取数据*
      */
-    private void initAdapter(final List<INVENTORY> list) {
+    private void initAdapter(final List<INVBALANCES> list) {
         inventoryListAdapter = new InventoryListAdapter(Inventoryactivity.this, R.layout.list_item_inventory, list);
         recyclerView.setAdapter(inventoryListAdapter);
         inventoryListAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
@@ -280,7 +298,7 @@ public class Inventoryactivity extends BaseActivity implements SwipeRefreshLayou
                 Intent intent = getIntent();
                 intent.setClass(Inventoryactivity.this, InventoryDetailsActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("inventory", items.get(position));
+                bundle.putSerializable("invbalances", items.get(position));
                 intent.putExtras(bundle);
                 startActivityForResult(intent, 0);
             }
@@ -290,7 +308,7 @@ public class Inventoryactivity extends BaseActivity implements SwipeRefreshLayou
     /**
      * 添加数据*
      */
-    private void addData(final List<INVENTORY> list) {
+    private void addData(final List<INVBALANCES> list) {
         inventoryListAdapter.addData(list);
     }
 

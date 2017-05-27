@@ -266,9 +266,6 @@ public class PoChooseActivity extends BaseActivity implements SwipeRefreshLayout
                         if (receivedqty == 0 || receivedqty < orderqty) {  //接收判断条件
                             items.add(poline);
                         }
-//                        if (receivedqty != 0 || receivedqty < orderqty) {  //退回判断条件
-//                            items.add(poline);
-//                        }
                     }
 
                     if (items != null && items.size() != 0) {
@@ -305,9 +302,10 @@ public class PoChooseActivity extends BaseActivity implements SwipeRefreshLayout
         });
         poLineChooseListAdapter.setOnCheckedChangeListener(new PoLineChooseListAdapter.OnCheckedChangeListener() {
             @Override
-            public void cOnCheckedChangeListener(boolean b, int postion, String t) {
+            public void cOnCheckedChangeListener(boolean b, int postion, String t,String hg) {
                 Log.i(TAG, "t=" + t);
                 items.get(postion).setRECEIVEDQTY(t);
+                items.get(postion).setBINNUM(hg);
                 if (b) {
                     chooseItems.add(items.get(postion));
                 } else {
@@ -376,9 +374,8 @@ public class PoChooseActivity extends BaseActivity implements SwipeRefreshLayout
     private MATRECTRANS getMATRECTRANS(POLINE poline) {
         MATRECTRANS matrectrans = new MATRECTRANS();
         matrectrans.setPOLINENUM(poline.getPOLINENUM());
-        Log.i(TAG, "qty=" + poline.getRECEIVEDQTY());
         matrectrans.setRECEIPTQUANTITY(poline.getRECEIVEDQTY());
-        matrectrans.setBINNUM("");
+        matrectrans.setBINNUM(poline.getBINNUM());
         matrectrans.setPONUM(ponum);
         matrectrans.setENTERBY(AccountUtils.getloginUserName(PoChooseActivity.this));
         return matrectrans;

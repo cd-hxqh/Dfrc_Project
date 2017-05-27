@@ -182,7 +182,7 @@ public class N_ProblemDetailsActivity extends BaseActivity {
             finishdateTextView.setText(n_problem.getFINISHDATE());
             jzTextView.setText(n_problem.getSTATUS());
             abcTextView.setText(n_problem.getABC());
-            confirmbyTextView.setText(n_problem.getCONFIRMBY_DISPLAYNAME());
+            confirmbyTextView.setText(n_problem.getCONFIRMBY());
             resultTextView.setText(n_problem.getRESULT());
 
         }

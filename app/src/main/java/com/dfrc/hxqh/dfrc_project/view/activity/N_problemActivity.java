@@ -194,6 +194,11 @@ public class N_problemActivity extends BaseActivity implements SwipeRefreshLayou
         }
     }
 
+    //删除
+    @OnClick(R.id.btn_delete)
+    void setDeleteBtnOnClickListener() {
+        search.setText("");
+    }
 
     @Override
     public void onLoad() {
@@ -245,7 +250,7 @@ public class N_problemActivity extends BaseActivity implements SwipeRefreshLayou
      */
     private void getData(String search) {
         String url = null;
-        if (isCodePda && assetNum.equals("")) {
+        if (!isCodePda && assetNum.equals("")) {
             url = HttpManager.getN_PROBLEMURL(search, page, 20);
         } else {
             url = HttpManager.getByASSETNUMN_PROBLEMURL(assetNum, page, 20);

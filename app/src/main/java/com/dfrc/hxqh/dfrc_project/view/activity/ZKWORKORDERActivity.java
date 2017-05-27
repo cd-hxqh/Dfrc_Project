@@ -32,6 +32,7 @@ import com.dfrc.hxqh.dfrc_project.view.adapter.BaseQuickAdapter;
 import com.dfrc.hxqh.dfrc_project.view.adapter.ZkworkOrderListAdapter;
 import com.dfrc.hxqh.dfrc_project.view.widght.SwipeRefreshLayout;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,7 +83,7 @@ public class ZkworkorderActivity extends BaseActivity implements SwipeRefreshLay
     private int mark;
 
 
-    private String assetnum; //设备编码
+    private String assetnum = ""; //设备编码
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -275,7 +276,7 @@ public class ZkworkorderActivity extends BaseActivity implements SwipeRefreshLay
      * 获取数据*
      */
     private void initAdapter(final List<ZKWORKORDER> list) {
-        zkworkOrderListAdapter = new ZkworkOrderListAdapter(ZkworkorderActivity.this, R.layout.list_item_asset, list);
+        zkworkOrderListAdapter = new ZkworkOrderListAdapter(ZkworkorderActivity.this, R.layout.list_item_zkworkorder, list);
         recyclerView.setAdapter(zkworkOrderListAdapter);
         zkworkOrderListAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override
@@ -283,7 +284,7 @@ public class ZkworkorderActivity extends BaseActivity implements SwipeRefreshLay
                 Intent intent = getIntent();
                 intent.setClass(ZkworkorderActivity.this, ZkworkorderDetailsActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("zkworkorder", items.get(position));
+                bundle.putSerializable("zkworkorder", (Serializable) zkworkOrderListAdapter.getData().get(position));
                 intent.putExtras(bundle);
                 startActivityForResult(intent, 0);
             }

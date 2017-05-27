@@ -7,8 +7,8 @@ android {
         applicationId "com.mpt.hxqh.dfrc_project"
         minSdkVersion 15
         targetSdkVersion 24
-        versionCode 19
-        versionName "1.1.9"
+        versionCode 21
+        versionName "1.2.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

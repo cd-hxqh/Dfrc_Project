@@ -17,8 +17,9 @@
         android:id="@+id/item_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
         android:gravity="center"
         android:text="@string/setting_text"
-        android:layout_marginTop="2dp" />
+        android:textSize="@dimen/dimens_16sp" />
 
 </LinearLayout>
