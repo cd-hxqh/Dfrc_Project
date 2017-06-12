@@ -18,7 +18,6 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -27,14 +26,11 @@ import com.dfrc.hxqh.dfrc_project.api.HttpManager;
 import com.dfrc.hxqh.dfrc_project.api.HttpRequestHandler;
 import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.bean.Results;
-import com.dfrc.hxqh.dfrc_project.model.INVBALANCES;
-import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
-import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
+import com.dfrc.hxqh.dfrc_project.model.WORKORDER;
 import com.dfrc.hxqh.dfrc_project.view.adapter.BaseQuickAdapter;
-import com.dfrc.hxqh.dfrc_project.view.adapter.InventoryListAdapter;
+import com.dfrc.hxqh.dfrc_project.view.adapter.WorkOrderChooseListAdapter;
 import com.dfrc.hxqh.dfrc_project.view.widght.SwipeRefreshLayout;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,16 +41,16 @@ import butterknife.OnTextChanged;
 
 /**
  * Created by Administrator on 2017/2/15.
- * 库存查询
+ * 来源选择
  */
 
-public class Inventoryactivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
-    private static final String TAG = "Inventoryactivity";
-    public static final int ASSET_CODE = 1001;
+public class WorkOrderChooseActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
+    private static final String TAG = "WorkOrderChooseActivity";
+
+    public static final int WORKORDER_RESULTCODE = 1006;
+
     @Bind(R.id.title_name) //标题
             TextView titleTextView;
-    @Bind(R.id.sbmittext_id)
-    ImageButton codeImageButton;
     LinearLayoutManager layoutManager;
 
     @Bind(R.id.recyclerView_id)//RecyclerView
@@ -71,7 +67,7 @@ public class Inventoryactivity extends BaseActivity implements SwipeRefreshLayou
     /**
      * 适配器*
      */
-    private InventoryListAdapter inventoryListAdapter;
+    private WorkOrderChooseListAdapter workOrderChooseListAdapter;
     /**
      * 查询条件*
      */
@@ -79,26 +75,17 @@ public class Inventoryactivity extends BaseActivity implements SwipeRefreshLayou
     private int page = 1;
 
 
-    ArrayList<INVBALANCES> items = new ArrayList<INVBALANCES>();
+    ArrayList<WORKORDER> items = new ArrayList<WORKORDER>();
 
-    private int mark;
-    private String assetNum;
-
-    private boolean isCodePda; //判断是扫描还是手输
+    private String crewid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
         ButterKnife.bind(this);
-        initDate();
         findViewById();
         initView();
-    }
-
-    private void initDate() {
-        assetNum = getIntent().getExtras().getString("assetNum");
-
     }
 
 
@@ -109,10 +96,8 @@ public class Inventoryactivity extends BaseActivity implements SwipeRefreshLayou
 
     @Override
     protected void initView() {
-        titleTextView.setText(R.string.kccx_text);
+        titleTextView.setText(R.string.ly_text);
         setSearchEdit();
-        codeImageButton.setImageResource(R.drawable.ic_code);
-        codeImageButton.setVisibility(View.VISIBLE);
 
         layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -129,7 +114,7 @@ public class Inventoryactivity extends BaseActivity implements SwipeRefreshLayou
         refresh_layout.setOnLoadListener(this);
 
         refresh_layout.setRefreshing(true);
-        initAdapter(new ArrayList<INVBALANCES>());
+        initAdapter(new ArrayList<WORKORDER>());
         items = new ArrayList<>();
         getData(searchText);
     }
@@ -141,30 +126,12 @@ public class Inventoryactivity extends BaseActivity implements SwipeRefreshLayou
         finish();
     }
 
-    //二维码扫描
-    @OnClick(R.id.sbmittext_id)
-    void setCodeImageButtonOnClickListener() {
-        Intent intent = getIntent();
-        intent.setClass(Inventoryactivity.this, MipcaActivityCapture.class);
-        intent.putExtra("mark", ASSET_CODE);
-        startActivityForResult(intent, 0);
-    }
-
-
     @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.BEFORE_TEXT_CHANGED)
     void beforeTextChanged(CharSequence s, int start, int before, int count) {
     }
 
     @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.TEXT_CHANGED)
     void onTextChanged(CharSequence s, int start, int before, int count) {
-        Log.i(TAG, "start=" + start + ",before=" + before + ",count=" + count);
-        if (start == 0 && before == 0 && count > 3) {
-            //扫描
-            isCodePda = true;
-        } else {
-            //手输
-            isCodePda = false;
-        }
     }
 
     @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
@@ -173,15 +140,6 @@ public class Inventoryactivity extends BaseActivity implements SwipeRefreshLayou
             deleteBtn.setVisibility(View.VISIBLE);
         } else {
             deleteBtn.setVisibility(View.GONE);
-        }
-        if (isCodePda) {
-            assetNum = parsingResult(s.toString());
-            inventoryListAdapter.removeAll(items);
-            items = new ArrayList<INVBALANCES>();
-            nodatalayout.setVisibility(View.GONE);
-            refresh_layout.setRefreshing(true);
-            page = 1;
-            getData(parsingResult(s.toString()));
         }
     }
 
@@ -219,12 +177,12 @@ public class Inventoryactivity extends BaseActivity implements SwipeRefreshLayou
                     // 先隐藏键盘
                     ((InputMethodManager) search.getContext().getSystemService(Context.INPUT_METHOD_SERVICE))
                             .hideSoftInputFromWindow(
-                                    Inventoryactivity.this.getCurrentFocus()
+                                    WorkOrderChooseActivity.this.getCurrentFocus()
                                             .getWindowToken(),
                                     InputMethodManager.HIDE_NOT_ALWAYS);
                     searchText = search.getText().toString();
-                    inventoryListAdapter.removeAll(items);
-                    items = new ArrayList<INVBALANCES>();
+                    workOrderChooseListAdapter.removeAll(items);
+                    items = new ArrayList<WORKORDER>();
                     nodatalayout.setVisibility(View.GONE);
                     refresh_layout.setRefreshing(true);
                     page = 1;
@@ -241,14 +199,8 @@ public class Inventoryactivity extends BaseActivity implements SwipeRefreshLayou
      * 获取数据*
      */
     private void getData(String search) {
-        String url = null;
-        if (!isCodePda && assetNum.equals("")) {
-            url = HttpManager.getINVETORYURL(search, AccountUtils.getloginSite(Inventoryactivity.this), page, 20);
-        } else {
-            url = HttpManager.getINVETORYIDURL(assetNum, page, 20);
-        }
-
-        HttpManager.getDataPagingInfo(Inventoryactivity.this, url, new HttpRequestHandler<Results>() {
+        String url = HttpManager.getLAIYUANURL(search, page, 20);
+        HttpManager.getDataPagingInfo(WorkOrderChooseActivity.this, url, new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {
                 Log.i(TAG, "data=" + results);
@@ -256,7 +208,7 @@ public class Inventoryactivity extends BaseActivity implements SwipeRefreshLayou
 
             @Override
             public void onSuccess(Results results, int totalPages, int currentPage) {
-                ArrayList<INVBALANCES> item = JsonUtils.parsingINVBALANCES(results.getResultlist());
+                ArrayList<WORKORDER> item = JsonUtils.parsingWORKORDER(results.getResultlist());
                 refresh_layout.setRefreshing(false);
                 refresh_layout.setLoading(false);
                 if (item == null || item.isEmpty()) {
@@ -265,17 +217,17 @@ public class Inventoryactivity extends BaseActivity implements SwipeRefreshLayou
 
                     if (item != null || item.size() != 0) {
                         if (page == 1) {
-                            items = new ArrayList<INVBALANCES>();
+                            items = new ArrayList<WORKORDER>();
                             initAdapter(items);
                         }
-                        if (page > totalPages) {
-                            MessageUtils.showMiddleToast(Inventoryactivity.this, getString(R.string.have_load_out_all_the_data));
-                        } else {
-                            addData(item);
+                        for (int i = 0; i < item.size(); i++) {
+                            items.add(item.get(i));
                         }
+                        addData(item);
                     }
                     nodatalayout.setVisibility(View.GONE);
 
+                    initAdapter(items);
                 }
             }
 
@@ -292,18 +244,18 @@ public class Inventoryactivity extends BaseActivity implements SwipeRefreshLayou
     /**
      * 获取数据*
      */
-    private void initAdapter(final List<INVBALANCES> list) {
-        inventoryListAdapter = new InventoryListAdapter(Inventoryactivity.this, R.layout.list_item_inventory, list);
-        recyclerView.setAdapter(inventoryListAdapter);
-        inventoryListAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
+    private void initAdapter(final List<WORKORDER> list) {
+        workOrderChooseListAdapter = new WorkOrderChooseListAdapter(WorkOrderChooseActivity.this, R.layout.list_item_workorder_main, list);
+        recyclerView.setAdapter(workOrderChooseListAdapter);
+        workOrderChooseListAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Intent intent = getIntent();
-                intent.setClass(Inventoryactivity.this, InventoryDetailsActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("invbalances", (Serializable) inventoryListAdapter.getData().get(position));
+                bundle.putSerializable("workorder", items.get(position));
                 intent.putExtras(bundle);
-                startActivityForResult(intent, 0);
+                setResult(WORKORDER_RESULTCODE, intent);
+                finish();
             }
         });
     }
@@ -311,8 +263,8 @@ public class Inventoryactivity extends BaseActivity implements SwipeRefreshLayou
     /**
      * 添加数据*
      */
-    private void addData(final List<INVBALANCES> list) {
-        inventoryListAdapter.addData(list);
+    private void addData(final List<WORKORDER> list) {
+        workOrderChooseListAdapter.addData(list);
     }
 
 }

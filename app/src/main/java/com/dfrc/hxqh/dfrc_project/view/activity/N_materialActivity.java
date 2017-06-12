@@ -67,6 +67,9 @@ public class N_materialActivity extends BaseActivity implements SwipeRefreshLayo
     @Bind(R.id.btn_delete)
     Button deleteBtn; //删除
 
+    @Bind(R.id.sureff_btn_id)
+    Button sureBtn; //确认发放
+
 
     /**
      * 适配器*
@@ -245,7 +248,7 @@ public class N_materialActivity extends BaseActivity implements SwipeRefreshLayo
      */
     private void getData(String search) {
         String url = null;
-        if (isCodePda && itemnum!=null) {
+        if (isCodePda && itemnum != null) {
             url = HttpManager.getN_MATERIAL1(itemnum, wonum, page, 20);
         } else {
             url = HttpManager.getN_MATERIAL(search, wonum, page, 20);
@@ -263,6 +266,7 @@ public class N_materialActivity extends BaseActivity implements SwipeRefreshLayo
                 refresh_layout.setRefreshing(false);
                 refresh_layout.setLoading(false);
                 if (item == null || item.isEmpty()) {
+
                     nodatalayout.setVisibility(View.VISIBLE);
                 } else {
 
@@ -271,14 +275,14 @@ public class N_materialActivity extends BaseActivity implements SwipeRefreshLayo
                             items = new ArrayList<N_MATERIAL>();
                             initAdapter(items);
                         }
-                        for (int i = 0; i < item.size(); i++) {
-                            items.add(item.get(i));
+                        if (page > totalPages) {
+                            MessageUtils.showMiddleToast(N_materialActivity.this, getString(R.string.have_load_out_all_the_data));
+                        } else {
+                            addData(item);
                         }
-                        addData(item);
                     }
                     nodatalayout.setVisibility(View.GONE);
 
-                    initAdapter(items);
                 }
             }
 
@@ -305,6 +309,11 @@ public class N_materialActivity extends BaseActivity implements SwipeRefreshLayo
                 n_material.setN_SAP3(t);
             }
         });
+        if (n_materialListAdapter.getItemCount() == 0) {
+            sureBtn.setVisibility(View.GONE);
+        } else {
+            sureBtn.setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -327,7 +336,6 @@ public class N_materialActivity extends BaseActivity implements SwipeRefreshLayo
                 for (N_MATERIAL item : list) {
                     AndroidClientService.UpdateMbo(N_materialActivity.this, JsonUtils.potoN_MATERIAL(item.getN_SAP3()), "N_MATERIAL", "N_MATERIALID", item.getN_MATERIALID());
                 }
-                Log.i(TAG, "size=" + n_materialListAdapter.getItemCount());
                 if (list.size() == n_materialListAdapter.getItemCount()) {
                     return "提交成功";
                 }

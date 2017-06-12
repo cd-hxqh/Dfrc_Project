@@ -2,14 +2,9 @@ package com.dfrc.hxqh.dfrc_project.view.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.dfrc.hxqh.dfrc_project.R;
@@ -32,9 +27,6 @@ public class AssetDetailsActivity extends BaseActivity {
 
     @Bind(R.id.title_name)
     TextView titleTextView; //标题
-    @Bind(R.id.title_add)
-    ImageView menuImageView; //菜单
-    PopupWindow popupWindow;
     @Bind(R.id.assetnum_text_id)
     TextView assetnumTextView; //设备编码
     @Bind(R.id.description_text_id)
@@ -95,6 +87,9 @@ public class AssetDetailsActivity extends BaseActivity {
     @Bind(R.id.siteid_text_id)
     TextView siteidTextView; //地点
 
+
+
+
     private ASSET asset;
 
     LinearLayout bejjianLinearLayout; //备件
@@ -127,8 +122,6 @@ public class AssetDetailsActivity extends BaseActivity {
     @Override
     protected void initView() {
         titleTextView.setText(R.string.asset_detail_text);
-        menuImageView.setVisibility(View.VISIBLE);
-        menuImageView.setImageResource(R.mipmap.ic_more);
         if (asset != null) {
             assetnumTextView.setText(asset.getASSETNUM());
             descriptionTextView.setText(asset.getDESCRIPTION());
@@ -186,83 +179,30 @@ public class AssetDetailsActivity extends BaseActivity {
         finish();
     }
 
-    //菜单事件
-    @OnClick(R.id.title_add)
-    void setMenuImageViewOnClickListener() {
-        showPopupWindow(menuImageView);
+    //备件
+    @OnClick(R.id.bj_text_id)void setBjOnClickListener(){
+        Intent intent = new Intent(AssetDetailsActivity.this, SparepartActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("assetnum", asset.getASSETNUM());
+        intent.putExtras(bundle);
+        startActivityForResult(intent, 1000);
+    }
+    //点检问题点记录
+    @OnClick(R.id.djwtdjl_text_id)void setDjwtdjlOnClickListener(){
+        Intent intent = new Intent(AssetDetailsActivity.this, N_problem1Activity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("assetnum", asset.getASSETNUM());
+        intent.putExtras(bundle);
+        startActivityForResult(intent, 1000);
+    }
+    //故障记录
+    @OnClick(R.id.gzjl_text_id)void setGzjlOnClickListener(){
+        Intent intent = new Intent(AssetDetailsActivity.this, GzWorkorderActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("assetnum", asset.getASSETNUM());
+        intent.putExtras(bundle);
+        startActivityForResult(intent, 1000);
     }
 
-
-    /**
-     * 初始化showPopupWindow*
-     */
-    private void showPopupWindow(View view) {
-
-        // 一个自定义的布局，作为显示的内容
-        View contentView = LayoutInflater.from(AssetDetailsActivity.this).inflate(
-                R.layout.asset_popup_window, null);
-
-
-        popupWindow = new PopupWindow(contentView,
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        popupWindow.setTouchable(true);
-        popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return false;
-            }
-        });
-
-        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
-        // 我觉得这里是API的一个bug
-        popupWindow.setBackgroundDrawable(getResources().getDrawable(
-                R.drawable.popup_background_mtrl_mult));
-
-        // 设置好参数之后再show
-        popupWindow.showAsDropDown(view);
-        bejjianLinearLayout = (LinearLayout) contentView.findViewById(R.id.beijian_linearlayout_id);
-        djLinearLayout = (LinearLayout) contentView.findViewById(R.id.djwtdjl_linearlayout_id);
-        gzLinearLayout = (LinearLayout) contentView.findViewById(R.id.gzjl_linearlayout_id);
-        bejjianLinearLayout.setOnClickListener(beijianOnClickListener);
-        djLinearLayout.setOnClickListener(djOnClickListener);
-        gzLinearLayout.setOnClickListener(gzOnClickListener);
-
-    }
-
-    private View.OnClickListener beijianOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent intent = new Intent(AssetDetailsActivity.this, SparepartActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("assetnum", asset.getASSETNUM());
-            intent.putExtras(bundle);
-            startActivityForResult(intent, 1000);
-            popupWindow.dismiss();
-        }
-    };
-    private View.OnClickListener djOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent intent = new Intent(AssetDetailsActivity.this, N_problem1Activity.class);
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("assetnum", asset.getASSETNUM());
-            intent.putExtras(bundle);
-            startActivityForResult(intent, 1000);
-            popupWindow.dismiss();
-        }
-    };
-    private View.OnClickListener gzOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent intent = new Intent(AssetDetailsActivity.this, GzWorkorderActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("assetnum", asset.getASSETNUM());
-            intent.putExtras(bundle);
-            startActivityForResult(intent, 1000);
-            popupWindow.dismiss();
-        }
-    };
 
 }

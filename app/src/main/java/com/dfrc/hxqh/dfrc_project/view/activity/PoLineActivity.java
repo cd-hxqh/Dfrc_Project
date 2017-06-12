@@ -26,6 +26,7 @@ import com.dfrc.hxqh.dfrc_project.api.HttpRequestHandler;
 import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.bean.Results;
 import com.dfrc.hxqh.dfrc_project.model.POLINE;
+import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
 import com.dfrc.hxqh.dfrc_project.view.adapter.BaseQuickAdapter;
 import com.dfrc.hxqh.dfrc_project.view.adapter.PoLineListAdapter;
 import com.dfrc.hxqh.dfrc_project.view.widght.SwipeRefreshLayout;
@@ -225,14 +226,14 @@ public class PoLineActivity extends BaseActivity implements SwipeRefreshLayout.O
                             items = new ArrayList<POLINE>();
                             initAdapter(items);
                         }
-                        for (int i = 0; i < item.size(); i++) {
-                            items.add(item.get(i));
+                        if (page > totalPages) {
+                            MessageUtils.showMiddleToast(PoLineActivity.this, getString(R.string.have_load_out_all_the_data));
+                        } else {
+                            addData(item);
                         }
-                        addData(item);
                     }
                     nodatalayout.setVisibility(View.GONE);
 
-                    initAdapter(items);
                 }
             }
 
@@ -255,12 +256,6 @@ public class PoLineActivity extends BaseActivity implements SwipeRefreshLayout.O
         poLineListAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-//                Intent intent = getIntent();
-//                intent.setClass(PoLineActivity.this, PoDetailsActivity.class);
-//                Bundle bundle = new Bundle();
-//                bundle.putSerializable("po", items.get(position));
-//                intent.putExtras(bundle);
-//                startActivityForResult(intent, 0);
             }
         });
     }

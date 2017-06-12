@@ -25,6 +25,7 @@ import com.dfrc.hxqh.dfrc_project.api.HttpRequestHandler;
 import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.bean.Results;
 import com.dfrc.hxqh.dfrc_project.model.SPAREPART;
+import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
 import com.dfrc.hxqh.dfrc_project.view.adapter.SparepartListAdapter;
 import com.dfrc.hxqh.dfrc_project.view.widght.SwipeRefreshLayout;
 
@@ -244,15 +245,14 @@ public class SparepartActivity extends BaseActivity implements SwipeRefreshLayou
                         if (page == 1) {
                             items = new ArrayList<SPAREPART>();
                             initAdapter(items);
+                        }  if (page > totalPages) {
+                            MessageUtils.showMiddleToast(SparepartActivity.this, getString(R.string.have_load_out_all_the_data));
+                        } else {
+                            addData(item);
                         }
-                        for (int i = 0; i < item.size(); i++) {
-                            items.add(item.get(i));
-                        }
-                        addData(item);
                     }
                     nodatalayout.setVisibility(View.GONE);
 
-                    initAdapter(items);
                 }
             }
 

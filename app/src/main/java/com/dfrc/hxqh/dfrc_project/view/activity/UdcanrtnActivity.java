@@ -31,7 +31,6 @@ import com.dfrc.hxqh.dfrc_project.dialog.FlippingLoadingDialog;
 import com.dfrc.hxqh.dfrc_project.model.UDCANRTN;
 import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
 import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
-import com.dfrc.hxqh.dfrc_project.view.adapter.BaseQuickAdapter;
 import com.dfrc.hxqh.dfrc_project.view.adapter.UdcanrtnChooseListAdapter;
 import com.dfrc.hxqh.dfrc_project.view.widght.SwipeRefreshLayout;
 import com.dfrc.hxqh.dfrc_project.webserviceclient.AndroidClientService;
@@ -252,10 +251,11 @@ public class UdcanrtnActivity extends BaseActivity implements SwipeRefreshLayout
                         items = new ArrayList<UDCANRTN>();
                         initAdapter(items);
                     }
-                    for (int i = 0; i < item.size(); i++) {
-                        items.add(item.get(i));
+                    if (page > totalPages) {
+                        MessageUtils.showMiddleToast(UdcanrtnActivity.this, getString(R.string.have_load_out_all_the_data));
+                    } else {
+                        addData(item);
                     }
-                    addData(item);
                 }
                 nodatalayout.setVisibility(View.GONE);
             }
@@ -276,11 +276,7 @@ public class UdcanrtnActivity extends BaseActivity implements SwipeRefreshLayout
     private void initAdapter(final List<UDCANRTN> list) {
         udcanrtnChooseListAdapter = new UdcanrtnChooseListAdapter(UdcanrtnActivity.this, R.layout.list_item_choose_udcanrtn, list);
         recyclerView.setAdapter(udcanrtnChooseListAdapter);
-        udcanrtnChooseListAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-            }
-        });
+
         udcanrtnChooseListAdapter.setOnCheckedChangeListener(new UdcanrtnChooseListAdapter.OnCheckedChangeListener() {
             @Override
             public void cOnCheckedChangeListener(boolean b, int postion, String t) {

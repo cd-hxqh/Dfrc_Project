@@ -14,6 +14,7 @@ import com.dfrc.hxqh.dfrc_project.R;
 import com.dfrc.hxqh.dfrc_project.dialog.FlippingLoadingDialog;
 import com.dfrc.hxqh.dfrc_project.model.INVBALANCES;
 import com.dfrc.hxqh.dfrc_project.model.N_MATERIAL;
+import com.dfrc.hxqh.dfrc_project.model.WORKORDER;
 import com.dfrc.hxqh.dfrc_project.model.ZKWORKORDER;
 import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
 import com.dfrc.hxqh.dfrc_project.webserviceclient.AndroidClientService;
@@ -61,7 +62,6 @@ public class N_material_AddActivity extends BaseActivity {
     @Bind(R.id.lyms_text_id)
     TextView lymsTextView; //来源描述
 
-
     private ZKWORKORDER zkworkorder;
     protected FlippingLoadingDialog mLoadingDialog;
 
@@ -95,6 +95,14 @@ public class N_material_AddActivity extends BaseActivity {
 
 
     }
+
+    //来源
+    @OnClick(R.id.source_text_id)
+    void setSourceOnClickListener() {
+        Intent intent = new Intent(N_material_AddActivity.this, WorkOrderChooseActivity.class);
+        startActivityForResult(intent, 0);
+    }
+
 
     @OnTextChanged(value = R.id.n_sap5_text_id, callback = OnTextChanged.Callback.BEFORE_TEXT_CHANGED)
     void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -133,8 +141,14 @@ public class N_material_AddActivity extends BaseActivity {
             case INVBALANCES_CODE:
                 INVBALANCES invbalances = (INVBALANCES) data.getSerializableExtra("invbalances");
                 itemnumTextView.setText(invbalances.getITEMNUM());
-                descTextView.setText(invbalances.getITEMNUMNAME());
+                descTextView.setText(invbalances.getDESCRIPTION());
+                curbalTextView.setText(invbalances.getCURBAL());
+                frombinTextView.setText(invbalances.getBINNUM());
                 break;
+            case WorkOrderChooseActivity.WORKORDER_RESULTCODE:
+                WORKORDER workorder = (WORKORDER) data.getSerializableExtra("workorder");
+                sourceTextView.setText(workorder.getWONUM());
+                lymsTextView.setText(workorder.getDESCRIPTION());
         }
     }
 
@@ -158,9 +172,9 @@ public class N_material_AddActivity extends BaseActivity {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                Log.i(TAG, "s=" + s);
                 mLoadingDialog.dismiss();
                 MessageUtils.showMiddleToast(N_material_AddActivity.this, s);
+                finish();
 
 
             }
@@ -176,13 +190,17 @@ public class N_material_AddActivity extends BaseActivity {
     private N_MATERIAL getN_MATERIAL() {
         N_MATERIAL n_material = new N_MATERIAL();
         String itemnum = itemnumTextView.getText().toString();
-        String tobin = frombinTextView.getText().toString();
+        String tobin = tobinTextView.getText().toString();
+        String frombin = frombinTextView.getText().toString();
         String n_reason = n_reasonTextView.getText().toString();
         String n_sap5 = n_sap5TextView.getText().toString();
+        String source = sourceTextView.getText().toString();
         n_material.setITEMNUM(itemnum);
         n_material.setTOBIN(tobin);
+        n_material.setFROMBIN(frombin);
         n_material.setN_REASON(n_reason);
         n_material.setN_SAP5(n_sap5);
+        n_material.setSOURCE(source);
         n_material.setN_SAP1(zkworkorder.getN_SAP1());
         n_material.setWONUM(zkworkorder.getWONUM());
         n_material.setSTATUS(zkworkorder.getSTATUS());

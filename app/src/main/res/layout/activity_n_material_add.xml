@@ -22,7 +22,6 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dimen_10"
                 android:background="@drawable/shape_corner_bottom"
                 android:orientation="vertical"
                 android:paddingLeft="@dimen/dimen_10"
@@ -108,7 +107,7 @@
                         android:textColor="@color/light_black"
                         android:textSize="@dimen/dimens_16sp" />
 
-                    <EditText
+                    <TextView
                         android:id="@+id/curbal_text_id"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -182,7 +181,6 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/editsharp_03"
                         android:gravity="right"
-                        android:inputType="numberDecimal"
                         android:padding="@dimen/dimen_5"
                         android:textColor="@color/light_black"
                         android:textSize="@dimen/dimens_16sp" />
@@ -214,16 +212,10 @@
                         android:hint="@string/have_not_data"
                         android:inputType="numberDecimal"
                         android:textColor="@color/light_black"
-                        android:textSize="@dimen/dimens_16sp"
-                        android:text="ZK" />
+                        android:textSize="@dimen/dimens_16sp" />
 
 
                 </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimens_line"
-                    android:background="@mipmap/line"></View>
 
                 <View
                     android:layout_width="match_parent"
@@ -320,7 +312,6 @@
                         android:background="@color/transparent"
                         android:gravity="right"
                         android:hint="@string/have_not_data"
-                        android:inputType="numberDecimal"
                         android:textColor="@color/light_black"
                         android:textSize="@dimen/dimens_16sp" />
 

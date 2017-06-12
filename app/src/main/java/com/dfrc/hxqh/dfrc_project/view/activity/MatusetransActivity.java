@@ -13,17 +13,12 @@ import android.text.Spanned;
 import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.dfrc.hxqh.dfrc_project.R;
@@ -32,10 +27,12 @@ import com.dfrc.hxqh.dfrc_project.api.HttpRequestHandler;
 import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.bean.Results;
 import com.dfrc.hxqh.dfrc_project.model.MATUSETRANS;
+import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
 import com.dfrc.hxqh.dfrc_project.view.adapter.BaseQuickAdapter;
 import com.dfrc.hxqh.dfrc_project.view.adapter.MatusetransListAdapter;
 import com.dfrc.hxqh.dfrc_project.view.widght.SwipeRefreshLayout;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,9 +51,9 @@ public class MatusetransActivity extends BaseActivity implements SwipeRefreshLay
     public static final int ASSET_CODE = 1001;
     @Bind(R.id.title_name) //标题
             TextView titleTextView;
-    @Bind(R.id.title_add)
-    ImageView menuImageView; //菜单
-    PopupWindow popupWindow;
+    //    @Bind(R.id.title_add)
+//    ImageView menuImageView; //菜单
+//    PopupWindow popupWindow;
     LinearLayoutManager layoutManager;
 
     @Bind(R.id.recyclerView_id)//RecyclerView
@@ -89,6 +86,10 @@ public class MatusetransActivity extends BaseActivity implements SwipeRefreshLay
     private LinearLayout addLinearLayout;//新建
     private LinearLayout sysLinearLayout;//扫一扫
 
+    private boolean isCodePda; //判断是扫描还是手输
+
+    private String itemnum; //物料条码
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,8 +115,8 @@ public class MatusetransActivity extends BaseActivity implements SwipeRefreshLay
     protected void initView() {
         titleTextView.setText(R.string.lymx_text);
         setSearchEdit();
-        menuImageView.setVisibility(View.VISIBLE);
-        menuImageView.setImageResource(R.mipmap.ic_more);
+//        menuImageView.setVisibility(View.VISIBLE);
+//        menuImageView.setImageResource(R.mipmap.ic_more);
         layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
@@ -143,11 +144,6 @@ public class MatusetransActivity extends BaseActivity implements SwipeRefreshLay
         finish();
     }
 
-    //菜单事件
-    @OnClick(R.id.title_add)
-    void setMenuImageViewOnClickListener() {
-        showPopupWindow(menuImageView);
-    }
 
     @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.BEFORE_TEXT_CHANGED)
     void beforeTextChanged(CharSequence s, int start, int before, int count) {
@@ -155,6 +151,14 @@ public class MatusetransActivity extends BaseActivity implements SwipeRefreshLay
 
     @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.TEXT_CHANGED)
     void onTextChanged(CharSequence s, int start, int before, int count) {
+        Log.i(TAG, "start=" + start + ",before=" + before + ",count=" + count);
+        if (start == 0 && before == 0 && count > 3) {
+            //扫描
+            isCodePda = true;
+        } else {
+            //手输
+            isCodePda = false;
+        }
     }
 
     @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
@@ -164,6 +168,16 @@ public class MatusetransActivity extends BaseActivity implements SwipeRefreshLay
         } else {
             deleteBtn.setVisibility(View.GONE);
         }
+
+        if (isCodePda) {
+            itemnum = parsingResult(s.toString());
+            matusetransListAdapter.removeAll(items);
+            items = new ArrayList<MATUSETRANS>();
+            nodatalayout.setVisibility(View.GONE);
+            refresh_layout.setRefreshing(true);
+            page = 1;
+            getData(parsingResult(s.toString()));
+        }
     }
 
     //删除
@@ -171,7 +185,6 @@ public class MatusetransActivity extends BaseActivity implements SwipeRefreshLay
     void setDeleteBtnOnClickListener() {
         search.setText("");
     }
-
 
 
     @Override
@@ -223,7 +236,14 @@ public class MatusetransActivity extends BaseActivity implements SwipeRefreshLay
      * 获取数据*
      */
     private void getData(String search) {
-        String url = HttpManager.getMATUSETRANSURL(search, wonum, page, 20);
+        String url = null;
+        if (isCodePda && itemnum != null) {
+
+            url = HttpManager.getMATUSETRANSBYITEMNUMURL(search, wonum, page, 20);
+        } else {
+            url = HttpManager.getMATUSETRANSURL(search, wonum, page, 20);
+        }
+
 
         HttpManager.getDataPagingInfo(MatusetransActivity.this, url, new HttpRequestHandler<Results>() {
             @Override
@@ -245,14 +265,14 @@ public class MatusetransActivity extends BaseActivity implements SwipeRefreshLay
                             items = new ArrayList<MATUSETRANS>();
                             initAdapter(items);
                         }
-                        for (int i = 0; i < item.size(); i++) {
-                            items.add(item.get(i));
+                        if (page > totalPages) {
+                            MessageUtils.showMiddleToast(MatusetransActivity.this, getString(R.string.have_load_out_all_the_data));
+                        } else {
+                            addData(item);
                         }
-                        addData(item);
                     }
                     nodatalayout.setVisibility(View.GONE);
 
-                    initAdapter(items);
                 }
             }
 
@@ -278,7 +298,7 @@ public class MatusetransActivity extends BaseActivity implements SwipeRefreshLay
                 Intent intent = getIntent();
                 intent.setClass(MatusetransActivity.this, MatusetransDetailsActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("matusetrans", items.get(position));
+                bundle.putSerializable("matusetrans", (Serializable) matusetransListAdapter.getData().get(position));
                 intent.putExtras(bundle);
                 startActivityForResult(intent, 0);
             }
@@ -292,62 +312,5 @@ public class MatusetransActivity extends BaseActivity implements SwipeRefreshLay
         matusetransListAdapter.addData(list);
     }
 
-
-    /**
-     * 初始化showPopupWindow*
-     */
-    private void showPopupWindow(View view) {
-
-        // 一个自定义的布局，作为显示的内容
-        View contentView = LayoutInflater.from(MatusetransActivity.this).inflate(
-                R.layout.n_material_popup_window, null);
-
-
-        popupWindow = new PopupWindow(contentView,
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        popupWindow.setTouchable(true);
-        popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return false;
-            }
-        });
-
-        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
-        // 我觉得这里是API的一个bug
-        popupWindow.setBackgroundDrawable(getResources().getDrawable(
-                R.drawable.popup_background_mtrl_mult));
-
-        // 设置好参数之后再show
-        popupWindow.showAsDropDown(view);
-        addLinearLayout = (LinearLayout) contentView.findViewById(R.id.add_linearlayout_id);
-        sysLinearLayout = (LinearLayout) contentView.findViewById(R.id.code_linearlayout_id);
-        addLinearLayout.setOnClickListener(addOnClickListener);
-        sysLinearLayout.setOnClickListener(sysOnClickListener);
-
-    }
-
-
-    private View.OnClickListener addOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent intent = getIntent();
-            intent.setClass(MatusetransActivity.this, Fkmatusetrans_AddActivity.class);
-            startActivityForResult(intent, 1000);
-            popupWindow.dismiss();
-        }
-    };
-    private View.OnClickListener sysOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent intent = getIntent();
-            intent.setClass(MatusetransActivity.this, MipcaActivityCapture.class);
-            intent.putExtra("mark", ASSET_CODE);
-            startActivityForResult(intent, 0);
-            popupWindow.dismiss();
-        }
-    };
 
 }

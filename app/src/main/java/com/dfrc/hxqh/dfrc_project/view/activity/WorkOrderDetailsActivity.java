@@ -33,8 +33,6 @@ public class WorkOrderDetailsActivity extends BaseActivity {
     TextView n_wpnumTextView; //周计划编号
     @Bind(R.id.status_text_id)
     TextView statusTextView; //状态
-    @Bind(R.id.changeby_text_id)
-    TextView changebyTextView; //变更人
     @Bind(R.id.n_qtyopen_text_id)
     TextView n_qtyopenTextView; //未完成项目数
     @Bind(R.id.n_qtycomp_text_id)
@@ -78,7 +76,6 @@ public class WorkOrderDetailsActivity extends BaseActivity {
             monthTextView.setText(workorder.getMONTH());
             n_wpnumTextView.setText(workorder.getN_WPNUM());
             statusTextView.setText(workorder.getSTATUS());
-            changebyTextView.setText(workorder.getCHANGEBY());
             n_qtyopenTextView.setText(workorder.getN_QTYOPEN());
             n_qtycompTextView.setText(workorder.getN_QTYCOMP());
 

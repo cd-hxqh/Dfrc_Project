@@ -29,10 +29,12 @@ import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.bean.Results;
 import com.dfrc.hxqh.dfrc_project.model.N_BORROWHEAD;
 import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
+import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
 import com.dfrc.hxqh.dfrc_project.view.adapter.BaseQuickAdapter;
 import com.dfrc.hxqh.dfrc_project.view.adapter.N_borrowheadListAdapter;
 import com.dfrc.hxqh.dfrc_project.view.widght.SwipeRefreshLayout;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -129,14 +131,6 @@ public class N_borrowheadactivity extends BaseActivity implements SwipeRefreshLa
         finish();
     }
 
-//    //二维码扫描
-//    @OnClick(R.id.sbmittext_id)
-//    void setCodeImageButtonOnClickListener() {
-//        Intent intent = getIntent();
-//        intent.setClass(N_borrowheadactivity.this, MipcaActivityCapture.class);
-//        intent.putExtra("mark", ASSET_CODE);
-//        startActivityForResult(intent, 0);
-//    }
 
 
     @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.BEFORE_TEXT_CHANGED)
@@ -233,14 +227,14 @@ public class N_borrowheadactivity extends BaseActivity implements SwipeRefreshLa
                             items = new ArrayList<N_BORROWHEAD>();
                             initAdapter(items);
                         }
-                        for (int i = 0; i < item.size(); i++) {
-                            items.add(item.get(i));
+                        if (page > totalPages) {
+                            MessageUtils.showMiddleToast(N_borrowheadactivity.this, getString(R.string.have_load_out_all_the_data));
+                        } else {
+                            addData(item);
                         }
-                        addData(item);
                     }
                     nodatalayout.setVisibility(View.GONE);
 
-                    initAdapter(items);
                 }
             }
 
@@ -266,7 +260,7 @@ public class N_borrowheadactivity extends BaseActivity implements SwipeRefreshLa
                 Intent intent = getIntent();
                 intent.setClass(N_borrowheadactivity.this, N_borrowheadDetailsActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("n_borrowhead", items.get(position));
+                bundle.putSerializable("n_borrowhead", (Serializable) n_borrowheadListAdapter.getData().get(position));
                 intent.putExtras(bundle);
                 startActivityForResult(intent, 0);
             }

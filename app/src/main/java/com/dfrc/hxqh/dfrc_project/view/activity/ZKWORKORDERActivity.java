@@ -28,6 +28,7 @@ import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.bean.Results;
 import com.dfrc.hxqh.dfrc_project.model.ZKWORKORDER;
 import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
+import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
 import com.dfrc.hxqh.dfrc_project.view.adapter.BaseQuickAdapter;
 import com.dfrc.hxqh.dfrc_project.view.adapter.ZkworkOrderListAdapter;
 import com.dfrc.hxqh.dfrc_project.view.widght.SwipeRefreshLayout;
@@ -51,8 +52,6 @@ public class ZkworkorderActivity extends BaseActivity implements SwipeRefreshLay
     public static final int ASSET_CODE = 1001;
     @Bind(R.id.title_name) //标题
             TextView titleTextView;
-    //    @Bind(R.id.sbmittext_id)
-//    ImageButton codeImageButton;
     LinearLayoutManager layoutManager;
 
     @Bind(R.id.recyclerView_id)//RecyclerView
@@ -251,14 +250,14 @@ public class ZkworkorderActivity extends BaseActivity implements SwipeRefreshLay
                             items = new ArrayList<ZKWORKORDER>();
                             initAdapter(items);
                         }
-                        for (int i = 0; i < item.size(); i++) {
-                            items.add(item.get(i));
+                        if (page > totalPages) {
+                            MessageUtils.showMiddleToast(ZkworkorderActivity.this, getString(R.string.have_load_out_all_the_data));
+                        } else {
+                            addData(item);
                         }
-                        addData(item);
                     }
                     nodatalayout.setVisibility(View.GONE);
 
-                    initAdapter(items);
                 }
             }
 

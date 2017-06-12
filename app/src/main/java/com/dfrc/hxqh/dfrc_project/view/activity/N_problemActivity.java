@@ -11,7 +11,6 @@ import android.text.Editable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -32,10 +31,12 @@ import com.dfrc.hxqh.dfrc_project.api.HttpRequestHandler;
 import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.bean.Results;
 import com.dfrc.hxqh.dfrc_project.model.N_PROBLEM;
+import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
 import com.dfrc.hxqh.dfrc_project.view.adapter.BaseQuickAdapter;
 import com.dfrc.hxqh.dfrc_project.view.adapter.N_problemListAdapter;
 import com.dfrc.hxqh.dfrc_project.view.widght.SwipeRefreshLayout;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -177,7 +178,6 @@ public class N_problemActivity extends BaseActivity implements SwipeRefreshLayou
 
     @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
     void afterTextChanged(Editable s) {
-        Log.i("isCodePda", "isCodePda=" + isCodePda);
         if (s.length() > 0) {
             deleteBtn.setVisibility(View.VISIBLE);
         } else {
@@ -275,14 +275,14 @@ public class N_problemActivity extends BaseActivity implements SwipeRefreshLayou
                             items = new ArrayList<N_PROBLEM>();
                             initAdapter(items);
                         }
-                        for (int i = 0; i < item.size(); i++) {
-                            items.add(item.get(i));
+                        if (page > totalPages) {
+                            MessageUtils.showMiddleToast(N_problemActivity.this, getString(R.string.have_load_out_all_the_data));
+                        } else {
+                            addData(item);
                         }
-                        addData(item);
                     }
                     nodatalayout.setVisibility(View.GONE);
 
-                    initAdapter(items);
                 }
             }
 
@@ -308,7 +308,7 @@ public class N_problemActivity extends BaseActivity implements SwipeRefreshLayou
                 Intent intent = getIntent();
                 intent.setClass(N_problemActivity.this, N_ProblemDetailsActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("n_problem", items.get(position));
+                bundle.putSerializable("n_problem", (Serializable) n_problemListAdapter.getData().get(position));
                 intent.putExtras(bundle);
                 startActivityForResult(intent, 0);
             }

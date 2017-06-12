@@ -66,7 +66,6 @@ public class JsonUtils {
      * 解析登录信息*
      */
     public static LoginResults parsingAuthStr(final Context cxt, String data) {
-        Log.i(TAG, "data=" + data);
         LoginResults loginResults = new LoginResults();
         try {
             JSONObject json = new JSONObject(data);
@@ -97,6 +96,7 @@ public class JsonUtils {
         try {
             JSONObject json = new JSONObject(data);
             String jsonString = json.getString("errcode");
+            Log.i(TAG,"jsonString="+jsonString);
             if (jsonString.equals(Constants.GETDATASUCCESS)) {
                 result = json.getString("result");
                 JSONObject rJson = new JSONObject(result);

@@ -28,10 +28,12 @@ import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.bean.Results;
 import com.dfrc.hxqh.dfrc_project.model.FKWORKORDER;
 import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
+import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
 import com.dfrc.hxqh.dfrc_project.view.adapter.BaseQuickAdapter;
 import com.dfrc.hxqh.dfrc_project.view.adapter.FkworkOrderListAdapter;
 import com.dfrc.hxqh.dfrc_project.view.widght.SwipeRefreshLayout;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -220,14 +222,14 @@ public class FkworkorderActivity extends BaseActivity implements SwipeRefreshLay
                             items = new ArrayList<FKWORKORDER>();
                             initAdapter(items);
                         }
-                        for (int i = 0; i < item.size(); i++) {
-                            items.add(item.get(i));
+                        if (page > totalPages) {
+                            MessageUtils.showMiddleToast(FkworkorderActivity.this, getString(R.string.have_load_out_all_the_data));
+                        } else {
+                            addData(item);
                         }
-                        addData(item);
                     }
                     nodatalayout.setVisibility(View.GONE);
 
-                    initAdapter(items);
                 }
             }
 
@@ -245,7 +247,7 @@ public class FkworkorderActivity extends BaseActivity implements SwipeRefreshLay
      * 获取数据*
      */
     private void initAdapter(final List<FKWORKORDER> list) {
-        fkworkOrderListAdapter = new FkworkOrderListAdapter(FkworkorderActivity.this, R.layout.list_item_asset, list);
+        fkworkOrderListAdapter = new FkworkOrderListAdapter(FkworkorderActivity.this, R.layout.list_item_fkworkorder, list);
         recyclerView.setAdapter(fkworkOrderListAdapter);
         fkworkOrderListAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override
@@ -253,7 +255,7 @@ public class FkworkorderActivity extends BaseActivity implements SwipeRefreshLay
                 Intent intent = getIntent();
                 intent.setClass(FkworkorderActivity.this, FkworkorderDetailsActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("fkworkorder", items.get(position));
+                bundle.putSerializable("fkworkorder", (Serializable) fkworkOrderListAdapter.getData().get(position));
                 intent.putExtras(bundle);
                 startActivityForResult(intent, 0);
             }

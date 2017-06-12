@@ -27,10 +27,12 @@ import com.dfrc.hxqh.dfrc_project.api.HttpRequestHandler;
 import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.bean.Results;
 import com.dfrc.hxqh.dfrc_project.model.PERSON;
+import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
 import com.dfrc.hxqh.dfrc_project.view.adapter.BaseQuickAdapter;
 import com.dfrc.hxqh.dfrc_project.view.adapter.PersonListAdapter;
 import com.dfrc.hxqh.dfrc_project.view.widght.SwipeRefreshLayout;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -232,14 +234,14 @@ public class PersonActivity extends BaseActivity implements SwipeRefreshLayout.O
                             items = new ArrayList<PERSON>();
                             initAdapter(items);
                         }
-                        for (int i = 0; i < item.size(); i++) {
-                            items.add(item.get(i));
+                        if (page > totalPages) {
+                            MessageUtils.showMiddleToast(PersonActivity.this, getString(R.string.have_load_out_all_the_data));
+                        } else {
+                            addData(item);
                         }
-                        addData(item);
                     }
                     nodatalayout.setVisibility(View.GONE);
 
-                    initAdapter(items);
                 }
             }
 
@@ -264,7 +266,7 @@ public class PersonActivity extends BaseActivity implements SwipeRefreshLayout.O
             public void onItemClick(View view, int position) {
                 Intent intent = getIntent();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("person", items.get(position));
+                bundle.putSerializable("person", (Serializable) personListAdapter.getData().get(position));
                 intent.putExtras(bundle);
                 setResult(PERSION_REQUESTCODE, intent);
                 finish();

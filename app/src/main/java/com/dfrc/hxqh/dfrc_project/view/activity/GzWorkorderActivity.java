@@ -26,10 +26,12 @@ import com.dfrc.hxqh.dfrc_project.api.HttpRequestHandler;
 import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.bean.Results;
 import com.dfrc.hxqh.dfrc_project.model.GZWORKORDER;
+import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
 import com.dfrc.hxqh.dfrc_project.view.adapter.BaseQuickAdapter;
 import com.dfrc.hxqh.dfrc_project.view.adapter.GZWorkOrderListAdapter;
 import com.dfrc.hxqh.dfrc_project.view.widght.SwipeRefreshLayout;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -224,14 +226,14 @@ public class GzWorkorderActivity extends BaseActivity implements SwipeRefreshLay
                             items = new ArrayList<GZWORKORDER>();
                             initAdapter(items);
                         }
-                        for (int i = 0; i < item.size(); i++) {
-                            items.add(item.get(i));
+                        if (page > totalPages) {
+                            MessageUtils.showMiddleToast(GzWorkorderActivity.this, getString(R.string.have_load_out_all_the_data));
+                        } else {
+                            addData(item);
                         }
-                        addData(item);
                     }
                     nodatalayout.setVisibility(View.GONE);
 
-                    initAdapter(items);
                 }
             }
 
@@ -257,7 +259,7 @@ public class GzWorkorderActivity extends BaseActivity implements SwipeRefreshLay
                 Intent intent = getIntent();
                 intent.setClass(GzWorkorderActivity.this, GZworkorderDetailsActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("gzworkorder", items.get(position));
+                bundle.putSerializable("gzworkorder", (Serializable) workOrderListAdapter.getData().get(position));
                 intent.putExtras(bundle);
                 startActivityForResult(intent, 0);
             }

@@ -14,6 +14,11 @@ public class INVBALANCES extends Entity {
     public String SITEID;//位置
     public String INVENTORY_ISSUEUNIT;//发放单位
     public String INVENTORY_UDUNITCOST;//单价
+    public String DESCRIPTION;//描述
+    public String LOCATION_DESCRIPTION;//库房描述
+    public String N_BRAND;//班组
+    public String ORDERUNIT;//单位成本
+    public String UDUNITCOST;//行成本
 
 
     public String getBINNUM() {
@@ -86,5 +91,45 @@ public class INVBALANCES extends Entity {
 
     public void setINVENTORY_UDUNITCOST(String INVENTORY_UDUNITCOST) {
         this.INVENTORY_UDUNITCOST = INVENTORY_UDUNITCOST;
+    }
+
+    public String getDESCRIPTION() {
+        return DESCRIPTION;
+    }
+
+    public void setDESCRIPTION(String DESCRIPTION) {
+        this.DESCRIPTION = DESCRIPTION;
+    }
+
+    public String getLOCATION_DESCRIPTION() {
+        return LOCATION_DESCRIPTION;
+    }
+
+    public void setLOCATION_DESCRIPTION(String LOCATION_DESCRIPTION) {
+        this.LOCATION_DESCRIPTION = LOCATION_DESCRIPTION;
+    }
+
+    public String getN_BRAND() {
+        return N_BRAND;
+    }
+
+    public void setN_BRAND(String n_BRAND) {
+        N_BRAND = n_BRAND;
+    }
+
+    public String getORDERUNIT() {
+        return ORDERUNIT;
+    }
+
+    public void setORDERUNIT(String ORDERUNIT) {
+        this.ORDERUNIT = ORDERUNIT;
+    }
+
+    public String getUDUNITCOST() {
+        return UDUNITCOST;
+    }
+
+    public void setUDUNITCOST(String UDUNITCOST) {
+        this.UDUNITCOST = UDUNITCOST;
     }
 }

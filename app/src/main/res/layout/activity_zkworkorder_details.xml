@@ -622,8 +622,6 @@
                         android:hint="@string/have_not_data"
                         android:textColor="@color/light_black"
                         android:textSize="@dimen/dimens_16sp" />
-
-
                 </LinearLayout>
             </LinearLayout>
 
@@ -655,8 +653,9 @@
             android:id="@+id/add_btn_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:background="@drawable/btn_enable_green"
+            android:layout_weight="1"
+            android:visibility="gone"
             android:gravity="center"
             android:padding="@dimen/dimen_5"
             android:text="@string/add_line_text"

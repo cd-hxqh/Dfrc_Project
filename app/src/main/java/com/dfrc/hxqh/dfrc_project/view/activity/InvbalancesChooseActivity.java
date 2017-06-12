@@ -27,10 +27,12 @@ import com.dfrc.hxqh.dfrc_project.api.HttpRequestHandler;
 import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.bean.Results;
 import com.dfrc.hxqh.dfrc_project.model.INVBALANCES;
+import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
 import com.dfrc.hxqh.dfrc_project.view.adapter.BaseQuickAdapter;
 import com.dfrc.hxqh.dfrc_project.view.adapter.Invbalances1ListAdapter;
 import com.dfrc.hxqh.dfrc_project.view.widght.SwipeRefreshLayout;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -226,14 +228,14 @@ public class InvbalancesChooseActivity extends BaseActivity implements SwipeRefr
                             items = new ArrayList<INVBALANCES>();
                             initAdapter(items);
                         }
-                        for (int i = 0; i < item.size(); i++) {
-                            items.add(item.get(i));
+                        if (page > totalPages) {
+                            MessageUtils.showMiddleToast(InvbalancesChooseActivity.this, getString(R.string.have_load_out_all_the_data));
+                        } else {
+                            addData(item);
                         }
-                        addData(item);
                     }
                     nodatalayout.setVisibility(View.GONE);
 
-                    initAdapter(items);
                 }
             }
 
@@ -258,7 +260,7 @@ public class InvbalancesChooseActivity extends BaseActivity implements SwipeRefr
             public void onItemClick(View view, int position) {
                 Intent intent = getIntent();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("invbalances", items.get(position));
+                bundle.putSerializable("invbalances", (Serializable) invbalancesListAdapter.getData().get(position));
                 intent.putExtras(bundle);
                 setResult(INVBALANCES_CODE, intent);
                 finish();

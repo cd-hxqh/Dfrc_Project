@@ -2,6 +2,8 @@ package com.dfrc.hxqh.dfrc_project.view.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -60,7 +62,8 @@ public class ZkworkorderDetailsActivity extends BaseActivity {
     @Bind(R.id.siteid_text_id)
     TextView siteidTextView; //地点
 
-
+    @Bind(R.id.add_btn_id)
+    Button addBtn; //新建行
     private ZKWORKORDER zkworkorder;
 
 
@@ -108,6 +111,9 @@ public class ZkworkorderDetailsActivity extends BaseActivity {
             siteidTextView.setText(zkworkorder.getSITEID());
 
         }
+        if (zkworkorder.getSTATUS().equals("等待批准")) {
+            addBtn.setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -116,6 +122,7 @@ public class ZkworkorderDetailsActivity extends BaseActivity {
     void setBackImageViewOnClickListener() {
         finish();
     }
+
     //物资领用明细
     @OnClick(R.id.sqlywlmx_text_id)
     void setSqlywlmxBtnOnClickListener() {
@@ -127,8 +134,10 @@ public class ZkworkorderDetailsActivity extends BaseActivity {
         intent.putExtras(bundle);
         startActivityForResult(intent, 1000);
     }
+
     //新建行
-    @OnClick(R.id.add_btn_id)void setAddBtnOnClickListener(){
+    @OnClick(R.id.add_btn_id)
+    void setAddBtnOnClickListener() {
         Intent intent = getIntent();
         intent.setClass(ZkworkorderDetailsActivity.this, N_material_AddActivity.class);
         startActivityForResult(intent, 1000);

@@ -22,7 +22,15 @@ public class N_MATERIAL extends Entity {
     public String ITEM_DESCRIPTION;//描述
     public String TOBIN;//分库存放货柜
     public String FROMBIN;//总库存放货柜
+    public String SOURCE;//来源
 
+    public String getSOURCE() {
+        return SOURCE;
+    }
+
+    public void setSOURCE(String SOURCE) {
+        this.SOURCE = SOURCE;
+    }
 
     public String getCURBAL() {
         return CURBAL;

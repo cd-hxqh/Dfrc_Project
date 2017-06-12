@@ -254,28 +254,31 @@ public class PoChooseActivity extends BaseActivity implements SwipeRefreshLayout
                         items = new ArrayList<POLINE>();
                         initAdapter(items);
                     }
-                    for (POLINE poline : item) {
-                        int orderqty = Integer.valueOf(poline.getORDERQTY()).intValue();
-                        int receivedqty = 0;
-                        if (poline.getRECEIVEDQTY() == null) {
-                            receivedqty = 0;
-                        } else {
-                            double dd = Double.valueOf(poline.getRECEIVEDQTY());
-                            receivedqty = (int) dd;
-                        }
-                        if (receivedqty == 0 || receivedqty < orderqty) {  //接收判断条件
-                            items.add(poline);
-                        }
-                    }
-
-                    if (items != null && items.size() != 0) {
-                        addData(items);
-                        nodatalayout.setVisibility(View.GONE);
-                        poLineChooseListAdapter.notifyDataSetChanged();
+                    if (page > totalPages) {
+                        MessageUtils.showMiddleToast(PoChooseActivity.this, getString(R.string.have_load_out_all_the_data));
                     } else {
-                        nodatalayout.setVisibility(View.VISIBLE);
-                    }
 
+                        for (POLINE poline : item) {
+                            int orderqty = Integer.valueOf(poline.getORDERQTY()).intValue();
+                            int receivedqty = 0;
+                            if (poline.getRECEIVEDQTY() == null) {
+                                receivedqty = 0;
+                            } else {
+                                double dd = Double.valueOf(poline.getRECEIVEDQTY());
+                                receivedqty = (int) dd;
+                            }
+                            if (receivedqty == 0 || receivedqty < orderqty) {  //接收判断条件
+                                items.add(poline);
+                            }
+                        }
+
+                        if (items != null && items.size() != 0) {
+                            addData(items);
+                            nodatalayout.setVisibility(View.GONE);
+                        } else {
+                            nodatalayout.setVisibility(View.VISIBLE);
+                        }
+                    }
                 }
             }
 
@@ -303,7 +306,6 @@ public class PoChooseActivity extends BaseActivity implements SwipeRefreshLayout
         poLineChooseListAdapter.setOnCheckedChangeListener(new PoLineChooseListAdapter.OnCheckedChangeListener() {
             @Override
             public void cOnCheckedChangeListener(boolean b, int postion, String t,String hg) {
-                Log.i(TAG, "t=" + t);
                 items.get(postion).setRECEIVEDQTY(t);
                 items.get(postion).setBINNUM(hg);
                 if (b) {

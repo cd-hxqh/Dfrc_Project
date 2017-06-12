@@ -29,10 +29,12 @@ import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.bean.Results;
 import com.dfrc.hxqh.dfrc_project.model.ASSET;
 import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
+import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
 import com.dfrc.hxqh.dfrc_project.view.adapter.AssetListAdapter;
 import com.dfrc.hxqh.dfrc_project.view.adapter.BaseQuickAdapter;
 import com.dfrc.hxqh.dfrc_project.view.widght.SwipeRefreshLayout;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -167,7 +169,6 @@ public class AssetActivity extends BaseActivity implements SwipeRefreshLayout.On
 
     @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
     void afterTextChanged(Editable s) {
-        Log.i("isCodePda", "isCodePda=" + isCodePda);
         if (s.length() > 0) {
             deleteBtn.setVisibility(View.VISIBLE);
         } else {
@@ -269,14 +270,14 @@ public class AssetActivity extends BaseActivity implements SwipeRefreshLayout.On
                             items = new ArrayList<ASSET>();
                             initAdapter(items);
                         }
-                        for (int i = 0; i < item.size(); i++) {
-                            items.add(item.get(i));
+                        if (page > totalPages) {
+                            MessageUtils.showMiddleToast(AssetActivity.this, getString(R.string.have_load_out_all_the_data));
+                        } else {
+                            addData(item);
                         }
-                        addData(item);
                     }
                     nodatalayout.setVisibility(View.GONE);
 
-                    initAdapter(items);
                 }
             }
 
@@ -302,7 +303,7 @@ public class AssetActivity extends BaseActivity implements SwipeRefreshLayout.On
                 Intent intent = getIntent();
                 intent.setClass(AssetActivity.this, AssetDetailsActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("asset", items.get(position));
+                bundle.putSerializable("asset", (Serializable) assetListAdapter.getData().get(position));
                 intent.putExtras(bundle);
                 startActivityForResult(intent, 0);
             }

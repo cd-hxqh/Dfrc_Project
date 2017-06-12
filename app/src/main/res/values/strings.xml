@@ -182,12 +182,13 @@
     <string name="wonum1_text">领料单号:</string>
     <string name="sb_text">设备:</string>
     <string name="tbr_text">提报人:</string>
+    <string name="tbrmc_text">提报人名称:</string>
     <string name="n_sap1_text">发货仓库:</string>
     <string name="reportdate_text">报告日期:</string>
     <string name="statusdate_text">状态日期:</string>
     <string name="totalcost_text">领料单合计:</string>
     <string name="loc_text">位置:</string>
-    <string name="sqlywlmx_text">申请领用物料明细</string>
+    <string name="sqlywlmx_text">领用明细行</string>
     <string name="wlbm_text">物料编码:</string>
     <string name="n_sap5_text">申请数量:</string>
     <string name="curbal1_text">当前余量:</string>
@@ -275,5 +276,10 @@
     <string name="zk_frombin">总库存放货柜:</string>
     <string name="source_text">来源:</string>
     <string name="lyms_text">来源描述:</string>
+    <string name="ly_text">来源</string>
+    <string name="have_load_out_all_the_data">已加载出全部数据</string>
+    <string name="down_text">下载</string>
+    <string name="down_success_text">下载完成</string>
+    <string name="yxzrw_text">已下载任务</string>
 
 </resources>

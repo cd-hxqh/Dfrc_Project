@@ -1,13 +1,17 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light_gray"
     android:orientation="vertical">
 
-    <include layout="@layout/title_main"></include>
+    <include layout="@layout/title_main"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimens_50dp"
+        android:id="@+id/title_relativelayout_id"></include>
 
     <ScrollView
+        android:layout_below="@+id/title_relativelayout_id"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical">
@@ -22,7 +26,6 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dimen_10"
                 android:background="@drawable/shape_corner_bottom"
                 android:orientation="vertical"
                 android:paddingLeft="@dimen/dimen_10"
@@ -273,5 +276,40 @@
         </LinearLayout>
     </ScrollView>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimens_50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:orientation="horizontal">
 
-</LinearLayout>
+        <Button
+            android:id="@+id/poline_text_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_enable_green"
+            android:gravity="center"
+            android:padding="@dimen/dimen_5"
+            android:text="@string/poline_text"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/dimens_16sp" />
+
+        <Button
+            android:id="@+id/wljs_text_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_enable_green"
+            android:gravity="center"
+            android:padding="@dimen/dimen_5"
+            android:text="@string/wljs_text"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/dimens_16sp" />
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

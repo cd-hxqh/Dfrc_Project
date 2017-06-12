@@ -2,13 +2,7 @@ package com.dfrc.hxqh.dfrc_project.view.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.dfrc.hxqh.dfrc_project.R;
@@ -28,9 +22,6 @@ public class PoDetailsActivity extends BaseActivity {
 
     @Bind(R.id.title_back_id)
     ImageView backImageView; //返回按钮
-    @Bind(R.id.title_add)
-    ImageView menuImageView; //菜单
-    PopupWindow popupWindow;
 
     @Bind(R.id.title_name)
     TextView titleTextView; //标题
@@ -52,9 +43,6 @@ public class PoDetailsActivity extends BaseActivity {
 
     private PO po;
 
-    private LinearLayout polineLinearLayout; //采购单行
-
-    private LinearLayout matrectransLinearLayout; //物料接收
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,8 +69,6 @@ public class PoDetailsActivity extends BaseActivity {
     @Override
     protected void initView() {
         titleTextView.setText(R.string.po_derail_text);
-        menuImageView.setVisibility(View.VISIBLE);
-        menuImageView.setImageResource(R.mipmap.ic_more);
         if (po != null) {
             ponumTextView.setText(po.getPONUM());
             descriptionTextView.setText(po.getDESCRIPTION());
@@ -102,69 +88,25 @@ public class PoDetailsActivity extends BaseActivity {
         finish();
     }
 
-    //菜单事件
-    @OnClick(R.id.title_add)
-    void setMenuImageViewOnClickListener() {
-        showPopupWindow(menuImageView);
+    //采购单行
+    @OnClick(R.id.poline_text_id)
+    void setPolineOnClickListener() {
+        Intent intent = new Intent(PoDetailsActivity.this, PoLineActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("ponum", po.getPONUM());
+        intent.putExtras(bundle);
+        startActivityForResult(intent, 1000);
     }
 
-    /**
-     * 初始化showPopupWindow*
-     */
-    private void showPopupWindow(View view) {
-
-        // 一个自定义的布局，作为显示的内容
-        View contentView = LayoutInflater.from(PoDetailsActivity.this).inflate(
-                R.layout.po_popup_window, null);
-
-
-        popupWindow = new PopupWindow(contentView,
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        popupWindow.setTouchable(true);
-        popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return false;
-            }
-        });
-
-        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
-        // 我觉得这里是API的一个bug
-        popupWindow.setBackgroundDrawable(getResources().getDrawable(
-                R.drawable.popup_background_mtrl_mult));
-
-        // 设置好参数之后再show
-        popupWindow.showAsDropDown(view);
-        polineLinearLayout = (LinearLayout) contentView.findViewById(R.id.poline_linearlayout_id);
-        matrectransLinearLayout = (LinearLayout) contentView.findViewById(R.id.matrectrans_linearlayout_id);
-        polineLinearLayout.setOnClickListener(polineOnClickListener);
-        matrectransLinearLayout.setOnClickListener(matrectransOnClickListener);
-
+    //物料接收
+    @OnClick(R.id.wljs_text_id)
+    void setWljsOnClickListener() {
+        Intent intent = new Intent(PoDetailsActivity.this, WljsActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("ponum", po.getPONUM());
+        intent.putExtras(bundle);
+        startActivityForResult(intent, 0);
     }
 
-    private View.OnClickListener polineOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent intent = new Intent(PoDetailsActivity.this, PoLineActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString("ponum", po.getPONUM());
-            intent.putExtras(bundle);
-            startActivityForResult(intent, 1000);
-            popupWindow.dismiss();
-        }
-    };
-    private View.OnClickListener matrectransOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent intent = new Intent(PoDetailsActivity.this, WljsActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString("ponum", po.getPONUM());
-            intent.putExtras(bundle);
-            startActivityForResult(intent, 0);
-            popupWindow.dismiss();
-        }
-    };
 
 }

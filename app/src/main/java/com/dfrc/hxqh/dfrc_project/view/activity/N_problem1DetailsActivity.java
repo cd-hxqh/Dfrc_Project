@@ -30,6 +30,8 @@ public class N_problem1DetailsActivity extends BaseActivity {
     TextView wonumTextView; //工单
     @Bind(R.id.finddate_text_id)
     TextView finddateTextView; //发现日期
+    @Bind(R.id.n_problemnum_text_id)
+    TextView n_problemnumTextView; //问题点编号
     @Bind(R.id.prodesc_text_id)
     TextView prodescTextView; //问题点描述
     @Bind(R.id.reason_text_id)
@@ -79,6 +81,7 @@ public class N_problem1DetailsActivity extends BaseActivity {
         if (n_problem != null) {
             wonumTextView.setText(n_problem.getWONUM());
             finddateTextView.setText(n_problem.getFINDDATE());
+            n_problemnumTextView.setText(n_problem.getN_PROBLEMNUM());
             prodescTextView.setText(n_problem.getPRODESC());
             reasonTextView.setText(n_problem.getREASON());
             dcTextView.setText(n_problem.getSOLVE());

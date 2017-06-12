@@ -28,10 +28,12 @@ import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.bean.Results;
 import com.dfrc.hxqh.dfrc_project.model.LOCATIONS;
 import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
+import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
 import com.dfrc.hxqh.dfrc_project.view.adapter.BaseQuickAdapter;
 import com.dfrc.hxqh.dfrc_project.view.adapter.LocationListAdapter;
 import com.dfrc.hxqh.dfrc_project.view.widght.SwipeRefreshLayout;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -221,14 +223,14 @@ public class LocationChooseActivity extends BaseActivity implements SwipeRefresh
                             items = new ArrayList<LOCATIONS>();
                             initAdapter(items);
                         }
-                        for (int i = 0; i < item.size(); i++) {
-                            items.add(item.get(i));
+                        if (page > totalPages) {
+                            MessageUtils.showMiddleToast(LocationChooseActivity.this, getString(R.string.have_load_out_all_the_data));
+                        } else {
+                            addData(item);
                         }
-                        addData(item);
                     }
                     nodatalayout.setVisibility(View.GONE);
 
-                    initAdapter(items);
                 }
             }
 
@@ -253,7 +255,7 @@ public class LocationChooseActivity extends BaseActivity implements SwipeRefresh
             public void onItemClick(View view, int position) {
                 Intent intent = getIntent();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("locations", items.get(position));
+                bundle.putSerializable("locations", (Serializable) locationListAdapter.getData().get(position));
                 intent.putExtras(bundle);
                 setResult(LOCATONS_RESULTCODE, intent);
                 finish();

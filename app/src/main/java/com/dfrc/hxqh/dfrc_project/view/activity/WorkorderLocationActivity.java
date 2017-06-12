@@ -3,6 +3,7 @@ package com.dfrc.hxqh.dfrc_project.view.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,7 +19,6 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -27,12 +27,13 @@ import com.dfrc.hxqh.dfrc_project.api.HttpManager;
 import com.dfrc.hxqh.dfrc_project.api.HttpRequestHandler;
 import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.bean.Results;
-import com.dfrc.hxqh.dfrc_project.model.INVBALANCES;
+import com.dfrc.hxqh.dfrc_project.model.WORKORDER;
 import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
 import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
 import com.dfrc.hxqh.dfrc_project.view.adapter.BaseQuickAdapter;
-import com.dfrc.hxqh.dfrc_project.view.adapter.InventoryListAdapter;
+import com.dfrc.hxqh.dfrc_project.view.adapter.WorkOrderListAdapter;
 import com.dfrc.hxqh.dfrc_project.view.widght.SwipeRefreshLayout;
+import com.dfrc.hxqh.dfrc_project.webserviceclient.AndroidClientService;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -45,33 +46,32 @@ import butterknife.OnTextChanged;
 
 /**
  * Created by Administrator on 2017/2/15.
- * 库存查询
+ * 本地任务
  */
 
-public class Inventoryactivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
-    private static final String TAG = "Inventoryactivity";
-    public static final int ASSET_CODE = 1001;
-    @Bind(R.id.title_name) //标题
-            TextView titleTextView;
-    @Bind(R.id.sbmittext_id)
-    ImageButton codeImageButton;
+public class WorkorderLocationActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
+    private static final String TAG = "WorkorderLocationActivity";
+
+    @Bind(R.id.title_name)
+    TextView titleTextView; //标题
     LinearLayoutManager layoutManager;
 
-    @Bind(R.id.recyclerView_id)//RecyclerView
-            RecyclerView recyclerView;
+    @Bind(R.id.recyclerView_id)
+    RecyclerView recyclerView; //RecyclerView
     @Bind(R.id.have_not_data_id)
     LinearLayout nodatalayout; //暂无数据
+
     @Bind(R.id.swipe_container)
     SwipeRefreshLayout refresh_layout;//界面刷新
+    /**
+     * 适配器*
+     */
+    private WorkOrderListAdapter workOrderListAdapter;
 
     @Bind(R.id.edt_input)
     EditText search; //编辑框
     @Bind(R.id.btn_delete)
     Button deleteBtn; //删除
-    /**
-     * 适配器*
-     */
-    private InventoryListAdapter inventoryListAdapter;
     /**
      * 查询条件*
      */
@@ -79,40 +79,31 @@ public class Inventoryactivity extends BaseActivity implements SwipeRefreshLayou
     private int page = 1;
 
 
-    ArrayList<INVBALANCES> items = new ArrayList<INVBALANCES>();
-
-    private int mark;
-    private String assetNum;
-
+    ArrayList<WORKORDER> items = new ArrayList<WORKORDER>();
     private boolean isCodePda; //判断是扫描还是手输
+
+    private String assetNum; //设备编号
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
         ButterKnife.bind(this);
-        initDate();
         findViewById();
         initView();
-    }
-
-    private void initDate() {
-        assetNum = getIntent().getExtras().getString("assetNum");
-
     }
 
 
     @Override
     protected void findViewById() {
+
     }
 
 
     @Override
     protected void initView() {
-        titleTextView.setText(R.string.kccx_text);
+        titleTextView.setText(R.string.ddjgd_text);
         setSearchEdit();
-        codeImageButton.setImageResource(R.drawable.ic_code);
-        codeImageButton.setVisibility(View.VISIBLE);
 
         layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -127,38 +118,29 @@ public class Inventoryactivity extends BaseActivity implements SwipeRefreshLayou
 
         refresh_layout.setOnRefreshListener(this);
         refresh_layout.setOnLoadListener(this);
-
         refresh_layout.setRefreshing(true);
-        initAdapter(new ArrayList<INVBALANCES>());
+        initAdapter(new ArrayList<WORKORDER>());
         items = new ArrayList<>();
         getData(searchText);
-    }
 
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(search.getWindowToken(), 0);
+    }
 
     //返回事件
     @OnClick(R.id.title_back_id)
-    void setBackOnClickListener() {
+    void setBackImageViewOnClickListener() {
         finish();
     }
 
-    //二维码扫描
-    @OnClick(R.id.sbmittext_id)
-    void setCodeImageButtonOnClickListener() {
-        Intent intent = getIntent();
-        intent.setClass(Inventoryactivity.this, MipcaActivityCapture.class);
-        intent.putExtra("mark", ASSET_CODE);
-        startActivityForResult(intent, 0);
-    }
-
-
     @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.BEFORE_TEXT_CHANGED)
-    void beforeTextChanged(CharSequence s, int start, int before, int count) {
+    void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
     }
 
     @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.TEXT_CHANGED)
     void onTextChanged(CharSequence s, int start, int before, int count) {
-        Log.i(TAG, "start=" + start + ",before=" + before + ",count=" + count);
-        if (start == 0 && before == 0 && count > 3) {
+        if (start == 0 && before == 0 && count > 1) {
             //扫描
             isCodePda = true;
         } else {
@@ -174,16 +156,18 @@ public class Inventoryactivity extends BaseActivity implements SwipeRefreshLayou
         } else {
             deleteBtn.setVisibility(View.GONE);
         }
+
         if (isCodePda) {
             assetNum = parsingResult(s.toString());
-            inventoryListAdapter.removeAll(items);
-            items = new ArrayList<INVBALANCES>();
+            workOrderListAdapter.removeAll(items);
+            items = new ArrayList<WORKORDER>();
             nodatalayout.setVisibility(View.GONE);
             refresh_layout.setRefreshing(true);
             page = 1;
-            getData(parsingResult(s.toString()));
+            startAsyncTask();
         }
     }
+
 
     //删除
     @OnClick(R.id.btn_delete)
@@ -194,14 +178,23 @@ public class Inventoryactivity extends BaseActivity implements SwipeRefreshLayou
 
     @Override
     public void onLoad() {
-        page++;
-        getData(searchText);
+        if (!isCodePda) {
+            page++;
+            getData(searchText);
+        } else {
+            refresh_layout.setLoading(false);
+        }
+
     }
 
     @Override
     public void onRefresh() {
-        page = 1;
-        getData(searchText);
+        if (!isCodePda) {
+            page = 1;
+            getData(searchText);
+        } else {
+            refresh_layout.setRefreshing(false);
+        }
     }
 
 
@@ -212,19 +205,18 @@ public class Inventoryactivity extends BaseActivity implements SwipeRefreshLayou
         drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
         search.setHint(msp);
         search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     // 先隐藏键盘
                     ((InputMethodManager) search.getContext().getSystemService(Context.INPUT_METHOD_SERVICE))
                             .hideSoftInputFromWindow(
-                                    Inventoryactivity.this.getCurrentFocus()
+                                    WorkorderLocationActivity.this.getCurrentFocus()
                                             .getWindowToken(),
                                     InputMethodManager.HIDE_NOT_ALWAYS);
                     searchText = search.getText().toString();
-                    inventoryListAdapter.removeAll(items);
-                    items = new ArrayList<INVBALANCES>();
+                    workOrderListAdapter.removeAll(items);
+                    items = new ArrayList<WORKORDER>();
                     nodatalayout.setVisibility(View.GONE);
                     refresh_layout.setRefreshing(true);
                     page = 1;
@@ -241,22 +233,17 @@ public class Inventoryactivity extends BaseActivity implements SwipeRefreshLayou
      * 获取数据*
      */
     private void getData(String search) {
-        String url = null;
-        if (!isCodePda && assetNum.equals("")) {
-            url = HttpManager.getINVETORYURL(search, AccountUtils.getloginSite(Inventoryactivity.this), page, 20);
-        } else {
-            url = HttpManager.getINVETORYIDURL(assetNum, page, 20);
-        }
 
-        HttpManager.getDataPagingInfo(Inventoryactivity.this, url, new HttpRequestHandler<Results>() {
+
+        HttpManager.getDataPagingInfo(WorkorderLocationActivity.this, HttpManager.getWORKORDERURL(search, AccountUtils.getCrewid(WorkorderLocationActivity.this), page, 20), new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {
-                Log.i(TAG, "data=" + results);
             }
 
             @Override
             public void onSuccess(Results results, int totalPages, int currentPage) {
-                ArrayList<INVBALANCES> item = JsonUtils.parsingINVBALANCES(results.getResultlist());
+                Log.i(TAG, "totalPages=" + totalPages + ",currentPage=" + currentPage);
+                ArrayList<WORKORDER> item = JsonUtils.parsingWORKORDER(results.getResultlist());
                 refresh_layout.setRefreshing(false);
                 refresh_layout.setLoading(false);
                 if (item == null || item.isEmpty()) {
@@ -265,14 +252,14 @@ public class Inventoryactivity extends BaseActivity implements SwipeRefreshLayou
 
                     if (item != null || item.size() != 0) {
                         if (page == 1) {
-                            items = new ArrayList<INVBALANCES>();
+                            items = new ArrayList<WORKORDER>();
                             initAdapter(items);
-                        }
-                        if (page > totalPages) {
-                            MessageUtils.showMiddleToast(Inventoryactivity.this, getString(R.string.have_load_out_all_the_data));
-                        } else {
+                        }if(page>totalPages){
+                            MessageUtils.showMiddleToast(WorkorderLocationActivity.this,"已加载出全部数据");
+                        }else{
                             addData(item);
                         }
+
                     }
                     nodatalayout.setVisibility(View.GONE);
 
@@ -292,27 +279,64 @@ public class Inventoryactivity extends BaseActivity implements SwipeRefreshLayou
     /**
      * 获取数据*
      */
-    private void initAdapter(final List<INVBALANCES> list) {
-        inventoryListAdapter = new InventoryListAdapter(Inventoryactivity.this, R.layout.list_item_inventory, list);
-        recyclerView.setAdapter(inventoryListAdapter);
-        inventoryListAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
+    private void initAdapter(final List<WORKORDER> list) {
+        workOrderListAdapter = new WorkOrderListAdapter(WorkorderLocationActivity.this, R.layout.list_item_workorder, list);
+        recyclerView.setAdapter(workOrderListAdapter);
+        workOrderListAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Intent intent = getIntent();
-                intent.setClass(Inventoryactivity.this, InventoryDetailsActivity.class);
+                intent.setClass(WorkorderLocationActivity.this, WorkOrderDetailsActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("invbalances", (Serializable) inventoryListAdapter.getData().get(position));
+                bundle.putSerializable("workorder", (Serializable) workOrderListAdapter.getData().get(position));
                 intent.putExtras(bundle);
                 startActivityForResult(intent, 0);
             }
         });
+
     }
 
     /**
      * 添加数据*
      */
-    private void addData(final List<INVBALANCES> list) {
-        inventoryListAdapter.addData(list);
+    private void addData(final List<WORKORDER> list) {
+        workOrderListAdapter.addData(list);
+        workOrderListAdapter.notifyDataSetChanged();
+    }
+
+
+    /**
+     * 根据设备查询编号*
+     */
+    private void startAsyncTask() {
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... strings) {
+                Log.i(TAG, "assetnum=" + assetNum);
+                return AndroidClientService.searchMaint2(WorkorderLocationActivity.this, "ASSETNUM", assetNum, "line"); //根据设备获取定期点检工单
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                refresh_layout.setRefreshing(false);
+                refresh_layout.setLoading(false);
+                String result = JsonUtils.parsingsearchMaint2(s);
+                if (result.equals("暂无数据")) {
+                    nodatalayout.setVisibility(View.VISIBLE);
+                } else {
+                    ArrayList<WORKORDER> item = JsonUtils.parsingWORKORDER(s);
+
+                    if (item == null || item.isEmpty()) {
+                        nodatalayout.setVisibility(View.VISIBLE);
+                    } else {
+                        addData(item);
+                    }
+                }
+            }
+        }.execute();
+
+
     }
 
 }

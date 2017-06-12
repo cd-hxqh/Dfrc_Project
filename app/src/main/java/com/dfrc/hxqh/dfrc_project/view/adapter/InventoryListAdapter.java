@@ -35,7 +35,11 @@ public class InventoryListAdapter extends BaseQuickAdapter<INVBALANCES> {
         helper.setText(R.id.item_desc_text, item.getITEMNUMNAME());
         helper.setText(R.id.location_text_id, "库房:" + item.getLOCATION());
         helper.setText(R.id.curbal_text_id, "余量:" + item.getCURBAL());
-        helper.setText(R.id.binnum_text_id, "货柜:" + item.getBINNUM());
+        if(null==item.getBINNUM()){
+            helper.setText(R.id.binnum_text_id, "货柜:无");
+        }else {
+            helper.setText(R.id.binnum_text_id, "货柜:" + item.getBINNUM());
+        }
         helper.setText(R.id.siteid_text_id, "地点:" + item.getSITEID());
     }
 

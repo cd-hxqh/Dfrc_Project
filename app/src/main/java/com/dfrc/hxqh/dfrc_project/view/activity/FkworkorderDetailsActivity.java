@@ -2,13 +2,7 @@ package com.dfrc.hxqh.dfrc_project.view.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.dfrc.hxqh.dfrc_project.R;
@@ -31,15 +25,16 @@ public class FkworkorderDetailsActivity extends BaseActivity {
 
     @Bind(R.id.title_name)
     TextView titleTextView; //标题
-    @Bind(R.id.title_add)
-    ImageView menuImageView; //菜单
-    PopupWindow popupWindow;
     @Bind(R.id.wonum_text_id)
     TextView wonumTextView; //领料单号
     @Bind(R.id.description_text_id)
     TextView descriptionTextView; //描述
+    @Bind(R.id.crewid_text_id)
+    TextView crewidTextView; //班组
     @Bind(R.id.tbr_text_id)
     TextView tbrTextView; //提报人
+    @Bind(R.id.tbrmc_text_id)
+    TextView tbrmcTextView; //提报人名称
     @Bind(R.id.status_text_id)
     TextView statusTextView; //状态
     @Bind(R.id.reportdate_text_id)
@@ -51,8 +46,6 @@ public class FkworkorderDetailsActivity extends BaseActivity {
 
 
     private FKWORKORDER fkworkorder;
-
-    LinearLayout n_materialLinearLayout; //申请领用物料明细
 
 
     @Override
@@ -80,12 +73,12 @@ public class FkworkorderDetailsActivity extends BaseActivity {
     @Override
     protected void initView() {
         titleTextView.setText(R.string.fklld_text);
-        menuImageView.setVisibility(View.VISIBLE);
-        menuImageView.setImageResource(R.mipmap.ic_more);
         if (fkworkorder != null) {
             wonumTextView.setText(fkworkorder.getWONUM());
             descriptionTextView.setText(fkworkorder.getDESCRIPTION());
-            tbrTextView.setText(fkworkorder.getREPORTEDBYNAME());
+            crewidTextView.setText(fkworkorder.getCREWID());
+            tbrTextView.setText(fkworkorder.getREPORTEDBY());
+            tbrmcTextView.setText(fkworkorder.getREPORTEDBYNAME());
             statusTextView.setText(fkworkorder.getSTATUS());
             reportdateTextView.setText(fkworkorder.getREPORTDATE());
             statusdateTextView.setText(fkworkorder.getSTATUSDATE());
@@ -101,58 +94,24 @@ public class FkworkorderDetailsActivity extends BaseActivity {
         finish();
     }
 
-    //菜单事件
-    @OnClick(R.id.title_add)
-    void setMenuImageViewOnClickListener() {
-        showPopupWindow(menuImageView);
+    //物资领用明细
+    @OnClick(R.id.sqlywlmx_text_id)
+    void setSqlywlmxBtnOnClickListener() {
+        Intent intent = getIntent();
+        intent.setClass(FkworkorderDetailsActivity.this, MatusetransActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("wonum", fkworkorder.getWONUM());
+        intent.putExtras(bundle);
+        startActivityForResult(intent, 1000);
     }
 
-
-    /**
-     * 初始化showPopupWindow*
-     */
-    private void showPopupWindow(View view) {
-
-        // 一个自定义的布局，作为显示的内容
-        View contentView = LayoutInflater.from(FkworkorderDetailsActivity.this).inflate(
-                R.layout.zkworkorder_popup_window, null);
-
-
-        popupWindow = new PopupWindow(contentView,
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        popupWindow.setTouchable(true);
-        popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return false;
-            }
-        });
-
-        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
-        // 我觉得这里是API的一个bug
-        popupWindow.setBackgroundDrawable(getResources().getDrawable(
-                R.drawable.popup_background_mtrl_mult));
-
-        // 设置好参数之后再show
-        popupWindow.showAsDropDown(view);
-        n_materialLinearLayout = (LinearLayout) contentView.findViewById(R.id.sqlywlmx_linearlayout_id);
-        n_materialLinearLayout.setOnClickListener(kcylOnClickListener);
-
+    //新建行
+    @OnClick(R.id.add_btn_id)
+    void setAddBtnOnClickListener() {
+        Intent intent = getIntent();
+        intent.setClass(FkworkorderDetailsActivity.this, Fkmatusetrans_AddActivity.class);
+        startActivityForResult(intent, 1000);
     }
 
-    private View.OnClickListener kcylOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent intent = getIntent();
-            intent.setClass(FkworkorderDetailsActivity.this, MatusetransActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("wonum", fkworkorder.getWONUM());
-            intent.putExtras(bundle);
-            startActivityForResult(intent, 1000);
-            popupWindow.dismiss();
-        }
-    };
 
 }

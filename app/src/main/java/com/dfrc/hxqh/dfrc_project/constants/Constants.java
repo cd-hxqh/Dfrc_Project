@@ -19,8 +19,7 @@ public class Constants {
 
 
     //登陆URL
-    public static final String SIGN_IN_URL ="/maximo/mobile/system/login";
-
+    public static final String SIGN_IN_URL = "/maximo/mobile/system/login";
 
 
     //全都是一个接口
@@ -30,18 +29,17 @@ public class Constants {
     public static final String MOBILESERVICEURL = "/meaweb/services/MOBILESERVICE";
 
 
-
     //通用接口查询
-    public static final String BASE_URL =  "/maximo/mobile/common/api";
+    public static final String BASE_URL = "/maximo/mobile/common/api";
 
 
     //生成物资编码接口
-    public static final String ITEM_GENERATE_URL ="/maximo/mobile/itemreq/createCode";
+    public static final String ITEM_GENERATE_URL = "/maximo/mobile/itemreq/createCode";
     //发送工作流接口
 
     public static final String START_FLOW_URL = "/maximo/mobile/wf/start";
     //审批工作流接口
-    public static final String APPROVAL_FLOW_URL ="/maximo/mobile/wf/approve";
+    public static final String APPROVAL_FLOW_URL = "/maximo/mobile/wf/approve";
 
 
     /**
@@ -54,7 +52,7 @@ public class Constants {
      */
 
     //设备appid
-    public static final String ASSET_APPID = "ASSET" ;
+    public static final String ASSET_APPID = "ASSET";
 
     //设备的表名
     public static final String ASSET_NAME = "ASSET";
@@ -62,7 +60,7 @@ public class Constants {
     public static final String SPAREPART_NAME = "SPAREPART";
 
     //库存appid
-    public static final String INVENTOR_APPID = "INVENTOR" ;
+    public static final String INVENTOR_APPID = "INVENTOR";
 
     //库存的表名
     public static final String INVENTORY_NAME = "INVENTORY";
@@ -71,19 +69,19 @@ public class Constants {
     public static final String INVBALANCES_NAME = "INVBALANCES";
 
     //位置appid
-    public static final String LOCATION_APPID = "LOCATION" ;
+    public static final String LOCATION_APPID = "LOCATION";
 
     //位置的表名
     public static final String LOCATIONS_NAME = "LOCATIONS";
 
     //问题点管理appid
-    public static final String N_PROB2_APPID = "N_PROB2" ;
+    public static final String N_PROB2_APPID = "N_PROB2";
 
     //问题点管理的表名
     public static final String N_PROBLEM_NAME = "N_PROBLEM";
 
     //定期点检工单appid
-    public static final String N_MATWO_APPID = "N_MATWO" ;
+    public static final String N_MATWO_APPID = "N_MATWO";
 
     //定期点检工单的表名
     public static final String WORKORDER_NAME = "WORKORDER";
@@ -91,7 +89,7 @@ public class Constants {
     public static final String WOTASK_NAME = "WOTASK";
 
     //采购接收appid
-    public static final String RECEIPTS_APPID = "N_PO" ;
+    public static final String RECEIPTS_APPID = "N_PO";
 
     //采购接收的表名
     public static final String PO_NAME = "PO";
@@ -103,38 +101,38 @@ public class Constants {
     public static final String UDCANRTN_NAME = "UDCANRTN";
 
     //人员appid
-    public static final String PERSON_APPID = "PERSON" ;
+    public static final String PERSON_APPID = "PERSON";
 
     //人员的表名
     public static final String PERSON_NAME = "PERSON";
 
     //总库领料单appid
-    public static final String N_WORKOR2 = "N_WORKOR2" ;
+    public static final String N_WORKOR2 = "N_WORKOR2";
     //总库领料单明细行的表名
-    public static final String N_MATERIAL = "N_MATERIAL" ;
+    public static final String N_MATERIAL = "N_MATERIAL";
 
     //分库领料单appid
-    public static final String N_WORKORDE = "N_WORKORDE" ;
+    public static final String N_WORKORDE = "N_WORKORDE";
     //分库库领料单明细行的表名
-    public static final String MATUSETRANS = "MATUSETRANS" ;
+    public static final String MATUSETRANS = "MATUSETRANS";
     //备件借用appid
-    public static final String N_BORROW_APPID = "N_BORROW" ;
+    public static final String N_BORROW_APPID = "N_BORROW";
     //备件借用的表名
-    public static final String N_BORROWHEAD_NAME = "N_BORROWHEAD" ;
+    public static final String N_BORROWHEAD_NAME = "N_BORROWHEAD";
 
     //ALNDOMAINappid
-    public static final String ALNDOMAIN_APPID = "ALNDOMAIN" ;
+    public static final String ALNDOMAIN_APPID = "ALNDOMAIN";
     //ALNDOMAIN的表名
-    public static final String ALNDOMAIN_NAME = "ALNDOMAIN" ;
+    public static final String ALNDOMAIN_NAME = "ALNDOMAIN";
 
-    /**附件appid**/
+    /**
+     * 附件appid
+     **/
     public static final String DOCLINKS_APPID = "N_PROB2";
-    /**附件表名**/
+    /**
+     * 附件表名
+     **/
     public static final String DOCLINKS_NAME = "DOCLINKS";
-
-
-
-
 
 
     /**
@@ -161,6 +159,25 @@ public class Constants {
     public static final String ABCTYPE = "N_ABC";//重要度
     public static final String N_PRORESULT = "N_PRORESULT";//整改结果
 
+
+    /**设置数据库参数-开始**/
+    /**
+     * 数据库路径
+     */
+    public static final String PATH_DB = android.os.Environment
+            .getExternalStorageDirectory().getAbsolutePath()
+            + "/Android/data/";
+    /**
+     * 无SD卡的数据库路径
+     */
+    public static final String NOT_SDCARD_PATH_DB = "/data/data/";
+    /**
+     * 数据库名称 *
+     */
+    public static final String TB_NAME = "sqlite-dfrc.db";
+
+    /**数据库版本**/
+    public static final int DATABASE_VERSION = 17;
 
 
 }

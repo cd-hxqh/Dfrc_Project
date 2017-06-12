@@ -1,20 +1,37 @@
 package com.dfrc.hxqh.dfrc_project.model;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 /**
  * Created by think on 2016/7/1.
  * 定期点检工单
  */
+@DatabaseTable(tableName = "WORKORDER")
 public class WORKORDER extends Entity {
+    @DatabaseField(generatedId = true)
+    public int id;
+    @DatabaseField(columnName = "CHANGEBY")
     public String CHANGEBY;//变更人
+    @DatabaseField(columnName = "CREWID")
     public String CREWID;//班组
+    @DatabaseField(columnName = "DESCRIPTION")
     public String DESCRIPTION;//描述
+    @DatabaseField(columnName = "MONTH")
     public String MONTH;//月度
+    @DatabaseField(columnName = "N_WPNUM")
     public String N_WPNUM;//周计划编号
+    @DatabaseField(columnName = "STATUS")
     public String STATUS;//状态
+    @DatabaseField(columnName = "WONUM")
     public String WONUM;//编号
+    @DatabaseField(columnName = "YEAR")
     public String YEAR;//年度
+    @DatabaseField(columnName = "N_QTYOPEN")
     public String N_QTYOPEN;//未完成
+    @DatabaseField(columnName = "N_QTYCOMP")
     public String N_QTYCOMP;//已完成
+    @DatabaseField(columnName = "SITEID")
     public String SITEID;//地点
 
     public String getSITEID() {

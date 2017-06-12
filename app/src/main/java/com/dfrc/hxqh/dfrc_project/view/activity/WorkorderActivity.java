@@ -27,14 +27,16 @@ import com.dfrc.hxqh.dfrc_project.api.HttpManager;
 import com.dfrc.hxqh.dfrc_project.api.HttpRequestHandler;
 import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.bean.Results;
+import com.dfrc.hxqh.dfrc_project.dao.WoTaskDao;
+import com.dfrc.hxqh.dfrc_project.dao.WorkOrderDao;
 import com.dfrc.hxqh.dfrc_project.model.WORKORDER;
+import com.dfrc.hxqh.dfrc_project.model.WOTASK;
 import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
-import com.dfrc.hxqh.dfrc_project.view.adapter.BaseQuickAdapter;
-import com.dfrc.hxqh.dfrc_project.view.adapter.WorkOrderListAdapter;
+import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
+import com.dfrc.hxqh.dfrc_project.view.adapter.WorkDownListAdapter;
 import com.dfrc.hxqh.dfrc_project.view.widght.SwipeRefreshLayout;
 import com.dfrc.hxqh.dfrc_project.webserviceclient.AndroidClientService;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,12 +67,15 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
     /**
      * 适配器*
      */
-    private WorkOrderListAdapter workOrderListAdapter;
+    private WorkDownListAdapter workDownListAdapter;
 
     @Bind(R.id.edt_input)
     EditText search; //编辑框
     @Bind(R.id.btn_delete)
     Button deleteBtn; //删除
+
+    @Bind(R.id.down_btn_id)
+    Button downBtn; //已下载任务
     /**
      * 查询条件*
      */
@@ -86,7 +91,7 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list);
+        setContentView(R.layout.activity_down_list);
         ButterKnife.bind(this);
         findViewById();
         initView();
@@ -122,8 +127,8 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
         items = new ArrayList<>();
         getData(searchText);
 
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(search.getWindowToken(),0);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(search.getWindowToken(), 0);
     }
 
     //返回事件
@@ -150,15 +155,15 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
 
     @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
     void afterTextChanged(Editable s) {
-        if(s.length() > 0){
+        if (s.length() > 0) {
             deleteBtn.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             deleteBtn.setVisibility(View.GONE);
         }
 
         if (isCodePda) {
             assetNum = parsingResult(s.toString());
-            workOrderListAdapter.removeAll(items);
+            workDownListAdapter.removeAll(items);
             items = new ArrayList<WORKORDER>();
             nodatalayout.setVisibility(View.GONE);
             refresh_layout.setRefreshing(true);
@@ -169,17 +174,25 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
 
 
     //删除
-    @OnClick(R.id.btn_delete)void setDeleteBtnOnClickListener(){
+    @OnClick(R.id.btn_delete)
+    void setDeleteBtnOnClickListener() {
         search.setText("");
+    }
+
+    //已下载任务
+    @OnClick(R.id.down_btn_id)
+    void setDownBtnOnClickListener() {
+        Intent intent = new Intent(WorkorderActivity.this, WorkorderLocationActivity.class);
+        startActivityForResult(intent, 0);
     }
 
 
     @Override
     public void onLoad() {
-        if(!isCodePda){
+        if (!isCodePda) {
             page++;
             getData(searchText);
-        }else{
+        } else {
             refresh_layout.setLoading(false);
         }
 
@@ -187,10 +200,10 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
 
     @Override
     public void onRefresh() {
-        if(!isCodePda) {
+        if (!isCodePda) {
             page = 1;
             getData(searchText);
-        }else{
+        } else {
             refresh_layout.setRefreshing(false);
         }
     }
@@ -213,7 +226,7 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
                                             .getWindowToken(),
                                     InputMethodManager.HIDE_NOT_ALWAYS);
                     searchText = search.getText().toString();
-                    workOrderListAdapter.removeAll(items);
+                    workDownListAdapter.removeAll(items);
                     items = new ArrayList<WORKORDER>();
                     nodatalayout.setVisibility(View.GONE);
                     refresh_layout.setRefreshing(true);
@@ -240,6 +253,7 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
 
             @Override
             public void onSuccess(Results results, int totalPages, int currentPage) {
+                Log.i(TAG, "totalPages=" + totalPages + ",currentPage=" + currentPage);
                 ArrayList<WORKORDER> item = JsonUtils.parsingWORKORDER(results.getResultlist());
                 refresh_layout.setRefreshing(false);
                 refresh_layout.setLoading(false);
@@ -252,14 +266,15 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
                             items = new ArrayList<WORKORDER>();
                             initAdapter(items);
                         }
-                        for (int i = 0; i < item.size(); i++) {
-                            items.add(item.get(i));
+                        if (page > totalPages) {
+                            MessageUtils.showMiddleToast(WorkorderActivity.this, "已加载出全部数据");
+                        } else {
+                            addData(item);
                         }
-                        addData(item);
+
                     }
                     nodatalayout.setVisibility(View.GONE);
 
-                    initAdapter(items);
                 }
             }
 
@@ -277,18 +292,21 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
      * 获取数据*
      */
     private void initAdapter(final List<WORKORDER> list) {
-        workOrderListAdapter = new WorkOrderListAdapter(WorkorderActivity.this, R.layout.list_item_workorder, list);
-        recyclerView.setAdapter(workOrderListAdapter);
-        workOrderListAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
+        workDownListAdapter = new WorkDownListAdapter(WorkorderActivity.this, R.layout.list_item_workdown, list);
+        recyclerView.setAdapter(workDownListAdapter);
+        workDownListAdapter.setDownOnClickListener(new WorkDownListAdapter.DownOnClickListener() {
             @Override
-            public void onItemClick(View view, int position) {
-                Intent intent = getIntent();
-                intent.setClass(WorkorderActivity.this, WorkOrderDetailsActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("workorder", (Serializable) workOrderListAdapter.getData().get(position));
-                intent.putExtras(bundle);
-                startActivityForResult(intent, 0);
+            public void cDownOnClickListener(int postion, TextView statusText, View pb) {
+                Log.i(TAG, "postion" + postion);
+                WORKORDER workorder = (WORKORDER) workDownListAdapter.getData().get(postion);
+                new WorkOrderDao(WorkorderActivity.this).update(workorder);
+                getItemData(workorder.getWONUM(), statusText, pb);
+                statusText.setVisibility(View.GONE);
+                pb.setVisibility(View.VISIBLE);
+                workDownListAdapter.notifyDataSetChanged();
             }
+
+
         });
 
     }
@@ -297,7 +315,7 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
      * 添加数据*
      */
     private void addData(final List<WORKORDER> list) {
-        workOrderListAdapter.addData(list);
+        workDownListAdapter.addData(list);
     }
 
 
@@ -308,8 +326,7 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
         new AsyncTask<String, String, String>() {
             @Override
             protected String doInBackground(String... strings) {
-                Log.i(TAG,"assetnum="+assetNum);
-                return AndroidClientService.searchMaint2(WorkorderActivity.this, "ASSETNUM", "H2-Z2-CP-047","line"); //根据设备获取定期点检工单
+                return AndroidClientService.searchMaint2(WorkorderActivity.this, "ASSETNUM", assetNum, "line"); //根据设备获取定期点检工单
             }
 
             @Override
@@ -319,7 +336,6 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
                 refresh_layout.setLoading(false);
                 String result = JsonUtils.parsingsearchMaint2(s);
                 if (result.equals("暂无数据")) {
-                    nodatalayout.setVisibility(View.VISIBLE);
                 } else {
                     ArrayList<WORKORDER> item = JsonUtils.parsingWORKORDER(s);
 
@@ -334,5 +350,39 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
 
 
     }
+
+
+    /**
+     * 根据编号获取子表信息
+     **/
+    private void getItemData(String wonum, final TextView statusText, final View pb) {
+        HttpManager.getDataPagingInfo(WorkorderActivity.this, HttpManager.getWOTASKURL(wonum, page, 10), new HttpRequestHandler<Results>() {
+            @Override
+            public void onSuccess(Results results) {
+            }
+
+            @Override
+            public void onSuccess(Results results, int totalPages, int currentPage) {
+                Log.i(TAG, "totalPages1=" + totalPages + ",currentPage=" + currentPage);
+                ArrayList<WOTASK> item = JsonUtils.parsingWOTASK(results.getResultlist());
+                if (item == null || item.isEmpty()) {
+                } else {
+                    new WoTaskDao(WorkorderActivity.this).update(item);
+                    statusText.setText(R.string.down_success_text);
+                    statusText.setTextColor(getResources().getColor(R.color.red));
+                    statusText.setVisibility(View.VISIBLE);
+                    pb.setVisibility(View.GONE);
+                    workDownListAdapter.notifyDataSetChanged();
+
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+            }
+        });
+
+    }
+
 
 }

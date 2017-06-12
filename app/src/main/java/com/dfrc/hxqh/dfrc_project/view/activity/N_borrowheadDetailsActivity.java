@@ -25,9 +25,6 @@ public class N_borrowheadDetailsActivity extends BaseActivity {
 
     @Bind(R.id.title_name)
     TextView titleTextView; //标题
-//    @Bind(R.id.title_add)
-//    ImageView menuImageView; //菜单
-//    PopupWindow popupWindow;
     @Bind(R.id.n_borrowheadnum_text_id)
     TextView itemTextView; //编号
     @Bind(R.id.description_text_id)
@@ -84,8 +81,6 @@ public class N_borrowheadDetailsActivity extends BaseActivity {
     @Override
     protected void initView() {
         titleTextView.setText(R.string.jyxq_text);
-//        menuImageView.setVisibility(View.VISIBLE);
-//        menuImageView.setImageResource(R.mipmap.ic_more);
         if (n_borrowhead != null) {
             itemTextView.setText(n_borrowhead.getN_BORROWHEADNUM());
             descriptionTextView.setText(n_borrowhead.getDESCRIPTION());
@@ -110,57 +105,5 @@ public class N_borrowheadDetailsActivity extends BaseActivity {
         finish();
     }
 
-//    //菜单事件
-//    @OnClick(R.id.title_add)
-//    void setMenuImageViewOnClickListener() {
-//        showPopupWindow(menuImageView);
-//    }
-//
-//
-//    /**
-//     * 初始化showPopupWindow*
-//     */
-//    private void showPopupWindow(View view) {
-//
-//        // 一个自定义的布局，作为显示的内容
-//        View contentView = LayoutInflater.from(N_borrowheadDetailsActivity.this).inflate(
-//                R.layout.inventory_popup_window, null);
-//
-//
-//        popupWindow = new PopupWindow(contentView,
-//                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-//        popupWindow.setTouchable(true);
-//        popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
-//        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
-//
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                return false;
-//            }
-//        });
-//
-//        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
-//        // 我觉得这里是API的一个bug
-//        popupWindow.setBackgroundDrawable(getResources().getDrawable(
-//                R.drawable.popup_background_mtrl_mult));
-//
-//        // 设置好参数之后再show
-//        popupWindow.showAsDropDown(view);
-//        invbalancesLinearLayout = (LinearLayout) contentView.findViewById(R.id.kcyl_linearlayout_id);
-//        invbalancesLinearLayout.setOnClickListener(kcylOnClickListener);
-//
-//    }
-//
-//    private View.OnClickListener kcylOnClickListener = new View.OnClickListener() {
-//        @Override
-//        public void onClick(View view) {
-//            Intent intent = new Intent(N_borrowheadDetailsActivity.this, InvbalancesActivity.class);
-//            Bundle bundle = new Bundle();
-//            bundle.putSerializable("itemnum", inventory.getITEMNUM());
-//            intent.putExtras(bundle);
-//            startActivityForResult(intent, 1000);
-//            popupWindow.dismiss();
-//        }
-//    };
 
 }

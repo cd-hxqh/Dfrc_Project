@@ -388,10 +388,11 @@ public class AndroidClientService {
         soapReq.addProperty("STATUS", n_material.getSTATUS());//状态
         soapReq.addProperty("N_SAP1", n_material.getN_SAP1());// 数量
         soapReq.addProperty("ITEMNUM", n_material.getITEMNUM());//物料号
-        soapReq.addProperty("REASON", n_material.getN_REASON());//领料原因
-        soapReq.addProperty("N_SAP3", n_material.getN_SAP3());//实际发放数量
+        soapReq.addProperty("N_REASON", n_material.getN_REASON());//领料原因
         soapReq.addProperty("N_SAP5", n_material.getN_SAP5());//申请数量
         soapReq.addProperty("TOBIN", n_material.getTOBIN());//分库
+        soapReq.addProperty("FROMBIN", n_material.getFROMBIN());//总库
+        soapReq.addProperty("SOURCE", n_material.getSOURCE());//来源
         soapEnvelope.setOutputSoapObject(soapReq);
         HttpTransportSE httpTransport = new HttpTransportSE(ip_adress, timeOut);
         try {

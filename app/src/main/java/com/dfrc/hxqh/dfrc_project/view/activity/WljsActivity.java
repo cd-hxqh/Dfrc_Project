@@ -13,17 +13,12 @@ import android.text.Spanned;
 import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.dfrc.hxqh.dfrc_project.R;
@@ -54,9 +49,6 @@ public class WljsActivity extends BaseActivity implements SwipeRefreshLayout.OnR
     @Bind(R.id.title_name) //标题
             TextView titleTextView;
     LinearLayoutManager layoutManager;
-    @Bind(R.id.title_add)
-    ImageView menuImageView; //菜单
-    PopupWindow popupWindow;
     @Bind(R.id.recyclerView_id)//RecyclerView
             RecyclerView recyclerView;
     @Bind(R.id.have_not_data_id)
@@ -83,14 +75,11 @@ public class WljsActivity extends BaseActivity implements SwipeRefreshLayout.OnR
 
     private String ponum;//采购单号
 
-    private LinearLayout thLinearLayout; //退回
-    private LinearLayout ffLinearLayout; //发放
-    private LinearLayout xjLinearLayout; //新建
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list);
+        setContentView(R.layout.activity_wljs_list);
         ButterKnife.bind(this);
         initDate();
         findViewById();
@@ -112,8 +101,6 @@ public class WljsActivity extends BaseActivity implements SwipeRefreshLayout.OnR
     protected void initView() {
         titleTextView.setText(R.string.wljs_text);
         setSearchEdit();
-        menuImageView.setVisibility(View.VISIBLE);
-        menuImageView.setImageResource(R.mipmap.ic_more);
         layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
@@ -164,11 +151,36 @@ public class WljsActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         search.setText("");
     }
 
-    //菜单事件
-    @OnClick(R.id.title_add)
-    void setMenuImageViewOnClickListener() {
-        showPopupWindow(menuImageView);
+    //新建
+    @OnClick(R.id.add_btn_id)
+    void setAddOnClickListenerr() {
+        Intent intent = new Intent(WljsActivity.this, Matrectrans_AddActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("ponum", ponum);
+        intent.putExtras(bundle);
+        startActivityForResult(intent, 0);
     }
+
+    //要退回项目
+    @OnClick(R.id.xzth_btn_id)
+    void setXzthOnClickListener() {
+        Intent intent = new Intent(WljsActivity.this, UdcanrtnActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("ponum", ponum);
+        intent.putExtras(bundle);
+        startActivityForResult(intent, 0);
+    }
+
+    //已订购项目
+    @OnClick(R.id.xzydg_btn_id)
+    void setXzydgOnClickListener() {
+        Intent intent = new Intent(WljsActivity.this, PoChooseActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("ponum", ponum);
+        intent.putExtras(bundle);
+        startActivityForResult(intent, 0);
+    }
+
 
     @Override
     public void onLoad() {
@@ -289,76 +301,4 @@ public class WljsActivity extends BaseActivity implements SwipeRefreshLayout.OnR
     }
 
 
-    /**
-     * 初始化showPopupWindow*
-     */
-    private void showPopupWindow(View view) {
-
-        // 一个自定义的布局，作为显示的内容
-        View contentView = LayoutInflater.from(WljsActivity.this).inflate(
-                R.layout.wljs_popup_window, null);
-
-
-        popupWindow = new PopupWindow(contentView,
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        popupWindow.setTouchable(true);
-        popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return false;
-            }
-        });
-
-        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
-        // 我觉得这里是API的一个bug
-        popupWindow.setBackgroundDrawable(getResources().getDrawable(
-                R.drawable.popup_background_mtrl_mult));
-
-        // 设置好参数之后再show
-        popupWindow.showAsDropDown(view);
-        xjLinearLayout = (LinearLayout) contentView.findViewById(R.id.add_linearlayout_id);
-        thLinearLayout = (LinearLayout) contentView.findViewById(R.id.th_linearlayout_id);
-        ffLinearLayout = (LinearLayout) contentView.findViewById(R.id.ff_linearlayout_id);
-        xjLinearLayout.setOnClickListener(addOnClickListener);
-        thLinearLayout.setOnClickListener(thOnClickListener);
-        ffLinearLayout.setOnClickListener(ffOnClickListener);
-
-    }
-
-
-    private View.OnClickListener addOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent intent = new Intent(WljsActivity.this, Matrectrans_AddActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString("ponum", ponum);
-            intent.putExtras(bundle);
-            startActivityForResult(intent, 0);
-            popupWindow.dismiss();
-        }
-    };
-    private View.OnClickListener thOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent intent = new Intent(WljsActivity.this, UdcanrtnActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString("ponum", ponum);
-            intent.putExtras(bundle);
-            startActivityForResult(intent, 0);
-            popupWindow.dismiss();
-        }
-    };
-    private View.OnClickListener ffOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent intent = new Intent(WljsActivity.this, PoChooseActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString("ponum", ponum);
-            intent.putExtras(bundle);
-            startActivityForResult(intent, 0);
-            popupWindow.dismiss();
-        }
-    };
 }

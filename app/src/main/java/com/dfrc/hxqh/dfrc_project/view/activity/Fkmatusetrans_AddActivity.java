@@ -141,7 +141,7 @@ public class Fkmatusetrans_AddActivity extends BaseActivity {
             case INVBALANCES_CODE:
                 INVBALANCES invbalances = (INVBALANCES) data.getSerializableExtra("invbalances");
                 itemnumTextView.setText(invbalances.getITEMNUM());
-                descTextView.setText(invbalances.getITEMNUMNAME());
+                descTextView.setText(invbalances.getDESCRIPTION());
                 hgTextView.setText(invbalances.getBINNUM());
                 break;
         }
@@ -169,6 +169,7 @@ public class Fkmatusetrans_AddActivity extends BaseActivity {
                 super.onPostExecute(s);
                 mLoadingDialog.dismiss();
                 MessageUtils.showMiddleToast(Fkmatusetrans_AddActivity.this, s);
+                finish();
 
 
             }

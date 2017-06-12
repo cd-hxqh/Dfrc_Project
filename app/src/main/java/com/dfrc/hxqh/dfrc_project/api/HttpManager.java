@@ -31,7 +31,7 @@ public class HttpManager {
             return "{'appid':'" + Constants.ASSET_APPID + "','objectname':'" + Constants.ASSET_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'ASSETNUM DESC','condition':{'STATUS':'=活动','SITEID':'=" + siteid + "'}}";
 
         } else {
-            return "{'appid':'" + Constants.ASSET_APPID + "','objectname':'" + Constants.ASSET_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'ASSETNUM DESC','condition':{'STATUS':'=活动','SITEID':'=" + siteid + "'},'sinorsearch':{'ASSETNUM':'" + vaule + "','DESCRIPTION':'" + vaule + "'}}";
+            return "{'appid':'" + Constants.ASSET_APPID + "','objectname':'" + Constants.ASSET_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'ASSETNUM DESC','condition':{'STATUS':'=活动','SITEID':'=" + siteid + "'},'sinorsearch':{'ASSETNUM':'" + vaule + "','DESCRIPTION':'" + vaule + "','N_CREWID':'" + vaule + "','N_FAMILY':'" + vaule + "'}}";
         }
     }
 
@@ -137,6 +137,25 @@ public class HttpManager {
     /**
      * 设置定期点检工单明细行
      */
+    public static String getWOTASKURL(String wonum,int curpage, int showcount) {
+        return "{'appid':'" + Constants.N_MATWO_APPID + "','objectname':'" + Constants.WOTASK_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WOTASKID DESC','condition':{'WONUM':'=" + wonum + "'}}";
+
+    }
+
+
+    /**
+     * 设置定期点检工单明细行
+     */
+    public static String getWOTASKURL(String wonum, String n_responsor) {
+        return "{'appid':'" + Constants.N_MATWO_APPID + "','objectname':'" + Constants.WOTASK_NAME + "','option':'read','orderby':'WOTASKID DESC','condition':{'WONUM':'=" + wonum + "'}}";
+
+
+    }
+
+
+    /**
+     * 设置定期点检工单明细行
+     */
     public static String getWOTASKURL(String vaule, String wonum, String n_responsor, String assetnum, int curpage, int showcount) {
         if (vaule.equals("")) {
             return "{'appid':'" + Constants.N_MATWO_APPID + "','objectname':'" + Constants.WOTASK_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WOTASKID DESC','condition':{'WONUM':'=" + wonum + "','ASSETNUM':'=" + assetnum + "','N_RESPONSOR':'=" + n_responsor + "'}}";
@@ -209,7 +228,7 @@ public class HttpManager {
             return "{'appid':'" + Constants.INVENTOR_APPID + "','objectname':'" + Constants.INVBALANCES_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'SITEID':'=" + siteid + "'}}";
 
         } else {
-            return "{'appid':'" + Constants.INVENTOR_APPID + "','objectname':'" + Constants.INVBALANCES_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'SITEID':'=" + siteid + "'},'sinorsearch':{'ITEMNUM':'" + vaule + "','ITEMNUMNAME':'"+vaule+"','BINNUM':'"+vaule+"'}}";
+            return "{'appid':'" + Constants.INVENTOR_APPID + "','objectname':'" + Constants.INVBALANCES_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'SITEID':'=" + siteid + "'},'sinorsearch':{'ITEMNUM':'" + vaule + "','ITEMNUMNAME':'" + vaule + "','BINNUM':'" + vaule + "'}}";
         }
     }
 
@@ -262,11 +281,12 @@ public class HttpManager {
             return "{'appid':'" + Constants.N_WORKOR2 + "','objectname':'" + Constants.N_MATERIAL + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'WONUM':'=" + wonum + "'},'sinorsearch':{'ITEMNUM':'" + vaule + "','DESCRIPTION':'" + vaule + "'}}";
         }
     }
+
     /**
      * 根据Wonum和Itenmun获取总库领料单
      */
     public static String getN_MATERIAL1(String itenmun, String wonum, int curpage, int showcount) {
-            return "{'appid':'" + Constants.N_WORKOR2 + "','objectname':'" + Constants.N_MATERIAL + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'WONUM':'=" + wonum + "','ITEMNUM':'="+itenmun+"'}}";
+        return "{'appid':'" + Constants.N_WORKOR2 + "','objectname':'" + Constants.N_MATERIAL + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'WONUM':'=" + wonum + "','ITEMNUM':'=" + itenmun + "'}}";
 
     }
 
@@ -307,6 +327,13 @@ public class HttpManager {
         } else {
             return "{'appid':'" + Constants.N_WORKORDE + "','objectname':'" + Constants.MATUSETRANS + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'REFWO':'=" + wonum + "'},'sinorsearch':{'ITEMNUM':'" + vaule + "','DESCRIPTION':'" + vaule + "'}}";
         }
+    }
+
+    /**
+     * 根据ITEMNUM获取分库领料单行
+     */
+    public static String getMATUSETRANSBYITEMNUMURL(String itemnum, String wonum, int curpage, int showcount) {
+        return "{'appid':'" + Constants.N_WORKORDE + "','objectname':'" + Constants.MATUSETRANS + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'REFWO':'=" + wonum + "','ITEMNUM':'=" + itemnum + "'}}";
     }
 
 
@@ -373,6 +400,19 @@ public class HttpManager {
 
 
     /**
+     * 获取来源
+     **/
+    public static String getLAIYUANURL(String vaule, int curpage, int showcount) {
+        if (vaule.equals("")) {
+            return "{'appid':'" + Constants.WORKORDER_NAME + "','objectname':'" + Constants.WORKORDER_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WONUM DESC','condition':{'WORKTYPE':'=FM'}}";
+
+        } else {
+            return "{'appid':'" + Constants.WORKORDER_NAME + "','objectname':'" + Constants.WORKORDER_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WONUM DESC','condition':{'WORKTYPE':'=FM'},'sinorsearch':{'WONUM':'" + vaule + "','DESCRIPTION':'" + vaule + "'}}";
+        }
+    }
+
+
+    /**
      * 设置获取库房
      */
     public static String getLOCATIONS(String vaule, String siteid, int curpage, int showcount) {
@@ -386,14 +426,15 @@ public class HttpManager {
 
     /**
      * 根据ITEMNUM,SITEID,LOCATION获取货柜
+     *
      * @
      */
-    public static String getINVBALANCES(String vaule, String itemnum,String siteid,String location, int curpage, int showcount) {
+    public static String getINVBALANCES(String vaule, String itemnum, String siteid, String location, int curpage, int showcount) {
         if (vaule.equals("")) {
-            return "{'appid':'" + Constants.INVENTOR_APPID + "','objectname':'" + Constants.INVBALANCES_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'ITEMNUM':'=" + itemnum + "','SITEID':'="+siteid+"','LOCATION':'="+location+"'}}";
+            return "{'appid':'" + Constants.INVENTOR_APPID + "','objectname':'" + Constants.INVBALANCES_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'ITEMNUM':'=" + itemnum + "','SITEID':'=" + siteid + "','LOCATION':'=" + location + "'}}";
 
         } else {
-            return "{'appid':'" + Constants.INVENTOR_APPID + "','objectname':'" + Constants.INVBALANCES_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'ITEMNUM':'=" + itemnum + "','SITEID':'="+siteid+"','LOCATION':'="+location+"'},'sinorsearch':{'BINNUM':'" + vaule + "'}}";
+            return "{'appid':'" + Constants.INVENTOR_APPID + "','objectname':'" + Constants.INVBALANCES_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'ITEMNUM':'=" + itemnum + "','SITEID':'=" + siteid + "','LOCATION':'=" + location + "'},'sinorsearch':{'BINNUM':'" + vaule + "'}}";
         }
     }
 

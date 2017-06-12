@@ -1,28 +1,54 @@
 package com.dfrc.hxqh.dfrc_project.model;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 /**
  * Created by think on 2016/7/1.
  * 点检明细行
  */
+@DatabaseTable(tableName = "WOTASK")
 public class WOTASK extends Entity {
+    @DatabaseField(generatedId = true)
+    public int id;
+    @DatabaseField(columnName = "WOTASKID")
     public String WOTASKID;//任务ID
+    @DatabaseField(columnName = "ASSETNUM")
     public String ASSETNUM;//设备编号
+    @DatabaseField(columnName = "ASSET_DESCRIPTION")
     public String ASSET_DESCRIPTION;//设备名称
+    @DatabaseField(columnName = "ITEM")
     public String ITEM;//项目
+    @DatabaseField(columnName = "N_MEMBERS")
     public String N_MEMBERS;//实施人员
+    @DatabaseField(columnName = "N_NOTE")
     public String N_NOTE;//预知项目结果
+    @DatabaseField(columnName = "N_RESPONSOR")
     public String N_RESPONSOR;//实施责任人
+    @DatabaseField(columnName = "N_RESULT")
     public String N_RESULT;//结果
+    @DatabaseField(columnName = "POSITION")
     public String POSITION;//部位
+    @DatabaseField(columnName = "REFBOOKLINE_ABC")
     public String REFBOOKLINE_ABC;//重要度
+    @DatabaseField(columnName = "REFBOOKLINE_CYCLE")
     public String REFBOOKLINE_CYCLE;//周期(月)
+    @DatabaseField(columnName = "REFBOOKLINE_HOURS")
     public String REFBOOKLINE_HOURS;//点检工时
+    @DatabaseField(columnName = "REFBOOKLINE_METHOD")
     public String REFBOOKLINE_METHOD;//点检方法
+    @DatabaseField(columnName = "REFBOOKLINE_TYPE")
     public String REFBOOKLINE_TYPE;//类别
+    @DatabaseField(columnName = "RESPONSOR_DISPLAYNAME")
     public String RESPONSOR_DISPLAYNAME;//
+    @DatabaseField(columnName = "WOSEQUENCE")
     public String WOSEQUENCE;//序号
+    @DatabaseField(columnName = "WPLINE_RULE")
     public String WPLINE_RULE;//基准
+    @DatabaseField(columnName = "WPLINE_SOLVE")
     public String WPLINE_SOLVE;//异常处理
+    @DatabaseField(columnName = "WONUM")
+    public String WONUM;//工单编号
 
     public String getWOTASKID() {
         return WOTASKID;

@@ -5,7 +5,7 @@ import android.content.Context;
 import android.support.v7.widget.CardView;
 
 import com.dfrc.hxqh.dfrc_project.R;
-import com.dfrc.hxqh.dfrc_project.model.INVBALANCES;
+import com.dfrc.hxqh.dfrc_project.model.WORKORDER;
 import com.dfrc.hxqh.dfrc_project.view.widght.BaseViewHolder;
 
 import java.util.List;
@@ -13,10 +13,10 @@ import java.util.List;
 
 /**
  * Created by apple on 15/10/26
- * 库存余量
+ * 定期点检工单
  */
-public class Invbalances1ListAdapter extends BaseQuickAdapter<INVBALANCES> {
-    public Invbalances1ListAdapter(Context context, int layoutResId, List data) {
+public class WorkOrderMainListAdapter extends BaseQuickAdapter<WORKORDER> {
+    public WorkOrderMainListAdapter(Context context, int layoutResId, List data) {
         super(context, layoutResId, data);
     }
 
@@ -29,11 +29,10 @@ public class Invbalances1ListAdapter extends BaseQuickAdapter<INVBALANCES> {
 
 
     @Override
-    protected void convert(BaseViewHolder helper, INVBALANCES item) {
+    protected void convert(BaseViewHolder helper, WORKORDER item) {
         CardView cardView = helper.getView(R.id.card_container);
-        helper.setText(R.id.item_text_id, item.getITEMNUM());
-        helper.setText(R.id.desc_text_id, item.getDESCRIPTION());
-        helper.setText(R.id.quantity_text_id, item.getCURBAL());
+        helper.setText(R.id.workorder_wonum_id, item.getWONUM());
+        helper.setText(R.id.workorder_desc_text_id, item.getDESCRIPTION());
     }
 
 

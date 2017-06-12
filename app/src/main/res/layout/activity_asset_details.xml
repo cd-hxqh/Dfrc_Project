@@ -981,9 +981,56 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dimens_line"
                     android:background="@mipmap/line"></View>
+
+
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimens_50dp"
+                android:layout_marginTop="@dimen/dimen_10"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:orientation="horizontal">
 
+                <Button
+                    android:id="@+id/bj_text_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_enable_green"
+                    android:gravity="center"
+                    android:padding="@dimen/dimen_5"
+                    android:text="@string/beijian_text"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/dimens_16sp" />
+
+                <Button
+                    android:id="@+id/djwtdjl_text_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_enable_green"
+                    android:gravity="center"
+                    android:padding="@dimen/dimen_5"
+                    android:text="@string/djwtdjl_text"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/dimens_16sp" />
+                <Button
+                    android:id="@+id/gzjl_text_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_enable_green"
+                    android:gravity="center"
+                    android:padding="@dimen/dimen_5"
+                    android:text="@string/gzjl_text"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/dimens_16sp" />
+
+
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

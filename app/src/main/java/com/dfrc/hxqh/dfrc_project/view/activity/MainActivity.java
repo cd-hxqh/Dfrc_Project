@@ -25,7 +25,7 @@ import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
 import com.dfrc.hxqh.dfrc_project.view.adapter.BaseQuickAdapter;
 import com.dfrc.hxqh.dfrc_project.view.adapter.MyGridViewAdpter;
 import com.dfrc.hxqh.dfrc_project.view.adapter.MyViewPagerAdapter;
-import com.dfrc.hxqh.dfrc_project.view.adapter.WorkOrderListAdapter;
+import com.dfrc.hxqh.dfrc_project.view.adapter.WorkOrderMainListAdapter;
 import com.dfrc.hxqh.dfrc_project.view.widght.SwipeRefreshLayout;
 import com.dfrc.hxqh.dfrc_project.webserviceclient.AndroidClientService;
 import com.mpt.hxqh.dfrc_project.AppManager;
@@ -72,7 +72,7 @@ public class MainActivity extends BaseActivity {
     /**
      * 适配器*
      */
-    private WorkOrderListAdapter workorderListAdapter;
+    private WorkOrderMainListAdapter workOrderMainListAdapter;
 
 
     ArrayList<WORKORDER> items = new ArrayList<WORKORDER>();
@@ -134,7 +134,7 @@ public class MainActivity extends BaseActivity {
                 listDatas.add(new ProdctBean(proName[5], Constants.N_WORKOR2, R.mipmap.ic_zklld));
             }
             if (list.contains(Constants.N_WORKORDE)) {//分库领料单
-                listDatas.add(new ProdctBean(proName[6], Constants.N_WORKORDE, R.mipmap.ic_zklld));
+                listDatas.add(new ProdctBean(proName[6], Constants.N_WORKORDE, R.mipmap.ic_fklld));
             }
             if (list.contains(Constants.N_BORROW_APPID)) {//备件借用
                 listDatas.add(new ProdctBean(proName[7], Constants.N_BORROW_APPID, R.mipmap.ic_bjjy));
@@ -297,15 +297,15 @@ public class MainActivity extends BaseActivity {
      * 获取数据*
      */
     private void initAdapter(List<WORKORDER> list) {
-        workorderListAdapter = new WorkOrderListAdapter(MainActivity.this, R.layout.list_item_workorder, list);
-        recyclerView.setAdapter(workorderListAdapter);
-        workorderListAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
+        workOrderMainListAdapter = new WorkOrderMainListAdapter(MainActivity.this, R.layout.list_item_workorder_main, list);
+        recyclerView.setAdapter(workOrderMainListAdapter);
+        workOrderMainListAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Intent intent = getIntent();
                 intent.setClass(MainActivity.this, WorkOrderDetailsActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("workorder", (Serializable) workorderListAdapter.getData().get(position));
+                bundle.putSerializable("workorder", (Serializable) workOrderMainListAdapter.getData().get(position));
                 intent.putExtras(bundle);
                 startActivityForResult(intent, 0);
             }
@@ -317,8 +317,8 @@ public class MainActivity extends BaseActivity {
      * 添加数据*
      */
     private void addData(final List<WORKORDER> list) {
-        workorderListAdapter.addData(list);
-        workorderListAdapter.notifyDataSetChanged();
+        workOrderMainListAdapter.addData(list);
+        workOrderMainListAdapter.notifyDataSetChanged();
     }
 
 

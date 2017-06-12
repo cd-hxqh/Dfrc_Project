@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/title_relativelayout_id"
+        layout="@layout/title_main"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimens_50dp"></include>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title_relativelayout_id">
+
+        <EditText
+            android:id="@+id/edt_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/editbox_background_normal"
+            android:gravity="center"
+            android:imeOptions="actionSearch"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textSize="@dimen/dimens_16sp" />
+
+        <Button
+            android:id="@+id/btn_delete"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dimen_10"
+            android:background="@drawable/btndelete_selector"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relativeLayout_id">
+
+
+        <com.dfrc.hxqh.dfrc_project.view.widght.SwipeRefreshLayout
+            android:id="@+id/swipe_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/chooseitem_relativelayout"
+            android:layout_below="@+id/relativeLayout_id">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView_id"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@color/white"></android.support.v7.widget.RecyclerView>
+        </com.dfrc.hxqh.dfrc_project.view.widght.SwipeRefreshLayout>
+
+        <LinearLayout
+            android:id="@+id/have_not_data_id"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/have_not_data_txt"
+                android:textSize="@dimen/abc_action_bar_content_inset_material" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/down_btn_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bg_btn_pre"
+        android:textColor="@color/white"
+        android:text="@string/yxzrw_text" />
+
+</RelativeLayout>

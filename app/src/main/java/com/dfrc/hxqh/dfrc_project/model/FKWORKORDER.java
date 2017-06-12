@@ -14,7 +14,15 @@ public class FKWORKORDER extends Entity {
     public String STATUSDATE;//状态日期
     public String WONUM;//分库领料单
     public String CREWID;//班组
+    public String FKTOTALCOST;//领料单合计
 
+    public String getFKTOTALCOST() {
+        return FKTOTALCOST;
+    }
+
+    public void setFKTOTALCOST(String FKTOTALCOST) {
+        this.FKTOTALCOST = FKTOTALCOST;
+    }
 
     public String getDESCRIPTION() {
         return DESCRIPTION;

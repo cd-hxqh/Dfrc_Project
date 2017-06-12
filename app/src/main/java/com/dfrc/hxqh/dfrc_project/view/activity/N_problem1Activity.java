@@ -26,10 +26,12 @@ import com.dfrc.hxqh.dfrc_project.api.HttpRequestHandler;
 import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.bean.Results;
 import com.dfrc.hxqh.dfrc_project.model.N_PROBLEM;
+import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
 import com.dfrc.hxqh.dfrc_project.view.adapter.BaseQuickAdapter;
 import com.dfrc.hxqh.dfrc_project.view.adapter.N_problem1ListAdapter;
 import com.dfrc.hxqh.dfrc_project.view.widght.SwipeRefreshLayout;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -223,15 +225,14 @@ public class N_problem1Activity extends BaseActivity implements SwipeRefreshLayo
                         if (page == 1) {
                             items = new ArrayList<N_PROBLEM>();
                             initAdapter(items);
+                        }if (page > totalPages) {
+                            MessageUtils.showMiddleToast(N_problem1Activity.this, getString(R.string.have_load_out_all_the_data));
+                        } else {
+                            addData(item);
                         }
-                        for (int i = 0; i < item.size(); i++) {
-                            items.add(item.get(i));
-                        }
-                        addData(item);
                     }
                     nodatalayout.setVisibility(View.GONE);
 
-                    initAdapter(items);
                 }
             }
 
@@ -257,7 +258,7 @@ public class N_problem1Activity extends BaseActivity implements SwipeRefreshLayo
                 Intent intent = getIntent();
                 intent.setClass(N_problem1Activity.this, N_problem1DetailsActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("n_problem", items.get(position));
+                bundle.putSerializable("n_problem", (Serializable) n_problemListAdapter.getData().get(position));
                 intent.putExtras(bundle);
                 startActivityForResult(intent, 0);
             }
