@@ -88,13 +88,23 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
 
     private String assetNum; //设备编号
 
+    private WorkOrderDao workOrderDao;
+    private WoTaskDao woTaskDao;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_down_list);
         ButterKnife.bind(this);
+        initDAO();
         findViewById();
         initView();
+    }
+
+    //初始化DAO
+    private void initDAO() {
+        workOrderDao = new WorkOrderDao(this);
+        woTaskDao=new WoTaskDao(this);
     }
 
 
@@ -253,7 +263,6 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
 
             @Override
             public void onSuccess(Results results, int totalPages, int currentPage) {
-                Log.i(TAG, "totalPages=" + totalPages + ",currentPage=" + currentPage);
                 ArrayList<WORKORDER> item = JsonUtils.parsingWORKORDER(results.getResultlist());
                 refresh_layout.setRefreshing(false);
                 refresh_layout.setLoading(false);
@@ -262,6 +271,18 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
                 } else {
 
                     if (item != null || item.size() != 0) {
+                        Log.i(TAG, "size=" + item.size());
+                        for (int i = 0; i < item.size(); i++) {
+                            String wonum = item.get(i).getWONUM();
+                            Log.i(TAG, "wonum=" + wonum);
+                            boolean is = workOrderDao.isexitByNum(wonum);
+                            Log.i(TAG, "is=" + is);
+                            if (is) {
+                                item.get(i).setDOWNSTATUS("已下载");
+                            }
+                        }
+
+
                         if (page == 1) {
                             items = new ArrayList<WORKORDER>();
                             initAdapter(items);
@@ -297,7 +318,6 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
         workDownListAdapter.setDownOnClickListener(new WorkDownListAdapter.DownOnClickListener() {
             @Override
             public void cDownOnClickListener(int postion, TextView statusText, View pb) {
-                Log.i(TAG, "postion" + postion);
                 WORKORDER workorder = (WORKORDER) workDownListAdapter.getData().get(postion);
                 new WorkOrderDao(WorkorderActivity.this).update(workorder);
                 getItemData(workorder.getWONUM(), statusText, pb);
@@ -355,7 +375,7 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
     /**
      * 根据编号获取子表信息
      **/
-    private void getItemData(String wonum, final TextView statusText, final View pb) {
+    private void getItemData(final String wonum, final TextView statusText, final View pb) {
         HttpManager.getDataPagingInfo(WorkorderActivity.this, HttpManager.getWOTASKURL(wonum, page, 10), new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {
@@ -363,11 +383,12 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
 
             @Override
             public void onSuccess(Results results, int totalPages, int currentPage) {
-                Log.i(TAG, "totalPages1=" + totalPages + ",currentPage=" + currentPage);
                 ArrayList<WOTASK> item = JsonUtils.parsingWOTASK(results.getResultlist());
+
                 if (item == null || item.isEmpty()) {
                 } else {
-                    new WoTaskDao(WorkorderActivity.this).update(item);
+
+                    woTaskDao.update(item);
                     statusText.setText(R.string.down_success_text);
                     statusText.setTextColor(getResources().getColor(R.color.red));
                     statusText.setVisibility(View.VISIBLE);

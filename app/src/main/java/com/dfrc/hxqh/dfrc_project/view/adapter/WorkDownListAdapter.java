@@ -42,14 +42,17 @@ public class WorkDownListAdapter extends BaseQuickAdapter<WORKORDER> {
         CardView cardView = helper.getView(R.id.card_container);
         helper.setText(R.id.workorder_wonum_id, item.getWONUM());
         helper.setText(R.id.workorder_desc_text_id, item.getDESCRIPTION());
+        if (null != item.getDOWNSTATUS() && item.getDOWNSTATUS().equals("已下载")) {
+            helper.setText(R.id.workorder_status_id, "已下载");
+            helper.setTextColorRes(R.id.workorder_status_id, R.color.red);
+        }
+
         helper.setOnClickListener(R.id.down_btn_id, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 TextView statusText = helper.getView(R.id.workorder_status_id);
                 View pb = helper.getView(R.id.pb);
                 downOnClickListener.cDownOnClickListener(helper.getPosition(), statusText, pb);
-//                helper.setVisible(R.id.workorder_status_id, false);
-//                helper.setVisible(R.id.pb, true);
             }
         });
     }

@@ -10,6 +10,9 @@ import com.dfrc.hxqh.dfrc_project.model.MATUSETRANS;
 import com.dfrc.hxqh.dfrc_project.model.N_MATERIAL;
 import com.dfrc.hxqh.dfrc_project.model.N_PROBLEM;
 import com.dfrc.hxqh.dfrc_project.model.UDCANRTN;
+import com.dfrc.hxqh.dfrc_project.model.WOTASKNG;
+import com.dfrc.hxqh.dfrc_project.model.WOTASKOK;
+import com.dfrc.hxqh.dfrc_project.model.WOTASKPRO;
 import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
 
 import org.ksoap2.SoapEnvelope;
@@ -65,7 +68,7 @@ public class AndroidClientService {
     /**
      * 定期检查单OK
      */
-    public static String MaintWOIsOk(final Context cxt, String wosequence, String n_result, String n_note, String n_members, String wonum) {
+    public static String MaintWOIsOk(final Context cxt, WOTASKOK wotaskok) {
 
         String ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
 
@@ -73,11 +76,11 @@ public class AndroidClientService {
         soapEnvelope.implicitTypes = true;
         soapEnvelope.dotNet = true;
         SoapObject soapReq = new SoapObject(NAMESPACE, "dflserviceMaintWOIsOk");
-        soapReq.addProperty("WOSEQUENCE", wosequence);
-        soapReq.addProperty("N_RESULT", n_result);
-        soapReq.addProperty("N_NOTE", n_note);
-        soapReq.addProperty("N_MEMBERS", n_members);
-        soapReq.addProperty("WONUM", wonum);
+        soapReq.addProperty("WOSEQUENCE", wotaskok.getWOSEQUENCE());
+        soapReq.addProperty("N_RESULT", wotaskok.getN_RESULT());
+        soapReq.addProperty("N_NOTE", wotaskok.getN_NOTE());
+        soapReq.addProperty("N_MEMBERS", wotaskok.getN_MEMBERS());
+        soapReq.addProperty("WONUM", wotaskok.getWONUM());
         soapEnvelope.setOutputSoapObject(soapReq);
         HttpTransportSE httpTransport = new HttpTransportSE(ip_adress, timeOut);
         try {
@@ -100,7 +103,7 @@ public class AndroidClientService {
     /**
      * 定期检查单NO
      */
-    public static String MaintWOIsNo(final Context cxt, String personid, String wosequence, String n_result, String n_note, String n_members, String wonum, String assetnum, String siteid, String crewid, String responsor, String position, String reason, String solve, String finishdate, String prodesc) {
+    public static String MaintWOIsNo(final Context cxt, WOTASKNG wotaskng) {
 
         String ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
 
@@ -108,21 +111,21 @@ public class AndroidClientService {
         soapEnvelope.implicitTypes = true;
         soapEnvelope.dotNet = true;
         SoapObject soapReq = new SoapObject(NAMESPACE, "dflserviceMaintWOIsNo");
-        soapReq.addProperty("PERSONID", personid); //登录人ID
-        soapReq.addProperty("WOSEQUENCE", wosequence);//点检项序号
-        soapReq.addProperty("N_RESULT", n_result);//结果
-        soapReq.addProperty("N_NOTE", n_note);// 预知项目结果
-        soapReq.addProperty("N_MEMBERS", n_members);//实施人
-        soapReq.addProperty("WONUM", wonum);//定期点检工单号
-        soapReq.addProperty("ASSETNUM", assetnum);//设备编号
-        soapReq.addProperty("SITEID", siteid);//站点
-        soapReq.addProperty("CREWID", crewid); //班组
-        soapReq.addProperty("RESPONSOR", responsor);//问题点担当
-        soapReq.addProperty("POSITION", position);//部位
-        soapReq.addProperty("REASON", reason); //原因
-        soapReq.addProperty("SOLVE", solve); //解决办法
-        soapReq.addProperty("FINISHDATE", finishdate);//完成日期
-        soapReq.addProperty("PRODESC", prodesc);//问题点录入
+        soapReq.addProperty("PERSONID", wotaskng.getPERSONID()); //登录人ID
+        soapReq.addProperty("WOSEQUENCE", wotaskng.getWOSEQUENCE());//点检项序号
+        soapReq.addProperty("N_RESULT", wotaskng.getN_RESULT());//结果
+        soapReq.addProperty("N_NOTE", wotaskng.getN_NOTE());// 预知项目结果
+        soapReq.addProperty("N_MEMBERS", wotaskng.getN_MEMBERS());//实施人
+        soapReq.addProperty("WONUM", wotaskng.getWONUM());//定期点检工单号
+        soapReq.addProperty("ASSETNUM", wotaskng.getASSETNUM());//设备编号
+        soapReq.addProperty("SITEID", wotaskng.getSITEID());//站点
+        soapReq.addProperty("CREWID", wotaskng.getCREWID()); //班组
+        soapReq.addProperty("RESPONSOR", wotaskng.getRESPONSOR());//问题点担当
+        soapReq.addProperty("POSITION", wotaskng.getPOSITION());//部位
+        soapReq.addProperty("REASON", wotaskng.getREASON()); //原因
+        soapReq.addProperty("SOLVE", wotaskng.getSOLVE()); //解决办法
+        soapReq.addProperty("FINISHDATE", wotaskng.getFINISHDATE());//完成日期
+        soapReq.addProperty("PRODESC", wotaskng.getPRODESC());//问题点录入
         soapEnvelope.setOutputSoapObject(soapReq);
         HttpTransportSE httpTransport = new HttpTransportSE(ip_adress, timeOut);
         try {
@@ -216,29 +219,29 @@ public class AndroidClientService {
     /**
      * 定期检查单问题点
      */
-    public static String MaintWOPro(final Context cxt, String personid, String wosequence, String n_result, String n_note, String n_members, String wonum, String assetnum, String siteid, String crewid, String responsor, String position, String reason, String solve, String finishdate, String prodesc) {
+    public static String MaintWOPro(final Context cxt, WOTASKPRO wotaskpro) {
 
         String ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
         soapEnvelope.dotNet = true;
-        SoapObject soapReq = new SoapObject(NAMESPACE, "dflserviceMaintWOIsNo");
-        soapReq.addProperty("PERSONID", personid); //登录人ID
-        soapReq.addProperty("WOSEQUENCE", wosequence);//点检项序号
-        soapReq.addProperty("N_RESULT", n_result);//结果
-        soapReq.addProperty("N_NOTE", n_note);// 预知项目结果
-        soapReq.addProperty("N_MEMBERS", n_members);//实施人
-        soapReq.addProperty("WONUM", wonum);//定期点检工单号
-        soapReq.addProperty("ASSETNUM", assetnum);//设备编号
-        soapReq.addProperty("SITEID", siteid);//站点
-        soapReq.addProperty("CREWID", crewid); //班组
-        soapReq.addProperty("RESPONSOR", responsor);//问题点担当
-        soapReq.addProperty("POSITION", position);//部位
-        soapReq.addProperty("REASON", reason); //原因
-        soapReq.addProperty("SOLVE", solve); //解决办法
-        soapReq.addProperty("FINISHDATE", finishdate);//完成日期
-        soapReq.addProperty("PRODESC", prodesc);//问题点录入
+        SoapObject soapReq = new SoapObject(NAMESPACE, "dflserviceMaintWOPro");
+        soapReq.addProperty("PERSONID", wotaskpro.getPERSONID()); //登录人ID
+        soapReq.addProperty("WOSEQUENCE", wotaskpro.getWOSEQUENCE());//点检项序号
+        soapReq.addProperty("N_RESULT", wotaskpro.getN_RESULT());//结果
+        soapReq.addProperty("N_NOTE", wotaskpro.getN_NOTE());// 预知项目结果
+        soapReq.addProperty("N_MEMBERS", wotaskpro.getN_MEMBERS());//实施人
+        soapReq.addProperty("WONUM", wotaskpro.getWONUM());//定期点检工单号
+        soapReq.addProperty("ASSETNUM", wotaskpro.getASSETNUM());//设备编号
+        soapReq.addProperty("SITEID", wotaskpro.getSITEID());//站点
+        soapReq.addProperty("CREWID", wotaskpro.getCREWID()); //班组
+        soapReq.addProperty("RESPONSOR", wotaskpro.getRESPONSOR());//问题点担当
+        soapReq.addProperty("POSITION", wotaskpro.getPOSITION());//部位
+        soapReq.addProperty("REASON", wotaskpro.getREASON()); //原因
+        soapReq.addProperty("SOLVE", wotaskpro.getSOLVE()); //解决办法
+        soapReq.addProperty("FINISHDATE", wotaskpro.getFINISHDATE());//完成日期
+        soapReq.addProperty("PRODESC", wotaskpro.getPRODESC());//问题点录入
         soapEnvelope.setOutputSoapObject(soapReq);
         HttpTransportSE httpTransport = new HttpTransportSE(ip_adress, timeOut);
         try {
@@ -251,6 +254,7 @@ public class AndroidClientService {
         String obj = null;
         try {
             obj = soapEnvelope.getResponse().toString();
+            Log.i(TAG,"问题点:="+obj);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }

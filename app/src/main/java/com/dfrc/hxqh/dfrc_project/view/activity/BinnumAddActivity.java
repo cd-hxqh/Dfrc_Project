@@ -6,7 +6,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dfrc.hxqh.dfrc_project.R;
-import com.dfrc.hxqh.dfrc_project.dialog.FlippingLoadingDialog;
 import com.dfrc.hxqh.dfrc_project.model.INVBALANCES;
 import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
 import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
@@ -39,7 +38,6 @@ public class BinnumAddActivity extends BaseActivity {
 
     private INVBALANCES invbalances;
 
-    protected FlippingLoadingDialog mLoadingDialog;
 
 
     @Override
@@ -83,11 +81,6 @@ public class BinnumAddActivity extends BaseActivity {
         startAsyncTask();
     }
 
-    private FlippingLoadingDialog getLoadingDialog(String msg) {
-        if (mLoadingDialog == null)
-            mLoadingDialog = new FlippingLoadingDialog(this, msg);
-        return mLoadingDialog;
-    }
 
     /**
      * 提交数据*

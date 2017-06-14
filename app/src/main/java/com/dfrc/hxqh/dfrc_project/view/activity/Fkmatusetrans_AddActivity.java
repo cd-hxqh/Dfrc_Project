@@ -13,7 +13,6 @@ import com.dfrc.hxqh.dfrc_project.api.HttpManager;
 import com.dfrc.hxqh.dfrc_project.api.HttpRequestHandler;
 import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.bean.Results;
-import com.dfrc.hxqh.dfrc_project.dialog.FlippingLoadingDialog;
 import com.dfrc.hxqh.dfrc_project.model.FKWORKORDER;
 import com.dfrc.hxqh.dfrc_project.model.INVBALANCES;
 import com.dfrc.hxqh.dfrc_project.model.LOCATIONS;
@@ -72,7 +71,6 @@ public class Fkmatusetrans_AddActivity extends BaseActivity {
     TextView n_useareaTextView; //使用区域
 
     private FKWORKORDER fkworkorder;
-    protected FlippingLoadingDialog mLoadingDialog;
 
     private BaseAnimatorSet mBasIn;
     private BaseAnimatorSet mBasOut;
@@ -147,11 +145,7 @@ public class Fkmatusetrans_AddActivity extends BaseActivity {
         }
     }
 
-    private FlippingLoadingDialog getLoadingDialog(String msg) {
-        if (mLoadingDialog == null)
-            mLoadingDialog = new FlippingLoadingDialog(this, msg);
-        return mLoadingDialog;
-    }
+
 
 
     /**

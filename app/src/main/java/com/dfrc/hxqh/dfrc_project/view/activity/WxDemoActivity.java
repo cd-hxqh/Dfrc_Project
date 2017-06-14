@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.dfrc.hxqh.dfrc_project.R;
 import com.dfrc.hxqh.dfrc_project.constants.Constants;
-import com.dfrc.hxqh.dfrc_project.dialog.FlippingLoadingDialog;
 import com.dfrc.hxqh.dfrc_project.until.ImageCompressUtils;
 import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
 import com.dfrc.hxqh.dfrc_project.view.adapter.ImagePickerAdapter;
@@ -80,7 +79,6 @@ public class WxDemoActivity extends BaseActivity implements ImagePickerAdapter.O
      */
     private String ownerid;
 
-    protected FlippingLoadingDialog mLoadingDialog;
 
 
     @Override
@@ -323,12 +321,6 @@ public class WxDemoActivity extends BaseActivity implements ImagePickerAdapter.O
             name = file.getName();
         }
         return name;
-    }
-
-    private FlippingLoadingDialog getLoadingDialog(String msg) {
-        if (mLoadingDialog == null)
-            mLoadingDialog = new FlippingLoadingDialog(this, msg);
-        return mLoadingDialog;
     }
 
 

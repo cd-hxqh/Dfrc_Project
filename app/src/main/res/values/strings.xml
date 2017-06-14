@@ -158,7 +158,7 @@
     <string name="wfcxsb_text">无法查询设备编号!</string>
     <string name="save_text">保存</string>
     <string name="ok_text">OK</string>
-    <string name="no_text">NO</string>
+    <string name="no_text">NG</string>
     <string name="n_pb_text">问题点</string>
     <string name="n_prodesc_text">问题点录入:</string>
     <string name="n_solve_text">解决办法:</string>
@@ -279,7 +279,12 @@
     <string name="ly_text">来源</string>
     <string name="have_load_out_all_the_data">已加载出全部数据</string>
     <string name="down_text">下载</string>
-    <string name="down_success_text">下载完成</string>
+    <string name="down_success_text">已下载</string>
     <string name="yxzrw_text">已下载任务</string>
+    <string name="data_success_text">数据保存成功</string>
+    <string name="all_text">全选</string>
+    <string name="upload_text">上传</string>
+    <string name="delete_text">删除</string>
+    <string name="please_upload_data_text">请选择需要上传的记录</string>
 
 </resources>

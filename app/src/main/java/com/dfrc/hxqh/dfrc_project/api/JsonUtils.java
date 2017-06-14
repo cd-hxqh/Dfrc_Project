@@ -1134,14 +1134,14 @@ public class JsonUtils {
     /**
      * 封装WOTASK的json
      */
-    public static String potoWOTASK(String n_result, String n_note, String n_members) {
+    public static String potoWOTASK(WOTASK wotask) {
 
         JSONObject json = new JSONObject();
 
         try {
-            json.put("N_RESULT", n_result);  //结果
-            json.put("N_NOTE", n_note); //预知项目结果
-            json.put("N_MEMBERS", n_members); //实施人员
+            json.put("N_RESULT", wotask.getN_RESULT());  //结果
+            json.put("N_NOTE", wotask.getN_NOTE()); //预知项目结果
+            json.put("N_MEMBERS", wotask.getN_MEMBERS()); //实施人员
             JSONArray jsonArray = new JSONArray();
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("", "");

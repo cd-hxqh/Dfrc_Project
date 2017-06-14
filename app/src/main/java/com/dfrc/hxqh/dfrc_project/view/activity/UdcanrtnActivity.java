@@ -27,7 +27,6 @@ import com.dfrc.hxqh.dfrc_project.api.HttpManager;
 import com.dfrc.hxqh.dfrc_project.api.HttpRequestHandler;
 import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.bean.Results;
-import com.dfrc.hxqh.dfrc_project.dialog.FlippingLoadingDialog;
 import com.dfrc.hxqh.dfrc_project.model.UDCANRTN;
 import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
 import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
@@ -88,7 +87,6 @@ public class UdcanrtnActivity extends BaseActivity implements SwipeRefreshLayout
 
     private String ponum; //采购单号
 
-    protected FlippingLoadingDialog mLoadingDialog;
 
 
     @Override
@@ -298,11 +296,7 @@ public class UdcanrtnActivity extends BaseActivity implements SwipeRefreshLayout
     }
 
 
-    private FlippingLoadingDialog getLoadingDialog(String msg) {
-        if (mLoadingDialog == null)
-            mLoadingDialog = new FlippingLoadingDialog(this, msg);
-        return mLoadingDialog;
-    }
+
 
     /**
      * 提交数据*

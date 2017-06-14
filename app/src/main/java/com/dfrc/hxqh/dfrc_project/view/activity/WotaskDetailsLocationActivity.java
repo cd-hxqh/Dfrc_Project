@@ -1,7 +1,6 @@
 package com.dfrc.hxqh.dfrc_project.view.activity;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -9,9 +8,12 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.dfrc.hxqh.dfrc_project.R;
-import com.dfrc.hxqh.dfrc_project.dialog.FlippingLoadingDialog;
+import com.dfrc.hxqh.dfrc_project.dao.WoTaskDao;
+import com.dfrc.hxqh.dfrc_project.dao.WoTaskOKDao;
 import com.dfrc.hxqh.dfrc_project.model.PERSON;
 import com.dfrc.hxqh.dfrc_project.model.WOTASK;
+import com.dfrc.hxqh.dfrc_project.model.WOTASKOK;
+import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
 import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
 
 import butterknife.Bind;
@@ -22,7 +24,7 @@ import butterknife.OnClick;
 /**
  * 点击明细行详情
  */
-public class WotaskDetailsActivity extends BaseActivity {
+public class WotaskDetailsLocationActivity extends BaseActivity {
 
     public static final int NO_CODE = 100;
     public static final int WT_CODE = 101;
@@ -73,8 +75,8 @@ public class WotaskDetailsActivity extends BaseActivity {
     private WOTASK wotask;
     private String wonum;
 
-
-    protected FlippingLoadingDialog mLoadingDialog;
+    private WoTaskOKDao woTaskOKDao;
+    private WoTaskDao woTaskDao;
 
 
     @Override
@@ -83,9 +85,16 @@ public class WotaskDetailsActivity extends BaseActivity {
         setContentView(R.layout.activity_wotask_details);
         ButterKnife.bind(this);
         geiIntentData();
+        initDAO();
         findViewById();
         initView();
 
+    }
+
+    //初始化DAO
+    private void initDAO() {
+        woTaskOKDao = new WoTaskOKDao(this);
+        woTaskDao = new WoTaskDao(this);
     }
 
     private void geiIntentData() {
@@ -132,20 +141,21 @@ public class WotaskDetailsActivity extends BaseActivity {
     void setSbmitBtnOnClickListener() {
         getLoadingDialog("正在提交数据...").show();
 //        saveAsyncTask();
+        saveWoTask();
     }
 
     //OK
     @OnClick(R.id.ok_btn_id)
     void setOkBtnOnClickListener() {
         getLoadingDialog("正在提交数据...").show();
-        startAsyncTask();
+        OKSubmit();
     }
 
     //NO
     @OnClick(R.id.no_text_id)
     void setNoBtnOnClickListener() {
         Intent intent = getIntent();
-        intent.setClass(WotaskDetailsActivity.this, N_PB_AddActivity.class);
+        intent.setClass(WotaskDetailsLocationActivity.this, N_PB_AddActivity.class);
         intent.putExtra("code", NO_CODE);
         startActivityForResult(intent, 0);
     }
@@ -154,7 +164,7 @@ public class WotaskDetailsActivity extends BaseActivity {
     @OnClick(R.id.n_pb_text_id)
     void setn_pbBtnOnClickListener() {
         Intent intent = getIntent();
-        intent.setClass(WotaskDetailsActivity.this, N_PB_AddActivity.class);
+        intent.setClass(WotaskDetailsLocationActivity.this, N_PB_AddActivity.class);
         intent.putExtra("code", WT_CODE);
         startActivityForResult(intent, 0);
     }
@@ -164,7 +174,7 @@ public class WotaskDetailsActivity extends BaseActivity {
     @OnClick(R.id.n_members_text_id)
     void setN_membersTextViewOnClickListener() {
         Intent intent = getIntent();
-        intent.setClass(WotaskDetailsActivity.this, PersonActivity.class);
+        intent.setClass(WotaskDetailsLocationActivity.this, PersonActivity.class);
         startActivityForResult(intent, 0);
     }
 
@@ -173,20 +183,21 @@ public class WotaskDetailsActivity extends BaseActivity {
 //     * 修改*
 //     */
 //    private void saveAsyncTask() {
+//
 //        final String n_result = n_resultTextView.getText().toString();
 //        final String n_note = n_noteTextView.getText().toString();
 //        final String n_members = n_membersTextView.getText().toString();
 //        new AsyncTask<String, String, String>() {
 //            @Override
 //            protected String doInBackground(String... strings) {
-//                return AndroidClientService.UpdateMbo(WotaskDetailsActivity.this, JsonUtils.potoWOTASK(n_result, n_note, n_members), Constants.WOTASK_NAME, "WOTASKID", wotask.getWOTASKID());
+//                return AndroidClientService.UpdateMbo(WotaskDetailsLocationActivity.this, JsonUtils.potoWOTASK(n_result, n_note, n_members), Constants.WOTASK_NAME, "WOTASKID", wotask.getWOTASKID());
 //            }
 //
 //            @Override
 //            protected void onPostExecute(String s) {
 //                super.onPostExecute(s);
 //                mLoadingDialog.dismiss();
-//                MessageUtils.showMiddleToast(WotaskDetailsActivity.this, s);
+//                MessageUtils.showMiddleToast(WotaskDetailsLocationActivity.this, s);
 //                finish();
 //
 //
@@ -196,33 +207,48 @@ public class WotaskDetailsActivity extends BaseActivity {
 //
 //    }
 
+
     /**
-     * 提交数据*
-     */
-    private void startAsyncTask() {
-
-        final String n_result = n_resultTextView.getText().toString();
-        final String n_note = n_noteTextView.getText().toString();
-        new AsyncTask<String, String, String>() {
-            @Override
-            protected String doInBackground(String... strings) {
-//                return AndroidClientService.MaintWOIsOk(WotaskDetailsActivity.this, wotask.getWOSEQUENCE(), n_result, n_note, AccountUtils.getloginUserName(WotaskDetailsActivity.this), wonum);
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-                mLoadingDialog.dismiss();
-                MessageUtils.showMiddleToast(WotaskDetailsActivity.this, s);
-                finish();
-
-            }
-        }.execute();
-
+     * 保存数据
+     **/
+    private void saveWoTask() {
+        String n_result = n_resultTextView.getText().toString();
+        String n_note = n_noteTextView.getText().toString();
+        String n_members = n_membersTextView.getText().toString();
+        wotask.setN_RESULT(n_result);
+        wotask.setN_NOTE(n_note);
+        wotask.setN_MEMBERS(n_members);
+        wotask.setUPDATE(1); //修改
+        woTaskDao.update(wotask);
+        colseProgressBar();
+        MessageUtils.showMiddleToast(WotaskDetailsLocationActivity.this, getString(R.string.data_success_text));
 
     }
 
+    /**
+     * OK提交数据
+     **/
+    private void OKSubmit() {
+        String n_result = n_resultTextView.getText().toString();
+        String n_note = n_noteTextView.getText().toString();
+        WOTASKOK wotaskok = woTaskOKDao.findByWosequence(wotask.getWOSEQUENCE());
+        if (null == wotaskok) {
+            wotaskok = new WOTASKOK();
+            wotaskok.setWONUM(wonum);
+            wotaskok.setWOSEQUENCE(wotask.getWOSEQUENCE());
+            wotaskok.setN_RESULT(n_result);
+            wotaskok.setN_NOTE(n_note);
+            wotaskok.setN_MEMBERS(AccountUtils.getloginUserName(WotaskDetailsLocationActivity.this));
+            woTaskOKDao.create(wotaskok);
+        } else {
+            wotaskok.setN_RESULT(n_result);
+            wotaskok.setN_NOTE(n_note);
+            woTaskOKDao.update(wotaskok);
+        }
+        colseProgressBar();
+        MessageUtils.showMiddleToast(WotaskDetailsLocationActivity.this, getString(R.string.data_success_text));
+
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

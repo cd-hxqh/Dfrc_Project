@@ -7,6 +7,9 @@ import android.util.Log;
 import com.dfrc.hxqh.dfrc_project.constants.Constants;
 import com.dfrc.hxqh.dfrc_project.model.WORKORDER;
 import com.dfrc.hxqh.dfrc_project.model.WOTASK;
+import com.dfrc.hxqh.dfrc_project.model.WOTASKNG;
+import com.dfrc.hxqh.dfrc_project.model.WOTASKOK;
+import com.dfrc.hxqh.dfrc_project.model.WOTASKPRO;
 import com.dfrc.hxqh.dfrc_project.until.Utils;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
@@ -35,6 +38,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         try {
             TableUtils.createTable(connectionSource, WORKORDER.class);
             TableUtils.createTable(connectionSource, WOTASK.class);
+            TableUtils.createTable(connectionSource, WOTASKOK.class);
+            TableUtils.createTable(connectionSource, WOTASKNG.class);
+            TableUtils.createTable(connectionSource, WOTASKPRO.class);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -50,6 +56,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             Log.i(TAG,"更新");
             TableUtils.dropTable(connectionSource, WORKORDER.class, true);
             TableUtils.dropTable(connectionSource, WOTASK.class, true);
+            TableUtils.dropTable(connectionSource, WOTASKOK.class, true);
+            TableUtils.dropTable(connectionSource, WOTASKNG.class, true);
+            TableUtils.dropTable(connectionSource, WOTASKPRO.class, true);
 
             onCreate(database, connectionSource);
         } catch (SQLException e) {

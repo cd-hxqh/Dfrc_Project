@@ -22,7 +22,6 @@ import com.dfrc.hxqh.dfrc_project.api.HttpRequestHandler;
 import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.bean.Results;
 import com.dfrc.hxqh.dfrc_project.constants.Constants;
-import com.dfrc.hxqh.dfrc_project.dialog.FlippingLoadingDialog;
 import com.dfrc.hxqh.dfrc_project.model.ALNDOMAIN;
 import com.dfrc.hxqh.dfrc_project.model.ASSET;
 import com.dfrc.hxqh.dfrc_project.model.N_PROBLEM;
@@ -127,7 +126,6 @@ public class N_ProblemDetailsActivity extends BaseActivity {
     private String[] jinzhanTypes = null;
 
 
-    protected FlippingLoadingDialog mLoadingDialog;
 
 
     private LinearLayout saveLinearLayout; //保存
@@ -390,11 +388,7 @@ public class N_ProblemDetailsActivity extends BaseActivity {
     }
 
 
-    private FlippingLoadingDialog getLoadingDialog(String msg) {
-        if (mLoadingDialog == null)
-            mLoadingDialog = new FlippingLoadingDialog(this, msg);
-        return mLoadingDialog;
-    }
+
 
 
     /**

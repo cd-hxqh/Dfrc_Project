@@ -177,7 +177,7 @@ public class Constants {
     public static final String TB_NAME = "sqlite-dfrc.db";
 
     /**数据库版本**/
-    public static final int DATABASE_VERSION = 17;
+    public static final int DATABASE_VERSION = 23;
 
 
 }

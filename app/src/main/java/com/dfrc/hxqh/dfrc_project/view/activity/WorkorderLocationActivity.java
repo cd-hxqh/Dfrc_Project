@@ -1,33 +1,32 @@
 package com.dfrc.hxqh.dfrc_project.view.activity;
 
-import android.content.Context;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.ImageSpan;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dfrc.hxqh.dfrc_project.R;
-import com.dfrc.hxqh.dfrc_project.api.HttpManager;
-import com.dfrc.hxqh.dfrc_project.api.HttpRequestHandler;
 import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
-import com.dfrc.hxqh.dfrc_project.bean.Results;
+import com.dfrc.hxqh.dfrc_project.constants.Constants;
+import com.dfrc.hxqh.dfrc_project.dao.WoTaskDao;
+import com.dfrc.hxqh.dfrc_project.dao.WoTaskNgDao;
+import com.dfrc.hxqh.dfrc_project.dao.WoTaskOKDao;
+import com.dfrc.hxqh.dfrc_project.dao.WoTaskProDao;
+import com.dfrc.hxqh.dfrc_project.dao.WorkOrderDao;
 import com.dfrc.hxqh.dfrc_project.model.WORKORDER;
+import com.dfrc.hxqh.dfrc_project.model.WOTASK;
+import com.dfrc.hxqh.dfrc_project.model.WOTASKNG;
+import com.dfrc.hxqh.dfrc_project.model.WOTASKOK;
+import com.dfrc.hxqh.dfrc_project.model.WOTASKPRO;
 import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
 import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
 import com.dfrc.hxqh.dfrc_project.view.adapter.BaseQuickAdapter;
@@ -42,7 +41,6 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnTextChanged;
 
 /**
  * Created by Administrator on 2017/2/15.
@@ -63,15 +61,20 @@ public class WorkorderLocationActivity extends BaseActivity implements SwipeRefr
 
     @Bind(R.id.swipe_container)
     SwipeRefreshLayout refresh_layout;//界面刷新
+
+
+    @Bind(R.id.all_btn_id)
+    Button allBtn; //全选
+    @Bind(R.id.upload_btn_id)
+    Button uploadBtn; //上传
+    @Bind(R.id.delete_btn_id)
+    Button deleteBtn; //删除
+
     /**
      * 适配器*
      */
     private WorkOrderListAdapter workOrderListAdapter;
 
-    @Bind(R.id.edt_input)
-    EditText search; //编辑框
-    @Bind(R.id.btn_delete)
-    Button deleteBtn; //删除
     /**
      * 查询条件*
      */
@@ -80,17 +83,34 @@ public class WorkorderLocationActivity extends BaseActivity implements SwipeRefr
 
 
     ArrayList<WORKORDER> items = new ArrayList<WORKORDER>();
-    private boolean isCodePda; //判断是扫描还是手输
 
-    private String assetNum; //设备编号
+    private ArrayList<WORKORDER> chooseWorkOrderList = new ArrayList<WORKORDER>(); //选中的记录
+
+    private WorkOrderDao workOrderDao;
+    private WoTaskDao woTaskDao;
+    private WoTaskOKDao woTaskOKDao;
+    private WoTaskNgDao woTaskNgDao;
+    private WoTaskProDao woTaskProDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list);
+        setContentView(R.layout.activity_locworkorder_list);
         ButterKnife.bind(this);
+        initDao();
         findViewById();
         initView();
+    }
+
+    /**
+     * 初始化DAO
+     **/
+    private void initDao() {
+        workOrderDao = new WorkOrderDao(this);
+        woTaskDao = new WoTaskDao(this);
+        woTaskOKDao = new WoTaskOKDao(this);
+        woTaskNgDao = new WoTaskNgDao(this);
+        woTaskProDao = new WoTaskProDao(this);
     }
 
 
@@ -103,7 +123,6 @@ public class WorkorderLocationActivity extends BaseActivity implements SwipeRefr
     @Override
     protected void initView() {
         titleTextView.setText(R.string.ddjgd_text);
-        setSearchEdit();
 
         layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -121,10 +140,8 @@ public class WorkorderLocationActivity extends BaseActivity implements SwipeRefr
         refresh_layout.setRefreshing(true);
         initAdapter(new ArrayList<WORKORDER>());
         items = new ArrayList<>();
-        getData(searchText);
+        getData();
 
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(search.getWindowToken(), 0);
     }
 
     //返回事件
@@ -133,145 +150,73 @@ public class WorkorderLocationActivity extends BaseActivity implements SwipeRefr
         finish();
     }
 
-    @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.BEFORE_TEXT_CHANGED)
-    void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    //全选
+    @OnClick(R.id.all_btn_id)
+    void setAllBtnOnClickListener() {
+        if (allBtn.getText().toString().equals("全选")) {
+            workOrderListAdapter.setAll(true);
+            workOrderListAdapter.notifyDataSetChanged();
+            allBtn.setText("全不选");
+        } else if (allBtn.getText().toString().equals("全不选")) {
+            workOrderListAdapter.setAll(false);
+            workOrderListAdapter.notifyDataSetChanged();
+            allBtn.setText("全选");
+        }
 
     }
 
-    @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.TEXT_CHANGED)
-    void onTextChanged(CharSequence s, int start, int before, int count) {
-        if (start == 0 && before == 0 && count > 1) {
-            //扫描
-            isCodePda = true;
+    //上传
+    @OnClick(R.id.upload_btn_id)
+    void setUploadBtnOnClickListener() {
+        if (null == chooseWorkOrderList || chooseWorkOrderList.size() == 0) {
+            MessageUtils.showMiddleToast(WorkorderLocationActivity.this, getString(R.string.please_upload_data_text));
         } else {
-            //手输
-            isCodePda = false;
+            alerDialog();
+
         }
     }
-
-    @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
-    void afterTextChanged(Editable s) {
-        if (s.length() > 0) {
-            deleteBtn.setVisibility(View.VISIBLE);
-        } else {
-            deleteBtn.setVisibility(View.GONE);
-        }
-
-        if (isCodePda) {
-            assetNum = parsingResult(s.toString());
-            workOrderListAdapter.removeAll(items);
-            items = new ArrayList<WORKORDER>();
-            nodatalayout.setVisibility(View.GONE);
-            refresh_layout.setRefreshing(true);
-            page = 1;
-            startAsyncTask();
-        }
-    }
-
 
     //删除
-    @OnClick(R.id.btn_delete)
+    @OnClick(R.id.delete_btn_id)
     void setDeleteBtnOnClickListener() {
-        search.setText("");
+        if (null == chooseWorkOrderList || chooseWorkOrderList.size() == 0) {
+            MessageUtils.showMiddleToast(WorkorderLocationActivity.this, getString(R.string.please_upload_data_text));
+        } else {
+            deleteAlerDialog();
+
+        }
     }
 
 
     @Override
     public void onLoad() {
-        if (!isCodePda) {
-            page++;
-            getData(searchText);
-        } else {
-            refresh_layout.setLoading(false);
-        }
+        refresh_layout.setLoading(false);
 
     }
 
     @Override
     public void onRefresh() {
-        if (!isCodePda) {
-            page = 1;
-            getData(searchText);
-        } else {
-            refresh_layout.setRefreshing(false);
-        }
-    }
-
-
-    private void setSearchEdit() {
-        SpannableString msp = new SpannableString("XX搜索");
-        Drawable drawable = getResources().getDrawable(R.mipmap.ic_search);
-        msp.setSpan(new ImageSpan(drawable), 0, 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-        search.setHint(msp);
-        search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    // 先隐藏键盘
-                    ((InputMethodManager) search.getContext().getSystemService(Context.INPUT_METHOD_SERVICE))
-                            .hideSoftInputFromWindow(
-                                    WorkorderLocationActivity.this.getCurrentFocus()
-                                            .getWindowToken(),
-                                    InputMethodManager.HIDE_NOT_ALWAYS);
-                    searchText = search.getText().toString();
-                    workOrderListAdapter.removeAll(items);
-                    items = new ArrayList<WORKORDER>();
-                    nodatalayout.setVisibility(View.GONE);
-                    refresh_layout.setRefreshing(true);
-                    page = 1;
-                    getData(searchText);
-                    return true;
-                }
-                return false;
-            }
-        });
+        refresh_layout.setRefreshing(false);
     }
 
 
     /**
      * 获取数据*
      */
-    private void getData(String search) {
+    private void getData() {
 
 
-        HttpManager.getDataPagingInfo(WorkorderLocationActivity.this, HttpManager.getWORKORDERURL(search, AccountUtils.getCrewid(WorkorderLocationActivity.this), page, 20), new HttpRequestHandler<Results>() {
-            @Override
-            public void onSuccess(Results results) {
-            }
-
-            @Override
-            public void onSuccess(Results results, int totalPages, int currentPage) {
-                Log.i(TAG, "totalPages=" + totalPages + ",currentPage=" + currentPage);
-                ArrayList<WORKORDER> item = JsonUtils.parsingWORKORDER(results.getResultlist());
-                refresh_layout.setRefreshing(false);
-                refresh_layout.setLoading(false);
-                if (item == null || item.isEmpty()) {
-                    nodatalayout.setVisibility(View.VISIBLE);
-                } else {
-
-                    if (item != null || item.size() != 0) {
-                        if (page == 1) {
-                            items = new ArrayList<WORKORDER>();
-                            initAdapter(items);
-                        }if(page>totalPages){
-                            MessageUtils.showMiddleToast(WorkorderLocationActivity.this,"已加载出全部数据");
-                        }else{
-                            addData(item);
-                        }
-
-                    }
-                    nodatalayout.setVisibility(View.GONE);
-
-                }
-            }
-
-            @Override
-            public void onFailure(String error) {
-                refresh_layout.setRefreshing(false);
-                nodatalayout.setVisibility(View.VISIBLE);
-            }
-        });
+        List<WORKORDER> workorderList = workOrderDao.queryForByCrewId("MAINT", "MAINT", AccountUtils.getCrewid(WorkorderLocationActivity.this));
+        if (workorderList != null || workorderList.size() != 0) {
+            addData(workorderList);
+            refresh_layout.setRefreshing(false);
+            refresh_layout.setLoading(false);
+            nodatalayout.setVisibility(View.GONE);
+        } else {
+            refresh_layout.setRefreshing(false);
+            nodatalayout.setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -280,7 +225,7 @@ public class WorkorderLocationActivity extends BaseActivity implements SwipeRefr
      * 获取数据*
      */
     private void initAdapter(final List<WORKORDER> list) {
-        workOrderListAdapter = new WorkOrderListAdapter(WorkorderLocationActivity.this, R.layout.list_item_workorder, list);
+        workOrderListAdapter = new WorkOrderListAdapter(WorkorderLocationActivity.this, R.layout.list_item_locworkorder, list);
         recyclerView.setAdapter(workOrderListAdapter);
         workOrderListAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override
@@ -293,6 +238,17 @@ public class WorkorderLocationActivity extends BaseActivity implements SwipeRefr
                 startActivityForResult(intent, 0);
             }
         });
+        workOrderListAdapter.setOnCheckedChangeListener(new WorkOrderListAdapter.OnCheckedChangeListener() {
+            @Override
+            public void cOnCheckedChangeListener(boolean b, int postion, WORKORDER item) {
+                if (b) {
+                    chooseWorkOrderList.add(item);
+                } else {
+                    chooseWorkOrderList.remove(item);
+                }
+            }
+        });
+
 
     }
 
@@ -306,37 +262,251 @@ public class WorkorderLocationActivity extends BaseActivity implements SwipeRefr
 
 
     /**
-     * 根据设备查询编号*
+     * 上传弹出框*
      */
-    private void startAsyncTask() {
+    private void alerDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(WorkorderLocationActivity.this);
+        builder.setMessage("已选择" + chooseWorkOrderList.size() + "条记录，确定上传吗？").setTitle("提示")
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                }).setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+                getLoadingDialog("正在提交...").show();
+                findWotaskOk();
+                submitData();
+
+
+            }
+        }).create().show();
+    }
+
+    /**
+     * 删除弹出框*
+     */
+    private void deleteAlerDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(WorkorderLocationActivity.this);
+        builder.setMessage("已选择" + chooseWorkOrderList.size() + "条记录，确定删除吗？").setTitle("提示")
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                }).setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+                getLoadingDialog("正在提交...").show();
+                findWotaskOk();
+                deleteData();
+
+            }
+        }).create().show();
+    }
+
+    /**
+     * 获取需要提交的数据
+     **/
+    private void submitData() {
+        saveAsyncTask();
+        startAsyncTaskOK();
+        startAsyncTaskNG();
+        startAsyncTaskPRO();
+    }
+
+
+    /**
+     * 删除选中的记录j
+     **/
+    private void deleteData() {
+        int deWorkOrder = workOrderDao.deleteByWorkorders(chooseWorkOrderList);
+        int deTask = woTaskDao.deleteByWotasks(wotasks);
+        int deOk = woTaskOKDao.deleteByWotaskoks(wotaskoks);
+        int deNG = woTaskNgDao.deleteByWotaskngs(wotaskngs);
+        int dePRO = woTaskProDao.deleteByWotaskpros(wotaskpros);
+        colseProgressBar();
+        if (deWorkOrder == 1 || deTask == 1 || deOk == 1 || deNG == 1 || dePRO == 1) {
+            MessageUtils.showMiddleToast(WorkorderLocationActivity.this, "删除成功");
+        } else {
+            MessageUtils.showMiddleToast(WorkorderLocationActivity.this, "删除失败");
+        }
+        initAdapter(new ArrayList<WORKORDER>());
+        getData();
+    }
+
+
+    private List<WOTASK> wotasks = new ArrayList<WOTASK>(); //选中的WOTASK选项
+    private List<WOTASKOK> wotaskoks = new ArrayList<WOTASKOK>(); //需要提交的OK选项
+    private List<WOTASKNG> wotaskngs = new ArrayList<WOTASKNG>(); //需要提交的NG选项
+    private List<WOTASKPRO> wotaskpros = new ArrayList<WOTASKPRO>(); //需要提交的PRO选项
+
+    //根据编号获取选中的子表数据
+    private void findWotaskOk() {
+        for (WORKORDER workorder : chooseWorkOrderList) {
+            String wonum = workorder.getWONUM();
+            Log.i(TAG, "wonum=" + wonum);
+            List<WOTASK> wotasklist = woTaskDao.findByWonum(wonum);
+            if (null != wotasklist && wotasklist.size() != 0) {
+                for (WOTASK wotask : wotasklist) {
+                    wotasks.add(wotask);
+                }
+            }
+            List<WOTASKOK> wotaskoklist = woTaskOKDao.findByWonum(wonum);
+            if (null != wotaskoklist && wotaskoklist.size() != 0) {
+                for (WOTASKOK wotaskok : wotaskoklist) {
+                    wotaskoks.add(wotaskok);
+                }
+            }
+            List<WOTASKNG> wotasknglist = woTaskNgDao.findByWonum(wonum);
+            if (null != wotasknglist && wotasknglist.size() != 0) {
+                for (WOTASKNG wotaskng : wotasknglist) {
+                    wotaskngs.add(wotaskng);
+                }
+            }
+            List<WOTASKPRO> wotaskprolist = woTaskProDao.findByWonum(wonum);
+            if (null != wotaskprolist && wotaskprolist.size() != 0) {
+                for (WOTASKPRO wotaskpro : wotaskprolist) {
+                    wotaskpros.add(wotaskpro);
+                }
+            }
+        }
+
+    }
+
+    private List<WOTASK> updateWotasks = new ArrayList<WOTASK>(); //本地修改过的WoTask
+
+    /**
+     * 根据wonum查询本地修改过的Wotask
+     **/
+    private List<WOTASK> updaeWoTasks() {
+        for (WORKORDER workorder : chooseWorkOrderList) {
+            String wonum = workorder.getWONUM();
+            Log.i(TAG, "wonum=" + wonum);
+            List<WOTASK> wotasklist = woTaskDao.findByWonumAndUpdate(wonum, 1);
+            if (null != wotasklist && wotasklist.size() != 0) {
+                for (WOTASK wotask : wotasklist) {
+                    updateWotasks.add(wotask);
+                }
+            }
+        }
+        return updateWotasks;
+    }
+
+
+    /**
+     * 提交保存数据Wotask
+     **/
+
+    private void saveAsyncTask() {
         new AsyncTask<String, String, String>() {
             @Override
             protected String doInBackground(String... strings) {
-                Log.i(TAG, "assetnum=" + assetNum);
-                return AndroidClientService.searchMaint2(WorkorderLocationActivity.this, "ASSETNUM", assetNum, "line"); //根据设备获取定期点检工单
+                List<WOTASK> list = updaeWoTasks();
+                if (null != list && list.size() != 0) {
+                    for (WOTASK wotask : list) {
+                        String relut=AndroidClientService.UpdateMbo(WorkorderLocationActivity.this, JsonUtils.potoWOTASK(wotask), Constants.WOTASK_NAME, "WOTASKID", wotask.getWOTASKID());
+                        Log.i(TAG,"修改"+relut);
+                    }
+                }
+
+                return "提交成功";
             }
 
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                refresh_layout.setRefreshing(false);
-                refresh_layout.setLoading(false);
-                String result = JsonUtils.parsingsearchMaint2(s);
-                if (result.equals("暂无数据")) {
-                    nodatalayout.setVisibility(View.VISIBLE);
-                } else {
-                    ArrayList<WORKORDER> item = JsonUtils.parsingWORKORDER(s);
 
-                    if (item == null || item.isEmpty()) {
-                        nodatalayout.setVisibility(View.VISIBLE);
-                    } else {
-                        addData(item);
-                    }
-                }
+
             }
         }.execute();
 
 
     }
+
+
+    /**
+     * 提交数据OK*
+     */
+    private void startAsyncTaskOK() {
+
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... strings) {
+                for (WOTASKOK wotaskok : wotaskoks) {
+                    String relut = AndroidClientService.MaintWOIsOk(WorkorderLocationActivity.this, wotaskok);
+
+                    Log.i(TAG, "结果:" + relut);
+                }
+                return "提交成功";
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                mLoadingDialog.dismiss();
+                woTaskOKDao.deleteByWotaskoks(wotaskoks);
+                MessageUtils.showMiddleToast(WorkorderLocationActivity.this, s);
+
+            }
+        }.execute();
+
+
+    }
+
+
+    /**
+     * 提交数据NG*
+     */
+    private void startAsyncTaskNG() {
+
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... strings) {
+                for (WOTASKNG wotaskng : wotaskngs) {
+                    AndroidClientService.MaintWOIsNo(WorkorderLocationActivity.this, wotaskng);
+                }
+                return "提交成功";
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                woTaskNgDao.deleteByWotaskngs(wotaskngs);
+            }
+        }.execute();
+
+
+    }
+
+    /**
+     * 提交数据PRO*
+     */
+    private void startAsyncTaskPRO() {
+
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... strings) {
+                for (WOTASKPRO wotaskpro : wotaskpros) {
+                    String relut = AndroidClientService.MaintWOPro(WorkorderLocationActivity.this, wotaskpro);
+                    Log.i(TAG, "relut=" + relut);
+                }
+                return "提交成功";
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                woTaskProDao.deleteByWotaskpros(wotaskpros);
+
+            }
+        }.execute();
+
+
+    }
+
 
 }

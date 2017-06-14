@@ -13,7 +13,6 @@ import com.dfrc.hxqh.dfrc_project.api.HttpRequestHandler;
 import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.bean.Results;
 import com.dfrc.hxqh.dfrc_project.constants.Constants;
-import com.dfrc.hxqh.dfrc_project.dialog.FlippingLoadingDialog;
 import com.dfrc.hxqh.dfrc_project.model.PERSON;
 import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
 import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
@@ -50,7 +49,6 @@ public class LoginActivity extends BaseActivity {
 
     private long exitTime = 0;
 
-    protected FlippingLoadingDialog mLoadingDialog;
 
 
     @Override
@@ -189,11 +187,7 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
-    private FlippingLoadingDialog getLoadingDialog(String msg) {
-        if (mLoadingDialog == null)
-            mLoadingDialog = new FlippingLoadingDialog(this, msg);
-        return mLoadingDialog;
-    }
+
 
     private boolean isJsonArrary(String data) {
         try {

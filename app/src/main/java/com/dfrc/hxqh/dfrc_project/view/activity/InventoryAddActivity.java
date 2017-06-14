@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dfrc.hxqh.dfrc_project.R;
-import com.dfrc.hxqh.dfrc_project.dialog.FlippingLoadingDialog;
 import com.dfrc.hxqh.dfrc_project.model.INVBALANCES;
 import com.dfrc.hxqh.dfrc_project.model.LOCATIONS;
 import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
@@ -57,7 +56,6 @@ public class InventoryAddActivity extends BaseActivity {
 
     private INVBALANCES invbalances;
 
-    protected FlippingLoadingDialog mLoadingDialog;
 
 
     @Override
@@ -158,11 +156,7 @@ public class InventoryAddActivity extends BaseActivity {
         }
     }
 
-    private FlippingLoadingDialog getLoadingDialog(String msg) {
-        if (mLoadingDialog == null)
-            mLoadingDialog = new FlippingLoadingDialog(this, msg);
-        return mLoadingDialog;
-    }
+
 
     /**
      * 提交数据*
@@ -184,7 +178,6 @@ public class InventoryAddActivity extends BaseActivity {
                 mLoadingDialog.dismiss();
                 MessageUtils.showMiddleToast(InventoryAddActivity.this, s);
                 finish();
-
 
             }
         }.execute();

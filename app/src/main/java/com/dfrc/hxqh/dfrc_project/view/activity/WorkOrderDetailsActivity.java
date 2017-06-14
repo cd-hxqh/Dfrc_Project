@@ -92,7 +92,7 @@ public class WorkOrderDetailsActivity extends BaseActivity {
     //点击明细行
     @OnClick(R.id.wotask_btn_id)
     void setWotaskBtnOnClickListener() {
-        Intent intent = new Intent(WorkOrderDetailsActivity.this, WotaskActivity.class);
+        Intent intent = new Intent(WorkOrderDetailsActivity.this, WotaskLocationActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable("wonum", workorder.getWONUM());
         bundle.putSerializable("crewid", workorder.getCREWID());

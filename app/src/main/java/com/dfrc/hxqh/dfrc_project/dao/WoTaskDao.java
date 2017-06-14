@@ -1,7 +1,6 @@
 package com.dfrc.hxqh.dfrc_project.dao;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.dfrc.hxqh.dfrc_project.model.WOTASK;
 import com.dfrc.hxqh.dfrc_project.ormLiteOpenHelper.DatabaseHelper;
@@ -17,7 +16,7 @@ import java.util.concurrent.Callable;
  * 定期点检工单子表
  */
 public class WoTaskDao {
-    private static final String TAG="WoTaskDao";
+    private static final String TAG = "WoTaskDao";
     private Context context;
     private Dao<WOTASK, Integer> WotaskDaoOpe;
     private DatabaseHelper helper;
@@ -33,19 +32,32 @@ public class WoTaskDao {
     }
 
     /**
+     * 创建wotask
+     *
+     * @param wotask
+     */
+    public void create(WOTASK wotask) {
+        try {
+            WotaskDaoOpe.create(wotask);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
      * 更新wotask
      *
      * @param wotask
      */
     public void update(WOTASK wotask) {
         try {
-            if (!isexitByNum(wotask.getASSETNUM())) {
-                WotaskDaoOpe.createOrUpdate(wotask);
-            }
+            WotaskDaoOpe.update(wotask);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
 
     /**
      * 更新wotask
@@ -53,15 +65,13 @@ public class WoTaskDao {
      * @param list
      */
     public void update(final ArrayList<WOTASK> list) {
-        Log.i(TAG,"size="+list.size());
         try {
             WotaskDaoOpe.callBatchTasks(new Callable<Void>() {
                 @Override
                 public Void call() throws Exception {
                     for (WOTASK wotask : list) {
                         if (!isexitByNum(wotask.getWOTASKID())) {
-                            Log.i(TAG,"111111111");
-                            WotaskDaoOpe.createOrUpdate(wotask);
+                            WotaskDaoOpe.create(wotask);
                         }
                     }
                     return null;
@@ -80,6 +90,21 @@ public class WoTaskDao {
     public List<WOTASK> queryForAll() {
         try {
             return WotaskDaoOpe.queryForAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 根据工单号查询WOTASK
+     * wonum
+     *
+     * @return
+     */
+    public List<WOTASK> queryForByWonum(String wonum) {
+        try {
+            return WotaskDaoOpe.queryBuilder().where().eq("WONUM", wonum).query();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -143,5 +168,56 @@ public class WoTaskDao {
             e.printStackTrace();
         }
         return false;
+    }
+
+
+    /**
+     * 根据wonum查询Wotask
+     *
+     * @wonum
+     **/
+    public List<WOTASK> findByWonum(String wonum) {
+        try {
+            return WotaskDaoOpe.queryBuilder().where().eq("WONUM", wonum).query();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * 根据wonum与update查询wotask
+     *
+     * @param wonum
+     * @param update
+     **/
+    public List<WOTASK> findByWonumAndUpdate(String wonum, int update) {
+        try {
+            return WotaskDaoOpe.queryBuilder().where().eq("WONUM", wonum).and().eq("UPDATE", update).query();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    /**
+     * 删除选中的记录
+     *
+     * @wotask 1 表示删除成功
+     * 0 表示删除失败
+     **/
+    public int deleteByWotasks(List<WOTASK> wotasks) {
+        ArrayList<Integer> ids = new ArrayList<Integer>();
+        int deletemark = 0;
+        try {
+            for (WOTASK wotask : wotasks) {
+                ids.add(wotask.getId());
+            }
+            deletemark = WotaskDaoOpe.deleteIds(ids);
+        } catch (SQLException e) {
+            return deletemark;
+        }
+        return deletemark;
     }
 }

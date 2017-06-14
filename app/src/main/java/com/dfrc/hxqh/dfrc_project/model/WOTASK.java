@@ -11,6 +11,8 @@ import com.j256.ormlite.table.DatabaseTable;
 public class WOTASK extends Entity {
     @DatabaseField(generatedId = true)
     public int id;
+
+
     @DatabaseField(columnName = "WOTASKID")
     public String WOTASKID;//任务ID
     @DatabaseField(columnName = "ASSETNUM")
@@ -49,6 +51,17 @@ public class WOTASK extends Entity {
     public String WPLINE_SOLVE;//异常处理
     @DatabaseField(columnName = "WONUM")
     public String WONUM;//工单编号
+    @DatabaseField(columnName = "UPDATE")
+    public int UPDATE;//是否修改 0表示未修改,1表示已修改
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getWOTASKID() {
         return WOTASKID;
@@ -192,5 +205,21 @@ public class WOTASK extends Entity {
 
     public void setWPLINE_SOLVE(String WPLINE_SOLVE) {
         this.WPLINE_SOLVE = WPLINE_SOLVE;
+    }
+
+    public String getWONUM() {
+        return WONUM;
+    }
+
+    public void setWONUM(String WONUM) {
+        this.WONUM = WONUM;
+    }
+
+    public int getUPDATE() {
+        return UPDATE;
+    }
+
+    public void setUPDATE(int UPDATE) {
+        this.UPDATE = UPDATE;
     }
 }

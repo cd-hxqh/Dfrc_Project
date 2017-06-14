@@ -347,11 +347,7 @@ public class N_ProblemAddActivity extends BaseActivity {
     }
 
 
-    private FlippingLoadingDialog getLoadingDialog(String msg) {
-        if (mLoadingDialog == null)
-            mLoadingDialog = new FlippingLoadingDialog(this, msg);
-        return mLoadingDialog;
-    }
+
 
 
     /**

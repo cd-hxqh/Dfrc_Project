@@ -26,7 +26,6 @@ import com.dfrc.hxqh.dfrc_project.api.HttpManager;
 import com.dfrc.hxqh.dfrc_project.api.HttpRequestHandler;
 import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.bean.Results;
-import com.dfrc.hxqh.dfrc_project.dialog.FlippingLoadingDialog;
 import com.dfrc.hxqh.dfrc_project.model.N_MATERIAL;
 import com.dfrc.hxqh.dfrc_project.model.ZKWORKORDER;
 import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
@@ -89,7 +88,6 @@ public class N_materialActivity extends BaseActivity implements SwipeRefreshLayo
     private String wonum;
     private ZKWORKORDER zkworkorder;
 
-    protected FlippingLoadingDialog mLoadingDialog;
 
     private boolean isCodePda; //判断是扫描还是手输
     private String itemnum; //物料编码
@@ -382,11 +380,6 @@ public class N_materialActivity extends BaseActivity implements SwipeRefreshLayo
     }
 
 
-    private FlippingLoadingDialog getLoadingDialog(String msg) {
-        if (mLoadingDialog == null)
-            mLoadingDialog = new FlippingLoadingDialog(this, msg);
-        return mLoadingDialog;
-    }
 
 
 }

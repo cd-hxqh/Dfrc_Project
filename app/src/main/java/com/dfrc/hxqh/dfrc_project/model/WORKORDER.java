@@ -33,6 +33,20 @@ public class WORKORDER extends Entity {
     public String N_QTYCOMP;//已完成
     @DatabaseField(columnName = "SITEID")
     public String SITEID;//地点
+    @DatabaseField(columnName = "WORKTYPE")
+    public String WORKTYPE;//类型
+    @DatabaseField(columnName = "WKTYPE")
+    public String WKTYPE;//类型
+    @DatabaseField(columnName = "DOWNSTATUS")
+    public String DOWNSTATUS;//下载状态
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getSITEID() {
         return SITEID;
@@ -120,5 +134,29 @@ public class WORKORDER extends Entity {
 
     public void setN_QTYCOMP(String n_QTYCOMP) {
         N_QTYCOMP = n_QTYCOMP;
+    }
+
+    public String getWORKTYPE() {
+        return WORKTYPE;
+    }
+
+    public void setWORKTYPE(String WORKTYPE) {
+        this.WORKTYPE = WORKTYPE;
+    }
+
+    public String getWKTYPE() {
+        return WKTYPE;
+    }
+
+    public void setWKTYPE(String WKTYPE) {
+        this.WKTYPE = WKTYPE;
+    }
+
+    public String getDOWNSTATUS() {
+        return DOWNSTATUS;
+    }
+
+    public void setDOWNSTATUS(String DOWNSTATUS) {
+        this.DOWNSTATUS = DOWNSTATUS;
     }
 }

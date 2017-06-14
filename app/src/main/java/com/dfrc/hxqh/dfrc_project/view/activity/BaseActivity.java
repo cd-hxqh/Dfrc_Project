@@ -1,17 +1,18 @@
 package com.dfrc.hxqh.dfrc_project.view.activity;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
 import com.dfrc.hxqh.dfrc_project.BaseApplication;
+import com.dfrc.hxqh.dfrc_project.dialog.FlippingLoadingDialog;
 import com.mpt.hxqh.dfrc_project.AppManager;
 
 import butterknife.ButterKnife;
 
 
 public abstract class BaseActivity extends ActionBarActivity {
-    private ProgressDialog mProgressDialog;
+
+    public FlippingLoadingDialog mLoadingDialog;
 
     protected BaseApplication baseApplication;
     @Override
@@ -33,37 +34,20 @@ public abstract class BaseActivity extends ActionBarActivity {
         AppManager.getAppManager().finishActivity(this);
     }
 
-    public void showProgressBar(boolean show) {
-        showProgressBar(show, "");
+
+
+    public FlippingLoadingDialog getLoadingDialog(String msg) {
+        if (mLoadingDialog == null)
+            mLoadingDialog = new FlippingLoadingDialog(this, msg);
+        return mLoadingDialog;
     }
 
-    public void showProgressBar(boolean show, String message) {
-        initProgressBar();
-        if (show) {
-            mProgressDialog.setMessage(message);
-            mProgressDialog.show();
-        } else {
-            mProgressDialog.hide();
-        }
-    }
 
-    private void initProgressBar() {
-        if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setIndeterminate(true);
-            mProgressDialog.setCancelable(false);
-        }
-    }
-
-    public void showProgressBar(int messageId) {
-        String message = getString(messageId);
-        showProgressBar(true, message);
-    }
 
     public void colseProgressBar() {
-        if (mProgressDialog != null) {
-            mProgressDialog.dismiss();
-            mProgressDialog = null;
+        if (mLoadingDialog != null) {
+            mLoadingDialog.dismiss();
+            mLoadingDialog = null;
         }
     }
 

@@ -15,7 +15,6 @@ import com.dfrc.hxqh.dfrc_project.api.HttpRequestHandler;
 import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.bean.Results;
 import com.dfrc.hxqh.dfrc_project.constants.Constants;
-import com.dfrc.hxqh.dfrc_project.dialog.FlippingLoadingDialog;
 import com.dfrc.hxqh.dfrc_project.model.DOCLINKS;
 import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
 import com.dfrc.hxqh.dfrc_project.view.adapter.ImageLoadAdapter;
@@ -70,7 +69,6 @@ public class PhotoActivity extends BaseActivity implements ImageLoadAdapter.OnRe
      */
     private String ownerid;
 
-    protected FlippingLoadingDialog mLoadingDialog;
 
 
     @Override
@@ -254,11 +252,7 @@ public class PhotoActivity extends BaseActivity implements ImageLoadAdapter.OnRe
     }
 
 
-    private FlippingLoadingDialog getLoadingDialog(String msg) {
-        if (mLoadingDialog == null)
-            mLoadingDialog = new FlippingLoadingDialog(this, msg);
-        return mLoadingDialog;
-    }
+
 
 
 }
