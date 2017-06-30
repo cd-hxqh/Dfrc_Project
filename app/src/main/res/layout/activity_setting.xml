@@ -15,6 +15,37 @@
         android:orientation="vertical">
 
         <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/dimen_10">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="@string/login_status_text"
+                android:textColor="@color/light_black"
+                android:textSize="@dimen/dimens_16sp" />
+
+            <TextView
+                android:id="@+id/login_status_text_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:gravity="center_vertical"
+                android:text="在线"
+                android:textColor="@color/nomal_button_color"
+
+                android:textSize="@dimen/dimens_16sp" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@mipmap/line"></View>
+
+        <RelativeLayout
             android:id="@+id/version_down_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -42,6 +73,31 @@
                 android:textSize="@dimen/dimens_16sp" />
         </RelativeLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@mipmap/line"></View>
+
+        <LinearLayout
+            android:id="@+id/data_down_linearlayout_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/dimen_10">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:drawableRight="@mipmap/item_more"
+                android:text="@string/data_down_text"
+                android:textColor="@color/light_black"
+                android:textSize="@dimen/dimens_16sp" />
+
+
+        </LinearLayout>
+
 
         <View
             android:layout_width="match_parent"
@@ -67,7 +123,6 @@
 
 
         </LinearLayout>
-
 
         <View
             android:layout_width="match_parent"

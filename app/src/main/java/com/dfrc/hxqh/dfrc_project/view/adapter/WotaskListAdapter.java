@@ -3,7 +3,6 @@ package com.dfrc.hxqh.dfrc_project.view.adapter;
 import android.animation.Animator;
 import android.content.Context;
 import android.support.v7.widget.CardView;
-import android.util.Log;
 
 import com.dfrc.hxqh.dfrc_project.R;
 import com.dfrc.hxqh.dfrc_project.model.WOTASK;
@@ -34,6 +33,7 @@ public class WotaskListAdapter extends BaseQuickAdapter<WOTASK> {
         CardView cardView = helper.getView(R.id.card_container);
         helper.setText(R.id.wosequence_text_id, item.getWOSEQUENCE());
         helper.setText(R.id.assetnum_text_id, item.getASSETNUM());
+        helper.setText(R.id.sbms_text_id, item.getASSET_DESCRIPTION());
         helper.setText(R.id.item_text_id, item.getITEM());
         if (null != item.getN_RESULT() && item.getN_RESULT().equals("NG")) {
             helper.setTextColorRes(R.id.n_result_title_id, R.color.red);

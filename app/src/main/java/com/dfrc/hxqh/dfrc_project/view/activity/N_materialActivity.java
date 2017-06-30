@@ -65,7 +65,8 @@ public class N_materialActivity extends BaseActivity implements SwipeRefreshLayo
     EditText search; //编辑框
     @Bind(R.id.btn_delete)
     Button deleteBtn; //删除
-
+    @Bind(R.id.sure_linearlayout_id)
+    LinearLayout sureLinearLayout;//确认发放
     @Bind(R.id.sureff_btn_id)
     Button sureBtn; //确认发放
 
@@ -227,7 +228,7 @@ public class N_materialActivity extends BaseActivity implements SwipeRefreshLayo
                                             .getWindowToken(),
                                     InputMethodManager.HIDE_NOT_ALWAYS);
                     searchText = search.getText().toString();
-                    n_materialListAdapter.removeAll(items);
+                    n_materialListAdapter.removeAll(n_materialListAdapter.getData());
                     items = new ArrayList<N_MATERIAL>();
                     nodatalayout.setVisibility(View.GONE);
                     refresh_layout.setRefreshing(true);
@@ -307,11 +308,7 @@ public class N_materialActivity extends BaseActivity implements SwipeRefreshLayo
                 n_material.setN_SAP3(t);
             }
         });
-        if (n_materialListAdapter.getItemCount() == 0) {
-            sureBtn.setVisibility(View.GONE);
-        } else {
-            sureBtn.setVisibility(View.VISIBLE);
-        }
+
 
     }
 
@@ -320,6 +317,13 @@ public class N_materialActivity extends BaseActivity implements SwipeRefreshLayo
      */
     private void addData(final List<N_MATERIAL> list) {
         n_materialListAdapter.addData(list);
+        if (n_materialListAdapter.getItemCount() == 0) {
+            sureLinearLayout.setVisibility(View.GONE);
+            sureBtn.setVisibility(View.GONE);
+        } else {
+            sureLinearLayout.setVisibility(View.VISIBLE);
+            sureBtn.setVisibility(View.VISIBLE);
+        }
     }
 
 
@@ -378,8 +382,6 @@ public class N_materialActivity extends BaseActivity implements SwipeRefreshLayo
 
 
     }
-
-
 
 
 }

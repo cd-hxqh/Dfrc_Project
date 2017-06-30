@@ -2,6 +2,7 @@ package com.dfrc.hxqh.dfrc_project.view.activity;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.DatePicker;
@@ -17,6 +18,8 @@ import com.dfrc.hxqh.dfrc_project.model.WOTASKNG;
 import com.dfrc.hxqh.dfrc_project.model.WOTASKPRO;
 import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
 import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
+import com.dfrc.hxqh.dfrc_project.until.NetWorkHelper;
+import com.dfrc.hxqh.dfrc_project.webserviceclient.AndroidClientService;
 
 import java.util.Calendar;
 
@@ -57,6 +60,8 @@ public class N_PB_AddActivity extends BaseActivity {
     private WOTASK wotask;
     private String wonum;
     private int code;
+    private String crewid; //班组
+    private String siteid; //站点
 
 
     /**
@@ -86,6 +91,7 @@ public class N_PB_AddActivity extends BaseActivity {
         wotask = (WOTASK) getIntent().getSerializableExtra("wotask");
         wonum = getIntent().getExtras().getString("wonum");
         code = getIntent().getExtras().getInt("code");
+
     }
 
     @Override
@@ -129,64 +135,66 @@ public class N_PB_AddActivity extends BaseActivity {
     @OnClick(R.id.sbmittext_id)
     void setSbmitImageButtonOnClickListener() {
         getLoadingDialog("正在保存...").show();
-//        startAsyncTask();
+
+
         if (code == WotaskDetailsActivity.NO_CODE) {
-            saveWoTaskNG();
+            if (NetWorkHelper.isWifi(this) && !AccountUtils.getIsOffLine(this)) {
+                startAsyncTask();
+            } else {
+                saveWoTaskNG();
+            }
         } else if (code == WotaskDetailsActivity.WT_CODE) {
-            saveWoTaskPRO();
+            if (NetWorkHelper.isWifi(this) && !AccountUtils.getIsOffLine(this)) {
+                startAsyncTask();
+            } else {
+                saveWoTaskPRO();
+            }
         }
 
 
     }
 
-
+    //改善担当
     @OnClick(R.id.n_improver_text_id)
     void setN_prodescTextViewOnClickListener() {
-        Intent intent = new Intent(N_PB_AddActivity.this, PersonActivity.class);
-        intent.putExtra("crewid", "");
+        Intent intent = getIntent();
+        intent.setClass(N_PB_AddActivity.this, PersonActivity.class);
         startActivityForResult(intent, 0);
     }
 
 
+    /**
+     * 提交数据*
+     */
+    private void startAsyncTask() {
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... strings) {
+                if (code == WotaskDetailsActivity.NO_CODE) {
+                    return AndroidClientService.MaintWOIsNo(N_PB_AddActivity.this, onLineWotaskNg());
+                } else if (code == WotaskDetailsActivity.WT_CODE) {
+                    return AndroidClientService.MaintWOPro(N_PB_AddActivity.this, onLineWotaskPro());
+
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                mLoadingDialog.dismiss();
+                MessageUtils.showMiddleToast(N_PB_AddActivity.this, s);
 
 
-//    /**
-//     * 提交数据*
-//     */
-//    private void startAsyncTask() {
-//        final String improver = improverTextView.getText().toString();
-//        final String reason = reasonTextView.getText().toString();
-//        final String solve = solveTextView.getText().toString();
-//        final String finishdate = n_finishdateTextView.getText().toString();
-//        final String prodesc = n_prodescTextView.getText().toString();
-//        new AsyncTask<String, String, String>() {
-//            @Override
-//            protected String doInBackground(String... strings) {
-//                if (code == WotaskDetailsActivity.NO_CODE) {
-//                    return AndroidClientService.MaintWOIsNo(N_PB_AddActivity.this, AccountUtils.getloginUserName(N_PB_AddActivity.this), wotask.getWOSEQUENCE(), wotask.getN_RESULT(), wotask.getN_NOTE(), wotask.getN_MEMBERS(), wonum, wotask.getASSETNUM(), AccountUtils.getloginSite(N_PB_AddActivity.this), AccountUtils.getCrewid(N_PB_AddActivity.this), improver, wotask.getPOSITION(), reason, solve, finishdate, prodesc);
-//                } else if (code == WotaskDetailsActivity.WT_CODE) {
-//                    return AndroidClientService.MaintWOPro(N_PB_AddActivity.this, AccountUtils.getloginUserName(N_PB_AddActivity.this), wotask.getWOSEQUENCE(), wotask.getN_RESULT(), wotask.getN_NOTE(), wotask.getN_MEMBERS(), wonum, wotask.getASSETNUM(), AccountUtils.getloginSite(N_PB_AddActivity.this), AccountUtils.getCrewid(N_PB_AddActivity.this), improver, wotask.getPOSITION(), reason, solve, finishdate, prodesc);
-//
-//                }
-//                return null;
-//            }
-//
-//            @Override
-//            protected void onPostExecute(String s) {
-//                super.onPostExecute(s);
-//                mLoadingDialog.dismiss();
-//                MessageUtils.showMiddleToast(N_PB_AddActivity.this, s);
-//
-//
-//            }
-//        }.execute();
-//
-//
-//    }
+            }
+        }.execute();
+
+
+    }
 
 
     /**
-     * 保存NG
+     * 离线保存NG
      **/
 
     private void saveWoTaskNG() {
@@ -194,7 +202,7 @@ public class N_PB_AddActivity extends BaseActivity {
             wotaskng = new WOTASKNG();
             wotaskng.setPERSONID(AccountUtils.getloginUserName(N_PB_AddActivity.this));
             wotaskng.setWOSEQUENCE(wotask.getWOSEQUENCE());
-            wotaskng.setN_RESULT(wotask.getN_RESULT());
+            wotaskng.setN_RESULT("NG");
             wotaskng.setN_NOTE(wotask.getN_NOTE());
             wotaskng.setN_MEMBERS(wotask.getN_MEMBERS());
             wotaskng.setWONUM(wotask.getWONUM());
@@ -232,12 +240,45 @@ public class N_PB_AddActivity extends BaseActivity {
         }
         mLoadingDialog.dismiss();
         MessageUtils.showMiddleToast(N_PB_AddActivity.this, getString(R.string.data_success_text));
+        finish();
 
 
     }
 
     /**
-     * 保存PRO
+     * 在线保存NG
+     **/
+    private WOTASKNG onLineWotaskNg() {
+        wotaskng = new WOTASKNG();
+        wotaskng.setPERSONID(AccountUtils.getloginUserName(N_PB_AddActivity.this));
+        wotaskng.setWOSEQUENCE(wotask.getWOSEQUENCE());
+        wotaskng.setN_RESULT("NG");
+        wotaskng.setN_NOTE(wotask.getN_NOTE());
+        wotaskng.setN_MEMBERS(wotask.getN_MEMBERS());
+        wotaskng.setWONUM(wotask.getWONUM());
+        wotaskng.setASSETNUM(wotask.getASSETNUM());
+        wotaskng.setSITEID(AccountUtils.getloginSite(N_PB_AddActivity.this));
+        wotaskng.setCREWID(AccountUtils.getCrewid(N_PB_AddActivity.this));
+        wotaskng.setCREWID(AccountUtils.getCrewid(N_PB_AddActivity.this));
+        wotaskng.setPOSITION(wotask.getPOSITION());
+
+        String improver = improverTextView.getText().toString();
+        String reason = reasonTextView.getText().toString();
+        String solve = solveTextView.getText().toString();
+        String finishdate = n_finishdateTextView.getText().toString();
+        String prodesc = n_prodescTextView.getText().toString();
+
+        wotaskng.setRESPONSOR(improver);
+        wotaskng.setREASON(reason);
+        wotaskng.setSOLVE(solve);
+        wotaskng.setFINISHDATE(finishdate);
+        wotaskng.setPRODESC(prodesc);
+        return wotaskng;
+    }
+
+
+    /**
+     * 离线 保存PRO
      **/
 
     private void saveWoTaskPRO() {
@@ -284,8 +325,43 @@ public class N_PB_AddActivity extends BaseActivity {
         }
         mLoadingDialog.dismiss();
         MessageUtils.showMiddleToast(N_PB_AddActivity.this, getString(R.string.data_success_text));
+        finish();
 
 
+    }
+
+
+    /**
+     * 在线保存NG
+     **/
+    private WOTASKPRO onLineWotaskPro() {
+        wotaskpro = new WOTASKPRO();
+        wotaskpro.setPERSONID(AccountUtils.getloginUserName(N_PB_AddActivity.this));
+        wotaskpro.setWOSEQUENCE(wotask.getWOSEQUENCE());
+        wotaskpro.setN_RESULT(wotask.getN_RESULT());
+        wotaskpro.setN_NOTE(wotask.getN_NOTE());
+        wotaskpro.setN_MEMBERS(wotask.getN_MEMBERS());
+        wotaskpro.setWONUM(wotask.getWONUM());
+        wotaskpro.setASSETNUM(wotask.getASSETNUM());
+        wotaskpro.setSITEID(AccountUtils.getloginSite(N_PB_AddActivity.this));
+        wotaskpro.setCREWID(AccountUtils.getCrewid(N_PB_AddActivity.this));
+        wotaskpro.setCREWID(AccountUtils.getCrewid(N_PB_AddActivity.this));
+        wotaskpro.setPOSITION(wotask.getPOSITION());
+
+
+        String improver = improverTextView.getText().toString();
+        String reason = reasonTextView.getText().toString();
+        String solve = solveTextView.getText().toString();
+        String finishdate = n_finishdateTextView.getText().toString();
+        String prodesc = n_prodescTextView.getText().toString();
+
+        wotaskpro.setRESPONSOR(improver);
+        wotaskpro.setREASON(reason);
+        wotaskpro.setSOLVE(solve);
+        wotaskpro.setFINISHDATE(finishdate);
+        wotaskpro.setPRODESC(prodesc);
+
+        return wotaskpro;
     }
 
 

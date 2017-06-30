@@ -2,10 +2,12 @@ package com.dfrc.hxqh.dfrc_project.view.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dfrc.hxqh.dfrc_project.R;
+import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
 import com.pgyersdk.javabean.AppBean;
 import com.pgyersdk.update.PgyUpdateManager;
 import com.pgyersdk.update.UpdateManagerListener;
@@ -28,8 +30,12 @@ public class SettingActivity extends BaseActivity {
     @Bind(R.id.title_name)
     TextView titleTextView; //标题
 
+    @Bind(R.id.login_status_text_id)
+    TextView loginStatus; //登陆状态
+
     @Bind(R.id.version_text_id)
     TextView versionName; //名称
+
 
 
     @Override
@@ -53,6 +59,14 @@ public class SettingActivity extends BaseActivity {
     @Override
     protected void initView() {
         titleTextView.setText(R.string.settings);
+        if(AccountUtils.getIsOffLine(SettingActivity.this)){
+            Log.i(TAG,"离线");
+            loginStatus.setText(R.string.unline_text);
+        }else{
+            Log.i(TAG,"在线");
+            loginStatus.setText(R.string.online_text);
+        }
+
 
 
     }

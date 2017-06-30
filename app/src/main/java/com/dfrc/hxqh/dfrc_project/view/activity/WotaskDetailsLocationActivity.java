@@ -64,7 +64,7 @@ public class WotaskDetailsLocationActivity extends BaseActivity {
     @Bind(R.id.cycle_text_id)
     TextView cycleTextView; //周期
     @Bind(R.id.n_result_text_id)
-    EditText n_resultTextView; //结果
+    TextView n_resultTextView; //结果
     @Bind(R.id.n_note_text_id)
     EditText n_noteTextView; //预知项目结果
     @Bind(R.id.n_responsor_text_id)
@@ -148,12 +148,14 @@ public class WotaskDetailsLocationActivity extends BaseActivity {
     @OnClick(R.id.ok_btn_id)
     void setOkBtnOnClickListener() {
         getLoadingDialog("正在提交数据...").show();
+        n_resultTextView.setText("OK");
         OKSubmit();
     }
 
     //NO
     @OnClick(R.id.no_text_id)
     void setNoBtnOnClickListener() {
+        n_resultTextView.setText("NG");
         Intent intent = getIntent();
         intent.setClass(WotaskDetailsLocationActivity.this, N_PB_AddActivity.class);
         intent.putExtra("code", NO_CODE);

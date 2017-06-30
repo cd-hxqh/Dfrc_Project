@@ -39,7 +39,12 @@ public class AndroidClientService {
      * 获取权限
      */
     public static String mobilelogin_getUserApp(Context context, String username) {
-        String ip_adress = AccountUtils.getIpAddress(context) + Constants.LoginwebserviceURL;
+        String ip_adress = AccountUtils.getIpAddress(context);
+        if (ip_adress.equals(Constants.HTTPZS_API_IP)) {
+            ip_adress = Constants.HTTPCES_API_IP + Constants.LoginwebserviceURL;
+        } else {
+            ip_adress = AccountUtils.getIpAddress(context) + Constants.LoginwebserviceURL;
+        }
         Log.i(TAG, "ip_adress=" + ip_adress);
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -68,9 +73,14 @@ public class AndroidClientService {
     /**
      * 定期检查单OK
      */
-    public static String MaintWOIsOk(final Context cxt, WOTASKOK wotaskok) {
+    public static String MaintWOIsOk(final Context context, WOTASKOK wotaskok) {
 
-        String ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
+        String ip_adress = AccountUtils.getIpAddress(context);
+        if (ip_adress.equals(Constants.HTTPZS_API_IP)) {
+            ip_adress = Constants.HTTPCES_API_IP + Constants.LoginwebserviceURL;
+        } else {
+            ip_adress = AccountUtils.getIpAddress(context) + Constants.LoginwebserviceURL;
+        }
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -103,9 +113,14 @@ public class AndroidClientService {
     /**
      * 定期检查单NO
      */
-    public static String MaintWOIsNo(final Context cxt, WOTASKNG wotaskng) {
+    public static String MaintWOIsNo(final Context context, WOTASKNG wotaskng) {
 
-        String ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
+        String ip_adress = AccountUtils.getIpAddress(context);
+        if (ip_adress.equals(Constants.HTTPZS_API_IP)) {
+            ip_adress = Constants.HTTPCES_API_IP + Constants.LoginwebserviceURL;
+        } else {
+            ip_adress = AccountUtils.getIpAddress(context) + Constants.LoginwebserviceURL;
+        }
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -147,10 +162,14 @@ public class AndroidClientService {
     /**
      * 总库领料单确认发放
      */
-    public static String INV03Issue(final Context cxt, String userid, String wonum, String itemnum, String n_sap1, String crewid, String siteid) {
+    public static String INV03Issue(final Context context, String userid, String wonum, String itemnum, String n_sap1, String crewid, String siteid) {
         Log.i(TAG, "userid=" + userid + ",wonum=" + wonum + ",itemnum=" + itemnum + ",n_sap1=" + n_sap1 + ",crewid=" + crewid + ",siteid=" + siteid);
-        String ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
-
+        String ip_adress = AccountUtils.getIpAddress(context);
+        if (ip_adress.equals(Constants.HTTPZS_API_IP)) {
+            ip_adress = Constants.HTTPCES_API_IP + Constants.LoginwebserviceURL;
+        } else {
+            ip_adress = AccountUtils.getIpAddress(context) + Constants.LoginwebserviceURL;
+        }
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
         soapEnvelope.dotNet = true;
@@ -184,9 +203,16 @@ public class AndroidClientService {
     /**
      * 通用修改
      */
-    public static String UpdateMbo(final Context cxt, String json, String mboObjectName, String mboKey, String mboKeyValue) {
+    public static String UpdateMbo(final Context context, String json, String mboObjectName, String mboKey, String mboKeyValue) {
 
-        String ip_adress = AccountUtils.getIpAddress(cxt) + Constants.MOBILESERVICEURL;
+        String ip_adress = AccountUtils.getIpAddress(context);
+
+        if (ip_adress.equals(Constants.HTTPZS_API_IP)) {
+            ip_adress = Constants.HTTPCES_API_IP + Constants.MOBILESERVICEURL;
+        } else {
+            ip_adress = AccountUtils.getIpAddress(context) + Constants.MOBILESERVICEURL;
+        }
+
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -221,7 +247,13 @@ public class AndroidClientService {
      */
     public static String MaintWOPro(final Context cxt, WOTASKPRO wotaskpro) {
 
-        String ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
+
+        String ip_adress = AccountUtils.getIpAddress(cxt);
+        if (ip_adress.equals(Constants.HTTPZS_API_IP)) {
+            ip_adress = Constants.HTTPCES_API_IP + Constants.LoginwebserviceURL;
+        } else {
+            ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
+        }
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -254,7 +286,7 @@ public class AndroidClientService {
         String obj = null;
         try {
             obj = soapEnvelope.getResponse().toString();
-            Log.i(TAG,"问题点:="+obj);
+            Log.i(TAG, "问题点:=" + obj);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
@@ -267,7 +299,14 @@ public class AndroidClientService {
      */
     public static String CreateProblem(final Context cxt, N_PROBLEM n_problem) {
 
-        String ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
+
+        String ip_adress = AccountUtils.getIpAddress(cxt);
+        if (ip_adress.equals(Constants.HTTPZS_API_IP)) {
+            ip_adress = Constants.HTTPCES_API_IP + Constants.LoginwebserviceURL;
+        } else {
+            ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
+        }
+
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -311,7 +350,14 @@ public class AndroidClientService {
      */
     public static String INV02RecByPOLine(final Context cxt, MATRECTRANS matrectrans) {
 
-        String ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
+
+        String ip_adress = AccountUtils.getIpAddress(cxt);
+        if (ip_adress.equals(Constants.HTTPZS_API_IP)) {
+            ip_adress = Constants.HTTPCES_API_IP + Constants.LoginwebserviceURL;
+        } else {
+            ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
+        }
+
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
         soapEnvelope.dotNet = true;
@@ -344,7 +390,14 @@ public class AndroidClientService {
      * 物料退回新增
      */
     public static String INV02RecByPOLine1(final Context cxt, UDCANRTN matrectrans) {
-        String ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
+
+        String ip_adress = AccountUtils.getIpAddress(cxt);
+        if (ip_adress.equals(Constants.HTTPZS_API_IP)) {
+            ip_adress = Constants.HTTPCES_API_IP + Constants.LoginwebserviceURL;
+        } else {
+            ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
+        }
+
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -380,7 +433,13 @@ public class AndroidClientService {
      */
     public static String AddN_WORKOR2Line(final Context cxt, N_MATERIAL n_material) {
 
-        String ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
+        String ip_adress = AccountUtils.getIpAddress(cxt);
+        if (ip_adress.equals(Constants.HTTPZS_API_IP)) {
+            ip_adress = Constants.HTTPCES_API_IP + Constants.LoginwebserviceURL;
+        } else {
+            ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
+        }
+
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -419,7 +478,13 @@ public class AndroidClientService {
      * 分库库领料单物料新增
      */
     public static String AddN_WORKORDLine(final Context cxt, MATUSETRANS matusetrans) {
-        String ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
+        String ip_adress = AccountUtils.getIpAddress(cxt);
+        if (ip_adress.equals(Constants.HTTPZS_API_IP)) {
+            ip_adress = Constants.HTTPCES_API_IP + Constants.LoginwebserviceURL;
+        } else {
+            ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
+        }
+
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
         soapEnvelope.dotNet = true;
@@ -459,7 +524,14 @@ public class AndroidClientService {
      */
     public static String searchMaint2(final Context cxt, String key, String keyvalue, String type) {
         Log.i(TAG, "key=" + key + ",keyvalue=" + keyvalue + ",type=" + type);
-        String ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
+
+        String ip_adress = AccountUtils.getIpAddress(cxt);
+        if (ip_adress.equals(Constants.HTTPZS_API_IP)) {
+            ip_adress = Constants.HTTPCES_API_IP + Constants.LoginwebserviceURL;
+        } else {
+            ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
+        }
+
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
         soapEnvelope.dotNet = true;
@@ -492,7 +564,13 @@ public class AndroidClientService {
      * 库房新增
      */
     public static String INV05InvAdd(final Context cxt, String userid, String itemnum, String qty, String storeroom, String binnum, String siteid) {
-        String ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
+        String ip_adress = AccountUtils.getIpAddress(cxt);
+        if (ip_adress.equals(Constants.HTTPZS_API_IP)) {
+            ip_adress = Constants.HTTPCES_API_IP + Constants.LoginwebserviceURL;
+        } else {
+            ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
+        }
+
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
         soapEnvelope.dotNet = true;
@@ -535,7 +613,13 @@ public class AndroidClientService {
      * @binnum2 目标货柜
      */
     public static String INV05Invtrans(final Context cxt, String userid, String itemnum, String qty, String storeroom1, String binnum1, String storeroom2, String binnum2) {
-        String ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
+        String ip_adress = AccountUtils.getIpAddress(cxt);
+        if (ip_adress.equals(Constants.HTTPZS_API_IP)) {
+            ip_adress = Constants.HTTPCES_API_IP + Constants.LoginwebserviceURL;
+        } else {
+            ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
+        }
+
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
         soapEnvelope.dotNet = true;
@@ -577,7 +661,12 @@ public class AndroidClientService {
      * 通用修改
      */
     public static String connectWebService(Context context, String filename, String image, String ownertable, String ownerid, String url) {
-
+        String ip_adress = AccountUtils.getIpAddress(context);
+        if (ip_adress.equals(Constants.HTTPZS_API_IP)) {
+            ip_adress = Constants.HTTPCES_API_IP;
+        } else {
+            ip_adress = AccountUtils.getIpAddress(context);
+        }
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
         soapEnvelope.dotNet = true;
@@ -587,7 +676,8 @@ public class AndroidClientService {
         soapReq.addProperty("ownertable", ownertable);//表名
         soapReq.addProperty("ownerid", ownerid);//表主键值
         soapEnvelope.setOutputSoapObject(soapReq);
-        HttpTransportSE httpTransport = new HttpTransportSE(AccountUtils.getIpAddress(context) + url, timeOut);
+
+        HttpTransportSE httpTransport = new HttpTransportSE(ip_adress+ url, timeOut);
         try {
             httpTransport.call("urn:action", soapEnvelope);
         } catch (IOException | XmlPullParserException e) {

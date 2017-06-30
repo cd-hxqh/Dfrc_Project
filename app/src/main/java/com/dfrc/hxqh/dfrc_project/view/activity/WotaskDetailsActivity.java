@@ -9,10 +9,14 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.dfrc.hxqh.dfrc_project.R;
-import com.dfrc.hxqh.dfrc_project.dialog.FlippingLoadingDialog;
+import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
+import com.dfrc.hxqh.dfrc_project.constants.Constants;
 import com.dfrc.hxqh.dfrc_project.model.PERSON;
 import com.dfrc.hxqh.dfrc_project.model.WOTASK;
+import com.dfrc.hxqh.dfrc_project.model.WOTASKOK;
+import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
 import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
+import com.dfrc.hxqh.dfrc_project.webserviceclient.AndroidClientService;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -62,7 +66,7 @@ public class WotaskDetailsActivity extends BaseActivity {
     @Bind(R.id.cycle_text_id)
     TextView cycleTextView; //周期
     @Bind(R.id.n_result_text_id)
-    EditText n_resultTextView; //结果
+    TextView n_resultTextView; //结果
     @Bind(R.id.n_note_text_id)
     EditText n_noteTextView; //预知项目结果
     @Bind(R.id.n_responsor_text_id)
@@ -74,7 +78,6 @@ public class WotaskDetailsActivity extends BaseActivity {
     private String wonum;
 
 
-    protected FlippingLoadingDialog mLoadingDialog;
 
 
     @Override
@@ -131,7 +134,7 @@ public class WotaskDetailsActivity extends BaseActivity {
     @OnClick(R.id.sbmittext_id)
     void setSbmitBtnOnClickListener() {
         getLoadingDialog("正在提交数据...").show();
-//        saveAsyncTask();
+        saveAsyncTask();
     }
 
     //OK
@@ -141,7 +144,7 @@ public class WotaskDetailsActivity extends BaseActivity {
         startAsyncTask();
     }
 
-    //NO
+    //NG
     @OnClick(R.id.no_text_id)
     void setNoBtnOnClickListener() {
         Intent intent = getIntent();
@@ -169,45 +172,58 @@ public class WotaskDetailsActivity extends BaseActivity {
     }
 
 
-//    /**
-//     * 修改*
-//     */
-//    private void saveAsyncTask() {
-//        final String n_result = n_resultTextView.getText().toString();
-//        final String n_note = n_noteTextView.getText().toString();
-//        final String n_members = n_membersTextView.getText().toString();
-//        new AsyncTask<String, String, String>() {
-//            @Override
-//            protected String doInBackground(String... strings) {
-//                return AndroidClientService.UpdateMbo(WotaskDetailsActivity.this, JsonUtils.potoWOTASK(n_result, n_note, n_members), Constants.WOTASK_NAME, "WOTASKID", wotask.getWOTASKID());
-//            }
-//
-//            @Override
-//            protected void onPostExecute(String s) {
-//                super.onPostExecute(s);
-//                mLoadingDialog.dismiss();
-//                MessageUtils.showMiddleToast(WotaskDetailsActivity.this, s);
-//                finish();
-//
-//
-//            }
-//        }.execute();
-//
-//
-//    }
+    /**
+     * 修改*
+     */
+    private void saveAsyncTask() {
+
+
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... strings) {
+                return AndroidClientService.UpdateMbo(WotaskDetailsActivity.this, JsonUtils.potoWOTASK(getWotaskData()), Constants.WOTASK_NAME, "WOTASKID", wotask.getWOTASKID());
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                mLoadingDialog.dismiss();
+                MessageUtils.showMiddleToast(WotaskDetailsActivity.this, s);
+                finish();
+
+
+            }
+        }.execute();
+
+
+    }
+
+
+    /**
+     * 封装数据
+     **/
+    private WOTASK getWotaskData() {
+        String n_result = n_resultTextView.getText().toString();
+        String n_note = n_noteTextView.getText().toString();
+        String n_members = n_membersTextView.getText().toString();
+        WOTASK wotask = new WOTASK();
+        wotask.setN_RESULT("NG");
+        wotask.setN_NOTE(n_note);
+        wotask.setN_MEMBERS(n_members);
+        return wotask;
+
+    }
+
 
     /**
      * 提交数据*
      */
     private void startAsyncTask() {
 
-        final String n_result = n_resultTextView.getText().toString();
-        final String n_note = n_noteTextView.getText().toString();
         new AsyncTask<String, String, String>() {
             @Override
             protected String doInBackground(String... strings) {
-//                return AndroidClientService.MaintWOIsOk(WotaskDetailsActivity.this, wotask.getWOSEQUENCE(), n_result, n_note, AccountUtils.getloginUserName(WotaskDetailsActivity.this), wonum);
-                return null;
+                return AndroidClientService.MaintWOIsOk(WotaskDetailsActivity.this, OKSubmit());
             }
 
             @Override
@@ -220,6 +236,23 @@ public class WotaskDetailsActivity extends BaseActivity {
             }
         }.execute();
 
+
+    }
+
+
+    /**
+     * 封装OK数据
+     **/
+    private WOTASKOK OKSubmit() {
+        String n_note = n_noteTextView.getText().toString();
+        WOTASKOK wotaskok = new WOTASKOK();
+        wotaskok = new WOTASKOK();
+        wotaskok.setWONUM(wonum);
+        wotaskok.setWOSEQUENCE(wotask.getWOSEQUENCE());
+        wotaskok.setN_RESULT("OK");
+        wotaskok.setN_NOTE(n_note);
+        wotaskok.setN_MEMBERS(AccountUtils.getloginUserName(WotaskDetailsActivity.this));
+        return wotaskok;
 
     }
 

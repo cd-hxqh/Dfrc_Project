@@ -34,8 +34,9 @@ public class N_problemListAdapter extends BaseQuickAdapter<N_PROBLEM> {
         helper.setText(R.id.workorder_sb_title, mContext.getString(R.string.num_text));
         helper.setText(R.id.assetnum_text_id, item.getN_PROBLEMNUM());
         helper.setText(R.id.item_desc_text, item.getPRODESC());
+        helper.setText(R.id.sbmc_text_id, item.getASSET_DESCRIPTION());
         helper.setText(R.id.status_text_id, item.getSTATUS());
-        helper.setText(R.id.family_displayname_text_id, item.getCONFIRMBY());
+        helper.setText(R.id.family_displayname_text_id, item.getRESPONSOR());
     }
 
 

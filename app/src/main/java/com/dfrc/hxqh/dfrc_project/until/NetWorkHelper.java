@@ -8,6 +8,15 @@ import android.net.NetworkInfo;
 /**网络消息处理类**/
 public class NetWorkHelper {
 
+
+	/**判断是否有网络
+	 *  false表示有网络
+	 *  true 表示没有网络
+	 */
+	public static boolean isNetwork(Context paramContext) {
+		return "Unknown".equals(getNetType(paramContext)[0]);
+	}
+
 	/**
 	 * 判断是不是wifi网络状态
 	 * 

@@ -26,6 +26,7 @@ public class N_PROBLEM extends Entity {
     public String STATUS;//进展
     public String WONUM;//工单
     public String WORKORDER_DESCRIPTION;//工单描述
+    public String SITEID;//站点
 
     public String getN_PROBLEMID() {
         return N_PROBLEMID;
@@ -193,5 +194,13 @@ public class N_PROBLEM extends Entity {
 
     public void setDISPLAYNAME(String DISPLAYNAME) {
         this.DISPLAYNAME = DISPLAYNAME;
+    }
+
+    public String getSITEID() {
+        return SITEID;
+    }
+
+    public void setSITEID(String SITEID) {
+        this.SITEID = SITEID;
     }
 }

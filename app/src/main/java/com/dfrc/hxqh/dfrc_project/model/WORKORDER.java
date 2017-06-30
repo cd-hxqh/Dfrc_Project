@@ -37,6 +37,10 @@ public class WORKORDER extends Entity {
     public String WORKTYPE;//类型
     @DatabaseField(columnName = "WKTYPE")
     public String WKTYPE;//类型
+    @DatabaseField(columnName = "N_QTYOK")
+    public String N_QTYOK;//OK数
+    @DatabaseField(columnName = "N_QTYNG")
+    public String N_QTYNG;//NG
     @DatabaseField(columnName = "DOWNSTATUS")
     public String DOWNSTATUS;//下载状态
 
@@ -158,5 +162,21 @@ public class WORKORDER extends Entity {
 
     public void setDOWNSTATUS(String DOWNSTATUS) {
         this.DOWNSTATUS = DOWNSTATUS;
+    }
+
+    public String getN_QTYOK() {
+        return N_QTYOK;
+    }
+
+    public void setN_QTYOK(String n_QTYOK) {
+        N_QTYOK = n_QTYOK;
+    }
+
+    public String getN_QTYNG() {
+        return N_QTYNG;
+    }
+
+    public void setN_QTYNG(String n_QTYNG) {
+        N_QTYNG = n_QTYNG;
     }
 }

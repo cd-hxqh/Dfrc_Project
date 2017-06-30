@@ -13,6 +13,8 @@ public class PO extends Entity {
     public String STATUS;//状态
     public String SHIPTOPERSON_DISPLAYNAME;//接收人名称
     public String SITEID;//地点
+    public String VENDOR;//供应商
+    public String VENDORNAME;//中文名称
 
     public String getDESCRIPTION() {
         return DESCRIPTION;
@@ -76,5 +78,21 @@ public class PO extends Entity {
 
     public void setSITEID(String SITEID) {
         this.SITEID = SITEID;
+    }
+
+    public String getVENDOR() {
+        return VENDOR;
+    }
+
+    public void setVENDOR(String VENDOR) {
+        this.VENDOR = VENDOR;
+    }
+
+    public String getVENDORNAME() {
+        return VENDORNAME;
+    }
+
+    public void setVENDORNAME(String VENDORNAME) {
+        this.VENDORNAME = VENDORNAME;
     }
 }

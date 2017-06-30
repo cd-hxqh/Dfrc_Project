@@ -33,7 +33,7 @@ public class InventoryListAdapter extends BaseQuickAdapter<INVBALANCES> {
         CardView cardView = helper.getView(R.id.card_container);
         helper.setText(R.id.assetnum_text_id, item.getITEMNUM());
         helper.setText(R.id.item_desc_text, item.getITEMNUMNAME());
-        helper.setText(R.id.location_text_id, "库房:" + item.getLOCATION());
+        helper.setText(R.id.location_text_id,item.getLOCATION2());
         helper.setText(R.id.curbal_text_id, "余量:" + item.getCURBAL());
         if(null==item.getBINNUM()){
             helper.setText(R.id.binnum_text_id, "货柜:无");

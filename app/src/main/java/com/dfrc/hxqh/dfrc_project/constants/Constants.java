@@ -14,8 +14,13 @@ public class Constants {
      * 默认 外网*
      */
     public static final String HTTP_API_IP = "http://172.25.185.32:7001";
-    //本地
-//    public static final String HTTP_API_IP = "http://192.168.101.164:7001";
+
+    /**正式**/
+
+    public static final String HTTPZS_API_IP = "http://172.28.16.96";
+
+    //神经病地址
+    public static final String HTTPCES_API_IP = "http://172.28.16.58:9083";
 
 
     //登陆URL
@@ -176,8 +181,10 @@ public class Constants {
      */
     public static final String TB_NAME = "sqlite-dfrc.db";
 
-    /**数据库版本**/
-    public static final int DATABASE_VERSION = 23;
+    /**
+     * 数据库版本
+     **/
+    public static final int DATABASE_VERSION = 20;
 
 
 }

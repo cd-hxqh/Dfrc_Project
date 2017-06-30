@@ -223,8 +223,7 @@ public class Inventoryactivity extends BaseActivity implements SwipeRefreshLayou
                                             .getWindowToken(),
                                     InputMethodManager.HIDE_NOT_ALWAYS);
                     searchText = search.getText().toString();
-                    inventoryListAdapter.removeAll(items);
-                    items = new ArrayList<INVBALANCES>();
+                    inventoryListAdapter.removeAll(inventoryListAdapter.getData());
                     nodatalayout.setVisibility(View.GONE);
                     refresh_layout.setRefreshing(true);
                     page = 1;

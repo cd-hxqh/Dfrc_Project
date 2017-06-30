@@ -18,10 +18,14 @@ import android.widget.TextView;
 import com.dfrc.hxqh.dfrc_project.R;
 import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.constants.Constants;
+import com.dfrc.hxqh.dfrc_project.dao.UserDao;
+import com.dfrc.hxqh.dfrc_project.dao.UserPermissionsDao;
 import com.dfrc.hxqh.dfrc_project.model.ProdctBean;
+import com.dfrc.hxqh.dfrc_project.model.USERPERMISSIONS;
 import com.dfrc.hxqh.dfrc_project.model.WORKORDER;
 import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
 import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
+import com.dfrc.hxqh.dfrc_project.until.NetWorkHelper;
 import com.dfrc.hxqh.dfrc_project.view.adapter.BaseQuickAdapter;
 import com.dfrc.hxqh.dfrc_project.view.adapter.MyGridViewAdpter;
 import com.dfrc.hxqh.dfrc_project.view.adapter.MyViewPagerAdapter;
@@ -41,12 +45,11 @@ import butterknife.ButterKnife;
  * MainActivity
  */
 public class MainActivity extends BaseActivity {
-
-    public static final int ROTASSETNUM_CODE = 10001;  //移动设备查询
-
-    public static final int ITEMNUM_CODE = 10002;  //工具查询查询
+    private static final String TAG = "MainActivity";
     @Bind(R.id.txt_member)
-    TextView memberText;
+    TextView memberText; //用户名
+    @Bind(R.id.online_text_id)
+    TextView loginStatusText; //登陆状态
     @Bind(R.id.viewpager)
     ViewPager viewPager;
     @Bind(R.id.points)
@@ -57,7 +60,7 @@ public class MainActivity extends BaseActivity {
     private List<ProdctBean> listDatas;//总的数据源
     private List<View> viewPagerList;//GridView作为一个View对象添加到ViewPager集合中
     private int currentPage;//当前页
-    private ArrayList<String> list = new ArrayList<>();//appid集合
+    private List<USERPERMISSIONS> list = new ArrayList<USERPERMISSIONS>();//appid集合
     private String[] proName = {"设备查询", "定期点检", "问题管理", "采购接收", "库存查询", "总库领料", "分库领料", "备件借用", "设置"};
 
 
@@ -77,18 +80,27 @@ public class MainActivity extends BaseActivity {
 
     ArrayList<WORKORDER> items = new ArrayList<WORKORDER>();
 
+    private UserPermissionsDao userpermissionsdao;
+    private UserDao userDao;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        initDAO();
         getIntentData();
         findViewById();
         initView();
     }
 
+    private void initDAO() {
+        userpermissionsdao = new UserPermissionsDao(this);
+        userDao = new UserDao(this);
+    }
+
     private void getIntentData() {
-        list = getIntent().getStringArrayListExtra("appidArray");
+        list = userpermissionsdao.findByPersonid(AccountUtils.getUserName(MainActivity.this));
     }
 
     @Override
@@ -106,39 +118,49 @@ public class MainActivity extends BaseActivity {
         refresh_layout.setRefreshing(false);
         refresh_layout.setEnabled(false);
         initAdapter(new ArrayList<WORKORDER>());
-        startAsyncTask();
+        if (!NetWorkHelper.isNetwork(MainActivity.this)) {
+            startAsyncTask();
+        }
+
     }
 
 
     @Override
     protected void initView() {
-        memberText.setText(AccountUtils.getdisplayName(MainActivity.this));
+        if (AccountUtils.getIsOffLine(this)) {
+            memberText.setText(userDao.findByUserName(AccountUtils.getUserName(MainActivity.this)).getDISPLAYNAME() + "," + getResources().getString(R.string.unline_text));
+        } else {
+            memberText.setText(userDao.findByUserName(AccountUtils.getUserName(MainActivity.this)).getDISPLAYNAME() + "," + getResources().getString(R.string.online_text));
+        }
         listDatas = new ArrayList<ProdctBean>();
         if (list != null && list.size() != 0) {
-            if (list.contains(Constants.ASSET_APPID)) {//设备管理
-                listDatas.add(new ProdctBean(proName[0], Constants.ASSET_APPID, R.mipmap.ic_asset));
+            for (USERPERMISSIONS u : list) {
+                if (u.getAPPID().contains(Constants.ASSET_APPID)) {//设备管理
+                    listDatas.add(new ProdctBean(proName[0], Constants.ASSET_APPID, R.mipmap.ic_asset));
+                }
+                if (u.getAPPID().contains(Constants.N_MATWO_APPID)) {//定期点检工单
+                    listDatas.add(new ProdctBean(proName[1], Constants.N_MATWO_APPID, R.mipmap.ic_ddjgd));
+                }
+                if (u.getAPPID().contains(Constants.N_PROB2_APPID)) {//问题点管理
+                    listDatas.add(new ProdctBean(proName[2], Constants.N_PROB2_APPID, R.mipmap.ic_wtdj));
+                }
+                if (u.getAPPID().contains(Constants.RECEIPTS_APPID)) {//采购接收
+                    listDatas.add(new ProdctBean(proName[3], Constants.RECEIPTS_APPID, R.mipmap.ic_cgjs));
+                }
+                if (u.getAPPID().contains(Constants.INVENTOR_APPID)) {//库存查询
+                    listDatas.add(new ProdctBean(proName[4], Constants.INVENTOR_APPID, R.mipmap.ic_kccx));
+                }
+                if (u.getAPPID().contains(Constants.N_WORKOR2)) {//总库领料单
+                    listDatas.add(new ProdctBean(proName[5], Constants.N_WORKOR2, R.mipmap.ic_zklld));
+                }
+                if (u.getAPPID().contains(Constants.N_WORKORDE)) {//分库领料单
+                    listDatas.add(new ProdctBean(proName[6], Constants.N_WORKORDE, R.mipmap.ic_fklld));
+                }
+                if (u.getAPPID().contains(Constants.N_BORROW_APPID)) {//备件借用
+                    listDatas.add(new ProdctBean(proName[7], Constants.N_BORROW_APPID, R.mipmap.ic_bjjy));
+                }
             }
-            if (list.contains(Constants.N_MATWO_APPID)) {//定期点检工单
-                listDatas.add(new ProdctBean(proName[1], Constants.N_MATWO_APPID, R.mipmap.ic_ddjgd));
-            }
-            if (list.contains(Constants.N_PROB2_APPID)) {//问题点管理
-                listDatas.add(new ProdctBean(proName[2], Constants.N_PROB2_APPID, R.mipmap.ic_wtdj));
-            }
-            if (list.contains(Constants.RECEIPTS_APPID)) {//采购接收
-                listDatas.add(new ProdctBean(proName[3], Constants.RECEIPTS_APPID, R.mipmap.ic_cgjs));
-            }
-            if (list.contains(Constants.INVENTOR_APPID)) {//库存查询
-                listDatas.add(new ProdctBean(proName[4], Constants.INVENTOR_APPID, R.mipmap.ic_kccx));
-            }
-            if (list.contains(Constants.N_WORKOR2)) {//总库领料单
-                listDatas.add(new ProdctBean(proName[5], Constants.N_WORKOR2, R.mipmap.ic_zklld));
-            }
-            if (list.contains(Constants.N_WORKORDE)) {//分库领料单
-                listDatas.add(new ProdctBean(proName[6], Constants.N_WORKORDE, R.mipmap.ic_fklld));
-            }
-            if (list.contains(Constants.N_BORROW_APPID)) {//备件借用
-                listDatas.add(new ProdctBean(proName[7], Constants.N_BORROW_APPID, R.mipmap.ic_bjjy));
-            }
+
 
             listDatas.add(new ProdctBean(proName[8], getString(R.string.setting_text), R.mipmap.ic_setting));
 
@@ -268,7 +290,7 @@ public class MainActivity extends BaseActivity {
         new AsyncTask<String, String, String>() {
             @Override
             protected String doInBackground(String... strings) {
-                return AndroidClientService.searchMaint2(MainActivity.this, "N_RESPONSOR", AccountUtils.getloginUserName(MainActivity.this),"index"); //获取周点检工单
+                return AndroidClientService.searchMaint2(MainActivity.this, "N_RESPONSOR", AccountUtils.getloginUserName(MainActivity.this), "index"); //获取周点检工单
             }
 
             @Override

@@ -2,10 +2,13 @@ package com.dfrc.hxqh.dfrc_project.view.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.dfrc.hxqh.dfrc_project.R;
 import com.dfrc.hxqh.dfrc_project.model.WORKORDER;
+import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
+import com.dfrc.hxqh.dfrc_project.until.NetWorkHelper;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -16,6 +19,8 @@ import butterknife.OnClick;
  * 工单详情
  */
 public class WorkOrderDetailsActivity extends BaseActivity {
+
+    private static final String TAG = "WorkOrderDetailsActivity";
 
     @Bind(R.id.title_name)
     TextView titleTextView; //标题
@@ -37,7 +42,10 @@ public class WorkOrderDetailsActivity extends BaseActivity {
     TextView n_qtyopenTextView; //未完成项目数
     @Bind(R.id.n_qtycomp_text_id)
     TextView n_qtycompTextView; //已完成项目数
-
+    @Bind(R.id.n_qtyok_text_id)
+    TextView n_qtyokTextView; //OK数
+    @Bind(R.id.n_qtyng_text_id)
+    TextView n_qtyngTextView; //NG数
 
 
     private WORKORDER workorder;
@@ -78,6 +86,8 @@ public class WorkOrderDetailsActivity extends BaseActivity {
             statusTextView.setText(workorder.getSTATUS());
             n_qtyopenTextView.setText(workorder.getN_QTYOPEN());
             n_qtycompTextView.setText(workorder.getN_QTYCOMP());
+            n_qtyokTextView.setText(workorder.getN_QTYOK());
+            n_qtyngTextView.setText(workorder.getN_QTYNG());
 
         }
 
@@ -89,18 +99,57 @@ public class WorkOrderDetailsActivity extends BaseActivity {
         finish();
     }
 
-    //点击明细行
-    @OnClick(R.id.wotask_btn_id)
-    void setWotaskBtnOnClickListener() {
-        Intent intent = new Intent(WorkOrderDetailsActivity.this, WotaskLocationActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("wonum", workorder.getWONUM());
-        bundle.putSerializable("crewid", workorder.getCREWID());
-        bundle.putString("assetNum", "");
-        intent.putExtras(bundle);
-        startActivityForResult(intent, 1000);
+    //个人点击明细行
+    @OnClick(R.id.item_wotask_btn_id)
+    void setItemWotaskBtnOnClickListener() {
+        if (NetWorkHelper.isWifi(this) && !AccountUtils.getIsOffLine(this)) { //在线
+            Intent intent = new Intent(WorkOrderDetailsActivity.this, WotaskActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("wonum", workorder.getWONUM());
+            bundle.putSerializable("crewid", workorder.getCREWID());
+            bundle.putSerializable("siteid", workorder.getSITEID());
+            bundle.putSerializable("n_responsor", AccountUtils.getloginUserName(WorkOrderDetailsActivity.this));
+            bundle.putString("assetNum", "");
+            intent.putExtras(bundle);
+            startActivityForResult(intent, 1000);
+        } else {//离线
+            Intent intent = new Intent(WorkOrderDetailsActivity.this, WotaskLocationActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("wonum", workorder.getWONUM());
+            bundle.putSerializable("crewid", workorder.getCREWID());
+            bundle.putSerializable("siteid", workorder.getSITEID());
+            bundle.putString("assetNum", "");
+            intent.putExtras(bundle);
+            startActivityForResult(intent, 1000);
+        }
+
     }
 
+    //点击明细行
+    @OnClick(R.id.all_wotask_btn_id)
+    void setAllWotaskBtnOnClickListener() {
+        Log.i(TAG, "line=" + !AccountUtils.getIsOffLine(this));
+        if (NetWorkHelper.isWifi(this) && !AccountUtils.getIsOffLine(this)) { //在线
+            Intent intent = new Intent(WorkOrderDetailsActivity.this, WotaskActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("wonum", workorder.getWONUM());
+            bundle.putSerializable("crewid", workorder.getCREWID());
+            bundle.putSerializable("siteid", workorder.getSITEID());
+            bundle.putString("assetNum", "");
+            intent.putExtras(bundle);
+            startActivityForResult(intent, 1000);
+        } else {//离线
+            Intent intent = new Intent(WorkOrderDetailsActivity.this, WotaskLocationActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("wonum", workorder.getWONUM());
+            bundle.putSerializable("crewid", workorder.getCREWID());
+            bundle.putSerializable("siteid", workorder.getSITEID());
+            bundle.putString("assetNum", "");
+            intent.putExtras(bundle);
+            startActivityForResult(intent, 1000);
+        }
+
+    }
 
 
 }

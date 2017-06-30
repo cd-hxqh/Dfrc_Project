@@ -23,6 +23,8 @@ public class N_MATERIAL extends Entity {
     public String TOBIN;//分库存放货柜
     public String FROMBIN;//总库存放货柜
     public String SOURCE;//来源
+    public String TID;//来源
+
 
     public String getSOURCE() {
         return SOURCE;
@@ -166,5 +168,13 @@ public class N_MATERIAL extends Entity {
 
     public void setN_MATERIALID(String n_MATERIALID) {
         N_MATERIALID = n_MATERIALID;
+    }
+
+    public String getTID() {
+        return TID;
+    }
+
+    public void setTID(String TID) {
+        this.TID = TID;
     }
 }

@@ -1,16 +1,30 @@
 package com.dfrc.hxqh.dfrc_project.model;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 /**
  * Created by think on 2016/7/1.
  * 设备
  */
+@DatabaseTable(tableName = "SPAREPART")
 public class SPAREPART extends Entity {
+    @DatabaseField(generatedId = true)
+    public int id;
+    @DatabaseField(columnName = "ITEMNUM")
     public String ITEMNUM;//物料编码
+    @DatabaseField(columnName = "ITEMNUM_DESCRIPTION")
     public String ITEMNUM_DESCRIPTION;//物料名称
+    @DatabaseField(columnName = "N_BRAND")
     public String N_BRAND;//品牌
+    @DatabaseField(columnName = "N_LOCATION")
     public String N_LOCATION;//安装部位
+    @DatabaseField(columnName = "N_MODELNUM")
     public String N_MODELNUM;//规格型号
+    @DatabaseField(columnName = "QUANTITY")
     public String QUANTITY;//数量
+    @DatabaseField(columnName = "ASSETNUM")
+    public String ASSETNUM;//资产编号
 
     public String getITEMNUM() {
         return ITEMNUM;
@@ -58,5 +72,21 @@ public class SPAREPART extends Entity {
 
     public void setQUANTITY(String QUANTITY) {
         this.QUANTITY = QUANTITY;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getASSETNUM() {
+        return ASSETNUM;
+    }
+
+    public void setASSETNUM(String ASSETNUM) {
+        this.ASSETNUM = ASSETNUM;
     }
 }

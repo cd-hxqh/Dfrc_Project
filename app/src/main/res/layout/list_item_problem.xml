@@ -26,7 +26,7 @@
                 android:id="@+id/workorder_sb_title"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:text="@string/item_text"
+                android:text="@string/assetnum_text"
                 android:textColor="@color/black"
                 android:textSize="@dimen/dimens_16sp" />
 
@@ -67,23 +67,23 @@
                 android:textSize="@dimen/dimens_16sp" />
 
             <TextView
-                android:id="@+id/location_title_id"
+                android:id="@+id/sbmc_title"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/item_desc_title"
                 android:layout_marginTop="5dp"
-                android:text="@string/location1_text"
+                android:text="@string/sbmc_text"
                 android:textColor="@color/black"
                 android:textSize="@dimen/dimens_16sp" />
 
             <TextView
-                android:id="@+id/location_text_id"
+                android:id="@+id/sbmc_text_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/item_desc_text"
+                android:layout_below="@+id/item_desc_title"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="5dp"
-                android:layout_toRightOf="@+id/location_title_id"
+                android:layout_toRightOf="@+id/sbmc_title"
                 android:ellipsize="end"
                 android:ems="14"
                 android:hint="@string/hint_item_desc_title"
@@ -95,46 +95,47 @@
                 android:id="@+id/view_1_id"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:layout_below="@+id/location_title_id"
+                android:layout_below="@+id/sbmc_title"
                 android:layout_marginTop="5dp"
                 android:background="@color/light_gray" />
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/view_1_id"
-                >
+                android:layout_marginTop="5dp">
 
                 <TextView
-                    android:id="@+id/curbal_text_id"
+                    android:id="@+id/status_title_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:text="余量:40"
-                    android:layout_weight="1"
+                    android:text="@string/status_text"
                     android:textColor="@color/black"
                     android:textSize="@dimen/dimens_16sp" />
+
                 <TextView
-                    android:id="@+id/binnum_text_id"
+                    android:id="@+id/status_text_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/status_title_id"
                     android:ellipsize="end"
-                    android:layout_weight="1"
-                    android:text="货柜:ABC"
+                    android:ems="14"
                     android:hint="@string/have_not_data"
                     android:textColor="@color/black"
                     android:textSize="@dimen/dimens_16sp" />
 
                 <TextView
-                    android:id="@+id/siteid_text_id"
+                    android:id="@+id/family_displayname_text_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="地点:HD2"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:drawableLeft="@mipmap/ic_admin"
                     android:textColor="@color/black"
                     android:textSize="@dimen/dimens_16sp" />
-            </LinearLayout>
+            </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>
 

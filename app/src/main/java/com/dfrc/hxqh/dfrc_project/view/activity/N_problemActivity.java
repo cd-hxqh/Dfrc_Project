@@ -31,7 +31,9 @@ import com.dfrc.hxqh.dfrc_project.api.HttpRequestHandler;
 import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.bean.Results;
 import com.dfrc.hxqh.dfrc_project.model.N_PROBLEM;
+import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
 import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
+import com.dfrc.hxqh.dfrc_project.until.NetWorkHelper;
 import com.dfrc.hxqh.dfrc_project.view.adapter.BaseQuickAdapter;
 import com.dfrc.hxqh.dfrc_project.view.adapter.N_problemListAdapter;
 import com.dfrc.hxqh.dfrc_project.view.widght.SwipeRefreshLayout;
@@ -136,7 +138,15 @@ public class N_problemActivity extends BaseActivity implements SwipeRefreshLayou
         refresh_layout.setRefreshing(true);
         initAdapter(new ArrayList<N_PROBLEM>());
         items = new ArrayList<>();
-        getData(searchText);
+        if (NetWorkHelper.isWifi(this)) {
+            getData(searchText);
+        } else {
+            MessageUtils.showMiddleToast(this, getString(R.string.please_check_the_network_settings));
+            refresh_layout.setRefreshing(false);
+            refresh_layout.setLoading(false);
+            nodatalayout.setVisibility(View.VISIBLE);
+        }
+
     }
 
     //返回事件
@@ -167,7 +177,7 @@ public class N_problemActivity extends BaseActivity implements SwipeRefreshLayou
 
     @OnTextChanged(value = R.id.edt_input, callback = OnTextChanged.Callback.TEXT_CHANGED)
     void onTextChanged(CharSequence s, int start, int before, int count) {
-        if (start == 0 && before == 0 && count > 1) {
+        if (start == 0 && before == 0 && count > 3) {
             //扫描
             isCodePda = true;
         } else {
@@ -184,9 +194,8 @@ public class N_problemActivity extends BaseActivity implements SwipeRefreshLayou
             deleteBtn.setVisibility(View.GONE);
         }
         if (isCodePda) {
-            n_problemListAdapter.removeAll(items);
+            n_problemListAdapter.removeAll(n_problemListAdapter.getData());
             assetNum = parsingResult(s.toString());
-            items = new ArrayList<N_PROBLEM>();
             nodatalayout.setVisibility(View.GONE);
             refresh_layout.setRefreshing(true);
             page = 1;
@@ -231,8 +240,7 @@ public class N_problemActivity extends BaseActivity implements SwipeRefreshLayou
                                             .getWindowToken(),
                                     InputMethodManager.HIDE_NOT_ALWAYS);
                     searchText = search.getText().toString();
-                    n_problemListAdapter.removeAll(items);
-                    items = new ArrayList<N_PROBLEM>();
+                    n_problemListAdapter.removeAll(n_problemListAdapter.getData());
                     nodatalayout.setVisibility(View.GONE);
                     refresh_layout.setRefreshing(true);
                     page = 1;
@@ -250,10 +258,10 @@ public class N_problemActivity extends BaseActivity implements SwipeRefreshLayou
      */
     private void getData(String search) {
         String url = null;
-        if (!isCodePda && assetNum.equals("")) {
-            url = HttpManager.getN_PROBLEMURL(search, page, 20);
-        } else {
-            url = HttpManager.getByASSETNUMN_PROBLEMURL(assetNum, page, 20);
+        if (isCodePda && !assetNum.equals("")) { //扫描
+            url = HttpManager.getByASSETNUMN_PROBLEMURL(assetNum, AccountUtils.getloginSite(this), AccountUtils.getCrewid(this), page, 20);
+        } else { //手动
+            url = HttpManager.getN_PROBLEMURL(search, AccountUtils.getloginSite(this), AccountUtils.getCrewid(this), page, 20);
         }
 
         HttpManager.getDataPagingInfo(N_problemActivity.this, url, new HttpRequestHandler<Results>() {
@@ -300,7 +308,7 @@ public class N_problemActivity extends BaseActivity implements SwipeRefreshLayou
      * 获取数据*
      */
     private void initAdapter(final List<N_PROBLEM> list) {
-        n_problemListAdapter = new N_problemListAdapter(N_problemActivity.this, R.layout.list_item_asset, list);
+        n_problemListAdapter = new N_problemListAdapter(N_problemActivity.this, R.layout.list_item_problem, list);
         recyclerView.setAdapter(n_problemListAdapter);
         n_problemListAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override

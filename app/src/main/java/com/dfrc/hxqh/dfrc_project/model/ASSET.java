@@ -1,38 +1,73 @@
 package com.dfrc.hxqh.dfrc_project.model;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 /**
  * Created by think on 2016/7/1.
  * 设备
  */
+@DatabaseTable(tableName = "ASSET")
 public class ASSET extends Entity{
+    @DatabaseField(generatedId = true)
+    public int id;
+    @DatabaseField(columnName = "ASSETNUM")
     public String ASSETNUM;//设备编码
+    @DatabaseField(columnName = "DESCRIPTION")
     public String DESCRIPTION;//设备描述
+    @DatabaseField(columnName = "FAMILY_DISPLAYNAME")
     public String FAMILY_DISPLAYNAME;//维护人名称
+    @DatabaseField(columnName = "LOCATION")
     public String LOCATION;//位置编码
+    @DatabaseField(columnName = "LOCATION_DESCRIPTION")
     public String LOCATION_DESCRIPTION;//位置描述
+    @DatabaseField(columnName = "N_ASSETNUM")
     public String N_ASSETNUM;//资产编码
+    @DatabaseField(columnName = "N_BONUSCODE")
     public String N_BONUSCODE;//注册代码
+    @DatabaseField(columnName = "N_BRAND")
     public String N_BRAND;//品牌
+    @DatabaseField(columnName = "N_CARDID")
     public String N_CARDID;//使用证号
+    @DatabaseField(columnName = "N_DCEQUIPMENT")
     public String N_DCEQUIPMENT;//数控设备？
+    @DatabaseField(columnName = "N_FAMILY")
     public String N_FAMILY;//维护人编码
+    @DatabaseField(columnName = "N_IMPORTANCE")
     public String N_IMPORTANCE;//重要程度（A/B/C）
+    @DatabaseField(columnName = "N_IPEQUIPMENT")
     public String N_IPEQUIPMENT;//尽快设备？
+    @DatabaseField(columnName = "N_MAKERNAME")
     public String N_MAKERNAME;//制造厂商
+    @DatabaseField(columnName = "N_MANAGEMENT")
     public String N_MANAGEMENT;//管理部门
+    @DatabaseField(columnName = "N_MANTYPE")
     public String N_MANTYPE;//管理类型
+    @DatabaseField(columnName = "N_MINITABDATE")
     public String N_MINITABDATE;//启用日期
+    @DatabaseField(columnName = "N_MODEL")
     public String N_MODEL;//规格型号
+    @DatabaseField(columnName = "N_PCEQUIPMENT")
     public String N_PCEQUIPMENT;//精密设备？
+    @DatabaseField(columnName = "N_PROVIDERNAME")
     public String N_PROVIDERNAME;//供应商
+    @DatabaseField(columnName = "N_RECORDATE")
     public String N_RECORDATE;//等级日期
+    @DatabaseField(columnName = "N_RELEASEDATE")
     public String N_RELEASEDATE;//出厂日期
+    @DatabaseField(columnName = "N_SORT")
     public String N_SORT;//设备分类
+    @DatabaseField(columnName = "N_SPECIALTYPE")
     public String N_SPECIALTYPE;//设备类型
+    @DatabaseField(columnName = "N_USERDEPARTMENT")
     public String N_USERDEPARTMENT;//使用部门
+    @DatabaseField(columnName = "N_VIRTUAL")
     public String N_VIRTUAL;//虚拟设备？
+    @DatabaseField(columnName = "SITEID")
     public String SITEID;//地点
+    @DatabaseField(columnName = "STATUS")
     public String STATUS;//状态
+    @DatabaseField(columnName = "N_CREWID")
     public String N_CREWID;//使用班组
 
 

@@ -1,7 +1,6 @@
 package com.dfrc.hxqh.dfrc_project.dao;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.dfrc.hxqh.dfrc_project.model.WORKORDER;
 import com.dfrc.hxqh.dfrc_project.ormLiteOpenHelper.DatabaseHelper;
@@ -85,7 +84,6 @@ public class WorkOrderDao {
                     .where().eq("WORKTYPE", worktype).and().eq("WKTYPE", wktype)
                     .and().eq("CREWID", crewid).query();
         } catch (SQLException e) {
-            Log.i(TAG, "这是异常");
             e.printStackTrace();
         }
         return null;

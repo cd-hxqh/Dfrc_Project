@@ -50,6 +50,11 @@ public class N_materialListAdapter extends BaseQuickAdapter<N_MATERIAL> {
         helper.setText(R.id.fk_tobin_text_id, item.getTOBIN());
         helper.setText(R.id.zk_frombin_id, item.getFROMBIN());
         helper.setText(R.id.n_reason_text_id, item.getN_REASON());
+        if (item.getTID().equals("N")) {
+            helper.setChecked(R.id.tid_checkbox_id, false);
+        } else if (item.getTID().equals("Y")) {
+            helper.setChecked(R.id.tid_checkbox_id, true);
+        }
 
         EditText n_sap3 = (EditText) helper.getView(R.id.n_sap3_text_id);
         n_sap3.addTextChangedListener(new TextWatcher() {

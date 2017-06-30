@@ -81,6 +81,7 @@ public class WotaskLocationActivity extends BaseActivity implements SwipeRefresh
 
     private String wonum; //工单编号
     private String assetNum; //设备编号
+    private String n_responsor; //实施负负责人
 
     private boolean isCodePda; //判断是扫描还是手输
 
@@ -102,6 +103,10 @@ public class WotaskLocationActivity extends BaseActivity implements SwipeRefresh
     private void initData() {
         wonum = getIntent().getExtras().getString("wonum");
         assetNum = getIntent().getExtras().getString("assetNum");
+        if (getIntent().hasExtra("n_responsor")) {
+            n_responsor = getIntent().getExtras().getString("n_responsor");
+
+        }
     }
 
 
@@ -150,7 +155,7 @@ public class WotaskLocationActivity extends BaseActivity implements SwipeRefresh
             nodatalayout.setVisibility(View.GONE);
             refresh_layout.setRefreshing(true);
             page = 1;
-            getData(parsingResult(s.toString()));
+            getData();
         }
     }
 
@@ -183,7 +188,7 @@ public class WotaskLocationActivity extends BaseActivity implements SwipeRefresh
         refresh_layout.setRefreshing(true);
         initAdapter(new ArrayList<WOTASK>());
         items = new ArrayList<>();
-        getData(searchText);
+        getData();
     }
 
 
@@ -222,12 +227,11 @@ public class WotaskLocationActivity extends BaseActivity implements SwipeRefresh
                                             .getWindowToken(),
                                     InputMethodManager.HIDE_NOT_ALWAYS);
                     searchText = search.getText().toString();
-                    wotaskListAdapter.removeAll(items);
-                    items = new ArrayList<WOTASK>();
+                    wotaskListAdapter.removeAll(wotaskListAdapter.getData());
                     nodatalayout.setVisibility(View.GONE);
                     refresh_layout.setRefreshing(true);
                     page = 1;
-                    getData(searchText);
+                    getDataSearch(searchText);
                     return true;
                 }
                 return false;
@@ -239,51 +243,27 @@ public class WotaskLocationActivity extends BaseActivity implements SwipeRefresh
     /**
      * 获取数据*
      */
-    private void getData(String search) {
-//        String url = null;
-//        if (assetNum.equals("")) {
-//            url = HttpManager.getWOTASKURL(search, wonum, AccountUtils.getloginUserName(WotaskLocationActivity.this), page, 20);
-//        } else {
-//            url = HttpManager.getWOTASKURL("", wonum, AccountUtils.getloginUserName(WotaskLocationActivity.this), assetNum, page, 20);
-//        }
-//
-//        HttpManager.getDataPagingInfo(WotaskLocationActivity.this, url, new HttpRequestHandler<Results>() {
-//            @Override
-//            public void onSuccess(Results results) {
-//            }
-//
-//            @Override
-//            public void onSuccess(Results results, int totalPages, int currentPage) {
-//                ArrayList<WOTASK> item = JsonUtils.parsingWOTASK(results.getResultlist());
-//                refresh_layout.setRefreshing(false);
-//                refresh_layout.setLoading(false);
-//                if (item == null || item.isEmpty()) {
-//                    nodatalayout.setVisibility(View.VISIBLE);
-//                } else {
-//
-//                    if (item != null || item.size() != 0) {
-//                        if (page == 1) {
-//                            items = new ArrayList<WOTASK>();
-//                            initAdapter(items);
-//                        }if(page>totalPages){
-//                            MessageUtils.showMiddleToast(WotaskLocationActivity.this,getString(R.string.have_load_out_all_the_data));
-//                        }else{
-//                            addData(item);
-//                        }
-//                    }
-//                    nodatalayout.setVisibility(View.GONE);
-//
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(String error) {
-//                refresh_layout.setRefreshing(false);
-//                nodatalayout.setVisibility(View.VISIBLE);
-//            }
-//        });
+    private void getData() {
 
-        List<WOTASK> wotaskList = new WoTaskDao(WotaskLocationActivity.this).queryForByWonum(wonum);
+        List<WOTASK> wotaskList = new WoTaskDao(WotaskLocationActivity.this).queryForByWonum(wonum,n_responsor);
+        if (wotaskList != null || wotaskList.size() != 0) {
+            addData(wotaskList);
+            refresh_layout.setRefreshing(false);
+            refresh_layout.setLoading(false);
+            nodatalayout.setVisibility(View.GONE);
+        } else {
+            refresh_layout.setRefreshing(false);
+            nodatalayout.setVisibility(View.VISIBLE);
+        }
+
+    }
+
+    /**
+     * 获取根据查询条件查询数据*
+     */
+    private void getDataSearch(String search) {
+
+        List<WOTASK> wotaskList = new WoTaskDao(WotaskLocationActivity.this).findByWonum(wonum,n_responsor,search);
         if (wotaskList != null || wotaskList.size() != 0) {
             addData(wotaskList);
             refresh_layout.setRefreshing(false);

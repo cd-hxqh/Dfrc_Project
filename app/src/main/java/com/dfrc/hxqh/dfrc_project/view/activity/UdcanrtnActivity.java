@@ -88,7 +88,6 @@ public class UdcanrtnActivity extends BaseActivity implements SwipeRefreshLayout
     private String ponum; //采购单号
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -278,11 +277,12 @@ public class UdcanrtnActivity extends BaseActivity implements SwipeRefreshLayout
         udcanrtnChooseListAdapter.setOnCheckedChangeListener(new UdcanrtnChooseListAdapter.OnCheckedChangeListener() {
             @Override
             public void cOnCheckedChangeListener(boolean b, int postion, String t) {
-                items.get(postion).setQUANTITY(t);
+                UDCANRTN udcanrtn = (UDCANRTN) udcanrtnChooseListAdapter.getData().get(postion);
+                udcanrtn.setQUANTITY(t);
                 if (b) {
-                    chooseItems.add(items.get(postion));
+                    chooseItems.add(udcanrtn);
                 } else {
-                    chooseItems.remove(items.get(postion));
+                    chooseItems.remove(udcanrtn);
                 }
             }
         });
@@ -294,8 +294,6 @@ public class UdcanrtnActivity extends BaseActivity implements SwipeRefreshLayout
     private void addData(final List<UDCANRTN> list) {
         udcanrtnChooseListAdapter.addData(list);
     }
-
-
 
 
     /**

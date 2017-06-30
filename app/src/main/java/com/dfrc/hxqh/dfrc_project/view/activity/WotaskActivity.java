@@ -27,7 +27,6 @@ import com.dfrc.hxqh.dfrc_project.api.HttpRequestHandler;
 import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.bean.Results;
 import com.dfrc.hxqh.dfrc_project.model.WOTASK;
-import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
 import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
 import com.dfrc.hxqh.dfrc_project.view.adapter.BaseQuickAdapter;
 import com.dfrc.hxqh.dfrc_project.view.adapter.WotaskListAdapter;
@@ -85,8 +84,10 @@ public class WotaskActivity extends BaseActivity implements SwipeRefreshLayout.O
 
     private String wonum; //工单编号
     private String assetNum; //设备编号
+    private String n_responsor; //实施负负责人
 
     private boolean isCodePda; //判断是扫描还是手输
+
     @OnClick(R.id.title_back_id)
     public void setBackOnClickListener() {
         finish();
@@ -105,6 +106,10 @@ public class WotaskActivity extends BaseActivity implements SwipeRefreshLayout.O
     private void initData() {
         wonum = getIntent().getExtras().getString("wonum");
         assetNum = getIntent().getExtras().getString("assetNum");
+        if (getIntent().hasExtra("n_responsor")) {
+            n_responsor = getIntent().getExtras().getString("n_responsor");
+
+        }
     }
 
 
@@ -148,8 +153,7 @@ public class WotaskActivity extends BaseActivity implements SwipeRefreshLayout.O
         }
         if (isCodePda) {
             assetNum = parsingResult(s.toString());
-            wotaskListAdapter.removeAll(items);
-            items = new ArrayList<WOTASK>();
+            wotaskListAdapter.removeAll(wotaskListAdapter.getData());
             nodatalayout.setVisibility(View.GONE);
             refresh_layout.setRefreshing(true);
             page = 1;
@@ -221,8 +225,7 @@ public class WotaskActivity extends BaseActivity implements SwipeRefreshLayout.O
                                             .getWindowToken(),
                                     InputMethodManager.HIDE_NOT_ALWAYS);
                     searchText = search.getText().toString();
-                    wotaskListAdapter.removeAll(items);
-                    items = new ArrayList<WOTASK>();
+                    wotaskListAdapter.removeAll(wotaskListAdapter.getData());
                     nodatalayout.setVisibility(View.GONE);
                     refresh_layout.setRefreshing(true);
                     page = 1;
@@ -241,9 +244,11 @@ public class WotaskActivity extends BaseActivity implements SwipeRefreshLayout.O
     private void getData(String search) {
         String url = null;
         if (assetNum.equals("")) {
-            url = HttpManager.getWOTASKURL(search, wonum, AccountUtils.getloginUserName(WotaskActivity.this), page, 20);
+
+            url = HttpManager.getWOTASKURL(search, wonum, n_responsor, page, 20);
+
         } else {
-            url = HttpManager.getWOTASKURL("", wonum, AccountUtils.getloginUserName(WotaskActivity.this), assetNum, page, 20);
+            url = HttpManager.getWOTASKURL("", wonum, n_responsor, assetNum, page, 20);
         }
 
         HttpManager.getDataPagingInfo(WotaskActivity.this, url, new HttpRequestHandler<Results>() {
@@ -264,9 +269,10 @@ public class WotaskActivity extends BaseActivity implements SwipeRefreshLayout.O
                         if (page == 1) {
                             items = new ArrayList<WOTASK>();
                             initAdapter(items);
-                        }if(page>totalPages){
-                            MessageUtils.showMiddleToast(WotaskActivity.this,getString(R.string.have_load_out_all_the_data));
-                        }else{
+                        }
+                        if (page > totalPages) {
+                            MessageUtils.showMiddleToast(WotaskActivity.this, getString(R.string.have_load_out_all_the_data));
+                        } else {
                             addData(item);
                         }
                     }

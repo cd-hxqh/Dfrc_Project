@@ -29,6 +29,10 @@ public class PoDetailsActivity extends BaseActivity {
     TextView ponumTextView; //订单号
     @Bind(R.id.description_text_id)
     TextView descriptionTextView; //描述
+    @Bind(R.id.vendor_text_id)
+    TextView vendorTextView; //供应商
+    @Bind(R.id.vendorname_text_id)
+    TextView vendornameTextView; //供应商名称
     @Bind(R.id.orderdate_text_id)
     TextView orderdateTextView; //订购日期
     @Bind(R.id.receipts_text_id)
@@ -72,6 +76,8 @@ public class PoDetailsActivity extends BaseActivity {
         if (po != null) {
             ponumTextView.setText(po.getPONUM());
             descriptionTextView.setText(po.getDESCRIPTION());
+            vendorTextView.setText(po.getVENDOR());
+            vendornameTextView.setText(po.getVENDORNAME());
             orderdateTextView.setText(po.getORDERDATE());
             receiptsTextView.setText(po.getRECEIPTS());
             shiptoattnTextView.setText(po.getSHIPTOPERSON_DISPLAYNAME());

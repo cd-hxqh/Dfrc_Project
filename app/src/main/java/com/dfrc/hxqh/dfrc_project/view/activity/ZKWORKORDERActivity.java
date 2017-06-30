@@ -157,8 +157,7 @@ public class ZkworkorderActivity extends BaseActivity implements SwipeRefreshLay
         }
         if (isCodePda) {
             assetnum = parsingResult(s.toString());
-            zkworkOrderListAdapter.removeAll(items);
-            items = new ArrayList<ZKWORKORDER>();
+            zkworkOrderListAdapter.removeAll(zkworkOrderListAdapter.getData());
             nodatalayout.setVisibility(View.GONE);
             refresh_layout.setRefreshing(true);
             page = 1;

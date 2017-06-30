@@ -11,23 +11,20 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/beijian_linearlayout_id"
-            android:layout_width="wrap_content"
+            android:id="@+id/scan_linearlayout_id"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal"
             android:padding="@dimen/size_10dp">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/ic_beijian" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/sys_text_id"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dimen_5"
-                android:text="@string/beijian_text"
+                android:layout_gravity="center_vertical"
+                android:text="@string/sys_text"
                 android:textSize="@dimen/dimens_16dp" />
 
         </LinearLayout>
@@ -39,24 +36,45 @@
             android:background="@mipmap/line" />
 
         <LinearLayout
-            android:id="@+id/djwtdjl_linearlayout_id"
+            android:id="@+id/bzcx_linearlayout_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal"
             android:padding="@dimen/size_10dp">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/ic_wtd" />
 
             <TextView
-                android:id="@+id/djwtdjl_text_id"
-                android:layout_width="wrap_content"
+                android:id="@+id/bzcx_text_id"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dimen_5"
-                android:text="@string/djwtdjl_text"
+                android:layout_gravity="center_vertical"
+                android:text="@string/bzcx_text"
+                android:textSize="@dimen/dimens_16dp" />
+
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimens_line"
+            android:background="@mipmap/line" />
+
+        <LinearLayout
+            android:id="@+id/zdcx_linearlayout_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="@dimen/size_10dp">
+
+
+            <TextView
+                android:id="@+id/zdcx_text_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/zdcx_text"
                 android:textSize="@dimen/dimens_16dp" />
 
         </LinearLayout>
@@ -69,23 +87,19 @@
 
         <LinearLayout
             android:id="@+id/gzjl_linearlayout_id"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal"
             android:padding="@dimen/size_10dp">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/ic_gzjl" />
 
             <TextView
-                android:id="@+id/gzjl_text_id"
-                android:layout_width="wrap_content"
+                android:id="@+id/sb_xz_text"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dimen_5"
-                android:text="@string/gzjl_text"
+                android:layout_gravity="center_vertical"
+                android:text="@string/sb_xz_text"
                 android:textSize="@dimen/dimens_16dp" />
 
         </LinearLayout>

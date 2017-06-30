@@ -14,6 +14,7 @@
     <string name="logined_member_username">logined_member_username</string>
     <string name="logined_member_password">logined_member_password</string>
     <string name="logined_member_ischeck">logined_member_ischeck</string>
+    <string name="logined_user_isoffline">logined_user_isoffline</string>
     <string name="ip_address">ip_address</string>
     <string name="login_insertOrg">login_insertOrg</string>
     <string name="login_insertSite">login_insertSite</string>
@@ -280,11 +281,28 @@
     <string name="have_load_out_all_the_data">已加载出全部数据</string>
     <string name="down_text">下载</string>
     <string name="down_success_text">已下载</string>
+    <string name="down_fail_text">已失败</string>
     <string name="yxzrw_text">已下载任务</string>
     <string name="data_success_text">数据保存成功</string>
     <string name="all_text">全选</string>
     <string name="upload_text">上传</string>
     <string name="delete_text">删除</string>
     <string name="please_upload_data_text">请选择需要上传的记录</string>
+    <string name="not_upload_data">暂无网络,无法上传数据</string>
+    <string name="data_down_text">数据下载</string>
+    <string name="login_status_text">登陆状态</string>
+    <string name="unline_text">离线</string>
+    <string name="online_text">在线</string>
+    <string name="please_check_the_network_settings">暂无网络,请检查网络设置</string>
+    <string name="tid_text">发放状态</string>
+    <string name="bzcx_text">按班组查询</string>
+    <string name="zdcx_text">按站点查询</string>
+    <string name="sb_xz_text">设备下载</string>
+    <string name="dbrw_text">待办任务</string>
+    <string name="ok_count_text">OK数:</string>
+    <string name="n_qtyng_text">NG数:</string>
+    <string name="server_adress_text">服务器地址</string>
+    <string name="vendor_text">供应商:</string>
+    <string name="vendorname_text">供应商名称:</string>
 
 </resources>

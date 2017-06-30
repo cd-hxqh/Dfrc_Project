@@ -29,6 +29,7 @@ import com.dfrc.hxqh.dfrc_project.model.WOTASKOK;
 import com.dfrc.hxqh.dfrc_project.model.WOTASKPRO;
 import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
 import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
+import com.dfrc.hxqh.dfrc_project.until.NetWorkHelper;
 import com.dfrc.hxqh.dfrc_project.view.adapter.BaseQuickAdapter;
 import com.dfrc.hxqh.dfrc_project.view.adapter.WorkOrderListAdapter;
 import com.dfrc.hxqh.dfrc_project.view.widght.SwipeRefreshLayout;
@@ -171,10 +172,14 @@ public class WorkorderLocationActivity extends BaseActivity implements SwipeRefr
     void setUploadBtnOnClickListener() {
         if (null == chooseWorkOrderList || chooseWorkOrderList.size() == 0) {
             MessageUtils.showMiddleToast(WorkorderLocationActivity.this, getString(R.string.please_upload_data_text));
-        } else {
+        } else if(NetWorkHelper.isWifi(WorkorderLocationActivity.this)){  //有Wifi网络
             alerDialog();
-
+        } else if(NetWorkHelper.isWifi(WorkorderLocationActivity.this)) {
+            MessageUtils.showMiddleToast(WorkorderLocationActivity.this, getString(R.string.not_upload_data));
         }
+
+
+
     }
 
     //删除
@@ -329,7 +334,7 @@ public class WorkorderLocationActivity extends BaseActivity implements SwipeRefr
         int deNG = woTaskNgDao.deleteByWotaskngs(wotaskngs);
         int dePRO = woTaskProDao.deleteByWotaskpros(wotaskpros);
         colseProgressBar();
-        if (deWorkOrder == 1 || deTask == 1 || deOk == 1 || deNG == 1 || dePRO == 1) {
+        if (deWorkOrder != 0 || deTask != 0 || deOk != 0 || deNG != 1 || dePRO != 0) {
             MessageUtils.showMiddleToast(WorkorderLocationActivity.this, "删除成功");
         } else {
             MessageUtils.showMiddleToast(WorkorderLocationActivity.this, "删除失败");
@@ -385,7 +390,6 @@ public class WorkorderLocationActivity extends BaseActivity implements SwipeRefr
     private List<WOTASK> updaeWoTasks() {
         for (WORKORDER workorder : chooseWorkOrderList) {
             String wonum = workorder.getWONUM();
-            Log.i(TAG, "wonum=" + wonum);
             List<WOTASK> wotasklist = woTaskDao.findByWonumAndUpdate(wonum, 1);
             if (null != wotasklist && wotasklist.size() != 0) {
                 for (WOTASK wotask : wotasklist) {
@@ -439,7 +443,6 @@ public class WorkorderLocationActivity extends BaseActivity implements SwipeRefr
                 for (WOTASKOK wotaskok : wotaskoks) {
                     String relut = AndroidClientService.MaintWOIsOk(WorkorderLocationActivity.this, wotaskok);
 
-                    Log.i(TAG, "结果:" + relut);
                 }
                 return "提交成功";
             }

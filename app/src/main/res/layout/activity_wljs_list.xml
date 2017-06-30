@@ -70,6 +70,7 @@
             android:paddingBottom="7dp"
             android:paddingTop="7dp"
             android:text="@string/add_text"
+            android:visibility="gone"
             android:textColor="@android:color/white"
             android:textSize="18sp" />
 

@@ -5,6 +5,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.dfrc.hxqh.dfrc_project.constants.Constants;
+import com.dfrc.hxqh.dfrc_project.model.ASSET;
+import com.dfrc.hxqh.dfrc_project.model.PERSON;
+import com.dfrc.hxqh.dfrc_project.model.SPAREPART;
+import com.dfrc.hxqh.dfrc_project.model.USER;
+import com.dfrc.hxqh.dfrc_project.model.USERPERMISSIONS;
 import com.dfrc.hxqh.dfrc_project.model.WORKORDER;
 import com.dfrc.hxqh.dfrc_project.model.WOTASK;
 import com.dfrc.hxqh.dfrc_project.model.WOTASKNG;
@@ -24,7 +29,7 @@ import java.util.Map;
  * Created by think on 2016/7/12.
  */
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
-    private static final String TAG="DatabaseHelper";
+    private static final String TAG = "DatabaseHelper";
     private Map<String, Dao> daos = new HashMap<String, Dao>();
 
     private DatabaseHelper(Context context) {
@@ -34,13 +39,18 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase database,
                          ConnectionSource connectionSource) {
-        Log.i(TAG,"新建");
+        Log.i(TAG, "新建");
         try {
+            TableUtils.createTable(connectionSource, USER.class);
             TableUtils.createTable(connectionSource, WORKORDER.class);
             TableUtils.createTable(connectionSource, WOTASK.class);
             TableUtils.createTable(connectionSource, WOTASKOK.class);
             TableUtils.createTable(connectionSource, WOTASKNG.class);
             TableUtils.createTable(connectionSource, WOTASKPRO.class);
+            TableUtils.createTable(connectionSource, USERPERMISSIONS.class);
+            TableUtils.createTable(connectionSource, PERSON.class);
+            TableUtils.createTable(connectionSource, ASSET.class);
+            TableUtils.createTable(connectionSource, SPAREPART.class);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -53,12 +63,17 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     public void onUpgrade(SQLiteDatabase database,
                           ConnectionSource connectionSource, int oldVersion, int newVersion) {
         try {
-            Log.i(TAG,"更新");
+            Log.i(TAG, "更新");
+            TableUtils.dropTable(connectionSource, USER.class, true);
             TableUtils.dropTable(connectionSource, WORKORDER.class, true);
             TableUtils.dropTable(connectionSource, WOTASK.class, true);
             TableUtils.dropTable(connectionSource, WOTASKOK.class, true);
             TableUtils.dropTable(connectionSource, WOTASKNG.class, true);
             TableUtils.dropTable(connectionSource, WOTASKPRO.class, true);
+            TableUtils.dropTable(connectionSource, USERPERMISSIONS.class, true);
+            TableUtils.dropTable(connectionSource, PERSON.class, true);
+            TableUtils.dropTable(connectionSource, ASSET.class, true);
+            TableUtils.dropTable(connectionSource, SPAREPART.class, true);
 
             onCreate(database, connectionSource);
         } catch (SQLException e) {

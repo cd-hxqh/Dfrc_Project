@@ -262,6 +262,7 @@ public class N_ProblemDetailsActivity extends BaseActivity {
     void setResponsorTextViewOnClickListener() {
         Intent intent = new Intent(N_ProblemDetailsActivity.this, PersonActivity.class);
         intent.putExtra("crewid", n_problem.getCREWID());
+        intent.putExtra("siteid", n_problem.getSITEID());
         startActivityForResult(intent, RESPONSOR_REQUESTCODE);
     }
 
@@ -291,6 +292,7 @@ public class N_ProblemDetailsActivity extends BaseActivity {
     void setConfirmbyTextViewOnClickListeber() {
         Intent intent = new Intent(N_ProblemDetailsActivity.this, PersonActivity.class);
         intent.putExtra("crewid", n_problem.getCREWID());
+        intent.putExtra("siteid", n_problem.getSITEID());
         startActivityForResult(intent, CONFIRMBY_REQUESTCODE);
     }
 

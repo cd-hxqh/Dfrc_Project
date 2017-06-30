@@ -99,12 +99,17 @@ public class WoTaskDao {
     /**
      * 根据工单号查询WOTASK
      * wonum
+     * n_responsor
      *
      * @return
      */
-    public List<WOTASK> queryForByWonum(String wonum) {
+    public List<WOTASK> queryForByWonum(String wonum, String n_responsor) {
         try {
-            return WotaskDaoOpe.queryBuilder().where().eq("WONUM", wonum).query();
+            if (null == n_responsor) {
+                return WotaskDaoOpe.queryBuilder().where().eq("WONUM", wonum).query();
+            } else {
+                return WotaskDaoOpe.queryBuilder().where().eq("WONUM", wonum).and().eq("N_RESPONSOR", n_responsor).query();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -219,5 +224,29 @@ public class WoTaskDao {
             return deletemark;
         }
         return deletemark;
+    }
+
+
+    /**
+     * 根据当前WOSEQUENCE,ASSETNUM,N_RESULT查询相应点检明细行的数据
+     * WOSEQUENCE
+     * ASSETNUM
+     * N_RESULT
+     *
+     * @return
+     */
+    public List<WOTASK> findByWonum(String wonum, String n_responsor, String search) {
+        try {
+            if (null == n_responsor) {
+
+                return WotaskDaoOpe.queryBuilder().where().eq("WONUM", wonum).and().like("WOSEQUENCE", "%" + search + "%").or().like("ASSETNUM", search).or().like("ASSETNUM", search).or().like("N_RESULT", search).query();
+            } else {
+                return WotaskDaoOpe.queryBuilder().where().eq("WONUM", wonum).and().eq("N_RESPONSOR", n_responsor).and().like("WOSEQUENCE", "%" + search + "%").or().like("ASSETNUM", search).or().like("ASSETNUM", search).or().like("N_RESULT", search).query();
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

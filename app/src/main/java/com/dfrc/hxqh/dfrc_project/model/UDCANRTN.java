@@ -6,6 +6,7 @@ package com.dfrc.hxqh.dfrc_project.model;
  */
 public class UDCANRTN extends Entity {
     public String ITEMNUM;//项目
+    public String DESCRIPTION;//描述
     public String POLINENUM;//采购单行
     public String PONUM;//采购单号
     public String QUANTITY;//数量
@@ -77,5 +78,13 @@ public class UDCANRTN extends Entity {
 
     public void setENTERBY(String ENTERBY) {
         this.ENTERBY = ENTERBY;
+    }
+
+    public String getDESCRIPTION() {
+        return DESCRIPTION;
+    }
+
+    public void setDESCRIPTION(String DESCRIPTION) {
+        this.DESCRIPTION = DESCRIPTION;
     }
 }

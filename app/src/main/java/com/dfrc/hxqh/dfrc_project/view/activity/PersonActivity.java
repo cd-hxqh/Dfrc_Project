@@ -26,8 +26,10 @@ import com.dfrc.hxqh.dfrc_project.api.HttpManager;
 import com.dfrc.hxqh.dfrc_project.api.HttpRequestHandler;
 import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.bean.Results;
+import com.dfrc.hxqh.dfrc_project.dao.PersonDao;
 import com.dfrc.hxqh.dfrc_project.model.PERSON;
 import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
+import com.dfrc.hxqh.dfrc_project.until.NetWorkHelper;
 import com.dfrc.hxqh.dfrc_project.view.adapter.BaseQuickAdapter;
 import com.dfrc.hxqh.dfrc_project.view.adapter.PersonListAdapter;
 import com.dfrc.hxqh.dfrc_project.view.widght.SwipeRefreshLayout;
@@ -81,20 +83,37 @@ public class PersonActivity extends BaseActivity implements SwipeRefreshLayout.O
 
     private int mark;
     private String assetNum;
-    private String crewid;
+    private String crewid; //班组
+    private String siteid; //站点
+
+
+    private PersonDao personDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
         ButterKnife.bind(this);
+        initDAO();
         initData();
         findViewById();
         initView();
     }
 
+    /**
+     * 初始化界面DAO
+     **/
+    private void initDAO() {
+        personDao = new PersonDao(this);
+    }
+
     private void initData() {
-        crewid = getIntent().getExtras().getString("crewid");
+        if (getIntent().hasExtra("crewid")) { //班组
+            crewid = getIntent().getExtras().getString("crewid");
+        }
+        if (getIntent().hasExtra("siteid")) { //地点
+            siteid = getIntent().getExtras().getString("siteid");
+        }
     }
 
 
@@ -125,7 +144,14 @@ public class PersonActivity extends BaseActivity implements SwipeRefreshLayout.O
         refresh_layout.setRefreshing(true);
         initAdapter(new ArrayList<PERSON>());
         items = new ArrayList<>();
-        getData(searchText);
+        if (NetWorkHelper.isWifi(this)) {
+            Log.i(TAG, "在线");
+            getData(searchText);
+        } else {
+            Log.i(TAG, "离线");
+            offLinegetData();
+        }
+
     }
 
 
@@ -190,12 +216,17 @@ public class PersonActivity extends BaseActivity implements SwipeRefreshLayout.O
                                             .getWindowToken(),
                                     InputMethodManager.HIDE_NOT_ALWAYS);
                     searchText = search.getText().toString();
-                    personListAdapter.removeAll(items);
                     items = new ArrayList<PERSON>();
+                    personListAdapter.removeAll(personListAdapter.getData());
                     nodatalayout.setVisibility(View.GONE);
                     refresh_layout.setRefreshing(true);
                     page = 1;
-                    getData(searchText);
+                    if (NetWorkHelper.isWifi(PersonActivity.this)) { //在线
+                        getData(searchText);
+                    } else { //离线
+                        offLineByPERSIONIDAndDISPLAYNAME(searchText);
+                    }
+
                     return true;
                 }
                 return false;
@@ -205,14 +236,14 @@ public class PersonActivity extends BaseActivity implements SwipeRefreshLayout.O
 
 
     /**
-     * 获取数据*
+     * 在线获取数据*
      */
     private void getData(String search) {
         String url = null;
         if (crewid.equals("")) {
-            url = HttpManager.getPERSIONURL(search, page, 20);
+            url = HttpManager.getPERSIONURL(search, siteid, page, 20);
         } else {
-            url = HttpManager.getPERSIONURL(search, crewid, page, 20);
+            url = HttpManager.getPERSIONURL(search, crewid, siteid, page, 20);
         }
         HttpManager.getDataPagingInfo(PersonActivity.this, url, new HttpRequestHandler<Results>() {
             @Override
@@ -237,6 +268,7 @@ public class PersonActivity extends BaseActivity implements SwipeRefreshLayout.O
                         if (page > totalPages) {
                             MessageUtils.showMiddleToast(PersonActivity.this, getString(R.string.have_load_out_all_the_data));
                         } else {
+                            personDao.update(item);
                             addData(item);
                         }
                     }
@@ -252,6 +284,43 @@ public class PersonActivity extends BaseActivity implements SwipeRefreshLayout.O
             }
         });
 
+    }
+
+
+    /**
+     * 离线获取数据
+     **/
+    private void offLinegetData() {
+        Log.i(TAG, "crewid=" + crewid);
+        if (null == crewid || crewid.equals("")) {
+
+        } else {
+
+            List<PERSON> pList = personDao.findByCrewid(crewid, siteid);
+            refresh_layout.setRefreshing(false);
+            refresh_layout.setLoading(false);
+            if (pList == null || pList.isEmpty()) {
+                nodatalayout.setVisibility(View.VISIBLE);
+            } else {
+
+                addData(pList);
+            }
+        }
+    }
+
+    /**
+     * 离线根据PERSONID与DISPLAYNAME查询PERSION数据
+     **/
+    private void offLineByPERSIONIDAndDISPLAYNAME(String seach) {
+        refresh_layout.setRefreshing(false);
+        refresh_layout.setLoading(false);
+        List<PERSON> pList = personDao.findByPersionIdAndDisplayNames(seach, siteid);
+        Log.i(TAG, "pList size=" + pList.size());
+        if (pList == null || pList.isEmpty()) {
+            nodatalayout.setVisibility(View.VISIBLE);
+        } else {
+            addData(pList);
+        }
     }
 
 

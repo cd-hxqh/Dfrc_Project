@@ -24,8 +24,10 @@ import com.dfrc.hxqh.dfrc_project.api.HttpManager;
 import com.dfrc.hxqh.dfrc_project.api.HttpRequestHandler;
 import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.bean.Results;
+import com.dfrc.hxqh.dfrc_project.dao.SparepartDao;
 import com.dfrc.hxqh.dfrc_project.model.SPAREPART;
 import com.dfrc.hxqh.dfrc_project.until.MessageUtils;
+import com.dfrc.hxqh.dfrc_project.until.NetWorkHelper;
 import com.dfrc.hxqh.dfrc_project.view.adapter.SparepartListAdapter;
 import com.dfrc.hxqh.dfrc_project.view.widght.SwipeRefreshLayout;
 
@@ -75,18 +77,27 @@ public class SparepartActivity extends BaseActivity implements SwipeRefreshLayou
     ArrayList<SPAREPART> items = new ArrayList<SPAREPART>();
 
     private String assetnum; //设备编号
-    private String itemnum=""; //物料编码
+    private String itemnum = ""; //物料编码
 
     private boolean isCodePda; //判断是扫描还是手输
+    private SparepartDao sparepartdao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
         ButterKnife.bind(this);
+        initDAO();
         initData();
         findViewById();
         initView();
+    }
+
+    /**
+     * 初始化界面DAO
+     **/
+    private void initDAO() {
+        sparepartdao = new SparepartDao(this);
     }
 
     private void initData() {
@@ -121,7 +132,12 @@ public class SparepartActivity extends BaseActivity implements SwipeRefreshLayou
         refresh_layout.setRefreshing(true);
         initAdapter(new ArrayList<SPAREPART>());
         items = new ArrayList<>();
-        getData(searchText);
+        if (NetWorkHelper.isWifi(this)) {//在线
+            getData(searchText);
+        } else {
+            offLineByAssetNums();
+        }
+
     }
 
     //返回事件
@@ -172,14 +188,25 @@ public class SparepartActivity extends BaseActivity implements SwipeRefreshLayou
 
     @Override
     public void onLoad() {
-        page++;
-        getData(searchText);
+        if (NetWorkHelper.isWifi(this)) {
+            page++;
+            getData(searchText);
+        } else {
+            refresh_layout.setRefreshing(false);
+            refresh_layout.setLoading(false);
+        }
+
     }
 
     @Override
     public void onRefresh() {
-        page = 1;
-        getData(searchText);
+        if (NetWorkHelper.isWifi(this)) {
+            page = 1;
+            getData(searchText);
+        } else {
+            refresh_layout.setRefreshing(false);
+            refresh_layout.setLoading(false);
+        }
     }
 
 
@@ -204,9 +231,13 @@ public class SparepartActivity extends BaseActivity implements SwipeRefreshLayou
                     sparepartListAdapter.removeAll(items);
                     items = new ArrayList<SPAREPART>();
                     nodatalayout.setVisibility(View.GONE);
-                    refresh_layout.setRefreshing(true);
                     page = 1;
-                    getData(searchText);
+                    if(NetWorkHelper.isWifi(SparepartActivity.this)){
+                        getData(searchText);
+                    }else{
+                        offLineByAssetNumAndItemNums(searchText);
+                    }
+
                     return true;
                 }
                 return false;
@@ -224,7 +255,7 @@ public class SparepartActivity extends BaseActivity implements SwipeRefreshLayou
             url = HttpManager.getSPAREPARTURL(search, assetnum, page, 20);
         } else {
             url = HttpManager.getSPAREPARTURL1(assetnum, itemnum, page, 20);
-            itemnum="";
+            itemnum = "";
         }
 
         HttpManager.getDataPagingInfo(SparepartActivity.this, url, new HttpRequestHandler<Results>() {
@@ -245,9 +276,11 @@ public class SparepartActivity extends BaseActivity implements SwipeRefreshLayou
                         if (page == 1) {
                             items = new ArrayList<SPAREPART>();
                             initAdapter(items);
-                        }  if (page > totalPages) {
+                        }
+                        if (page > totalPages) {
                             MessageUtils.showMiddleToast(SparepartActivity.this, getString(R.string.have_load_out_all_the_data));
                         } else {
+                            sparepartdao.update(item);
                             addData(item);
                         }
                     }
@@ -263,6 +296,35 @@ public class SparepartActivity extends BaseActivity implements SwipeRefreshLayou
             }
         });
 
+    }
+
+
+    /**
+     * 离线查询Sparepart数据
+     **/
+    private void offLineByAssetNums() {
+        List<SPAREPART> sList = sparepartdao.findByAssetNums(assetnum);
+        refresh_layout.setRefreshing(false);
+        refresh_layout.setLoading(false);
+        if (sList == null || sList.isEmpty()) {
+            nodatalayout.setVisibility(View.VISIBLE);
+        } else {
+
+            addData(sList);
+        }
+    }
+
+
+    /**离线 根据AssetNum与ItemNum模糊查询Sparepart的数据**/
+    private void offLineByAssetNumAndItemNums(String itemnum){
+        List<SPAREPART> sList = sparepartdao.findByAssetNumAndItemNums(assetnum,itemnum);
+        refresh_layout.setRefreshing(false);
+        refresh_layout.setLoading(false);
+        if (sList == null || sList.isEmpty()) {
+            nodatalayout.setVisibility(View.VISIBLE);
+        } else {
+            addData(sList);
+        }
     }
 
 
