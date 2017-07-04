@@ -247,7 +247,7 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
                                             .getWindowToken(),
                                     InputMethodManager.HIDE_NOT_ALWAYS);
                     searchText = search.getText().toString();
-                    workDownListAdapter.removeAll(items);
+                    workDownListAdapter.removeAll(workDownListAdapter.getData());
                     items = new ArrayList<WORKORDER>();
                     nodatalayout.setVisibility(View.GONE);
                     refresh_layout.setRefreshing(true);
@@ -373,7 +373,8 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
         new AsyncTask<String, String, String>() {
             @Override
             protected String doInBackground(String... strings) {
-                return AndroidClientService.searchMaint2(WorkorderActivity.this, "ASSETNUM", assetNum, "line"); //根据设备获取定期点检工单
+//                return AndroidClientService.searchMaint2(WorkorderActivity.this, "ASSETNUM", assetNum, "line"); //根据设备获取定期点检工单
+                return AndroidClientService.searchMaint2(WorkorderActivity.this, "ASSETNUM","H2-Z2-CV-063", "line"); //根据设备获取定期点检工单
             }
 
             @Override
@@ -389,6 +390,7 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
                     if (item == null || item.isEmpty()) {
                         nodatalayout.setVisibility(View.VISIBLE);
                     } else {
+                        workDownListAdapter.removeAll(workDownListAdapter.getData());
                         addData(item);
                     }
                 }
@@ -403,7 +405,47 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
      * 根据编号获取子表信息
      **/
     private void getItemData(final int postion, final WORKORDER workorder, final String wonum, final TextView statusText, final View pb) {
-        HttpManager.getDataPagingInfo(WorkorderActivity.this, HttpManager.getWOTASKURL(wonum, page, 20), new HttpRequestHandler<Results>() {
+//        HttpManager.getDataPagingInfo(WorkorderActivity.this, HttpManager.getWOTASKURL(wonum, page, 10000), new HttpRequestHandler<Results>() {
+//            @Override
+//            public void onSuccess(Results results) {
+//            }
+//
+//            @Override
+//            public void onSuccess(Results results, int totalPages, int currentPage) {
+//                ArrayList<WOTASK> item = JsonUtils.parsingWOTASK(results.getResultlist());
+//
+//                if (item == null || item.isEmpty()) {
+//                } else {
+//                    woTaskDao.update(item);
+//                }
+//                workorder.setDOWNSTATUS("已下载");
+//                WORKORDER w = (WORKORDER) workDownListAdapter.getData().get(postion);
+//                workDownListAdapter.remove(postion);
+//                workDownListAdapter.add(postion, workorder);
+//                statusText.setText(R.string.down_success_text);
+//                statusText.setTextColor(getResources().getColor(R.color.red));
+//                statusText.setVisibility(View.VISIBLE);
+//                pb.setVisibility(View.GONE);
+//                workDownListAdapter.notifyDataSetChanged();
+//            }
+//
+//            @Override
+//            public void onFailure(String error) {
+//                workorder.setDOWNSTATUS("下载失败");
+//                WORKORDER w = (WORKORDER) workDownListAdapter.getData().get(postion);
+//                workDownListAdapter.remove(postion);
+//                workDownListAdapter.add(postion, workorder);
+//                statusText.setText(R.string.down_fail_text);
+//                statusText.setTextColor(getResources().getColor(R.color.red));
+//                statusText.setVisibility(View.VISIBLE);
+//                pb.setVisibility(View.GONE);
+//                workDownListAdapter.notifyDataSetChanged();
+//            }
+//        });
+
+
+
+        HttpManager.getData(WorkorderActivity.this, HttpManager.getWOTASKURL(wonum), new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {
             }
@@ -440,7 +482,6 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
                 workDownListAdapter.notifyDataSetChanged();
             }
         });
-
     }
 
 

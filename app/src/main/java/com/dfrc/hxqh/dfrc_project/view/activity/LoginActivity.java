@@ -421,6 +421,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onSuccess(Results results, int totalPages, int currentPage) {
+                Log.i(TAG,"sssssssssss="+results.getResultlist());
                 ArrayList<PERSON> item = JsonUtils.parsingPERSON(results.getResultlist());
                 if (item == null || item.isEmpty()) {
                 } else {
@@ -431,6 +432,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onFailure(String error) {
+                Log.i(TAG,"eeeeee");
             }
         });
     }

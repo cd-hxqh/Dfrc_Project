@@ -249,6 +249,7 @@ public class WotaskActivity extends BaseActivity implements SwipeRefreshLayout.O
 
         } else {
             url = HttpManager.getWOTASKURL("", wonum, n_responsor, assetNum, page, 20);
+//            url = HttpManager.getWOTASKURL("", wonum, n_responsor, "H2-C2-CP005", page, 20);
         }
 
         HttpManager.getDataPagingInfo(WotaskActivity.this, url, new HttpRequestHandler<Results>() {

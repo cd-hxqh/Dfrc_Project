@@ -164,7 +164,7 @@ public class HttpManager {
     /**
      * 设置定期点检工单明细行
      */
-    public static String getWOTASKURL(String wonum, String n_responsor) {
+    public static String getWOTASKURL(String wonum) {
         return "{'appid':'" + Constants.N_MATWO_APPID + "','objectname':'" + Constants.WOTASK_NAME + "','option':'read','orderby':'WOTASKID DESC','condition':{'WONUM':'=" + wonum + "'}}";
 
 
@@ -176,9 +176,18 @@ public class HttpManager {
      */
     public static String getWOTASKURL(String vaule, String wonum, String n_responsor, String assetnum, int curpage, int showcount) {
         if (vaule.equals("")) {
-            return "{'appid':'" + Constants.N_MATWO_APPID + "','objectname':'" + Constants.WOTASK_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WOTASKID DESC','condition':{'WONUM':'=" + wonum + "','ASSETNUM':'=" + assetnum + "','N_RESPONSOR':'=" + n_responsor + "'}}";
+            if(null==n_responsor){
+                return "{'appid':'" + Constants.N_MATWO_APPID + "','objectname':'" + Constants.WOTASK_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WOTASKID DESC','condition':{'WONUM':'=" + wonum + "','ASSETNUM':'=" + assetnum + "'}}";
 
+            }else {
+                return "{'appid':'" + Constants.N_MATWO_APPID + "','objectname':'" + Constants.WOTASK_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WOTASKID DESC','condition':{'WONUM':'=" + wonum + "','ASSETNUM':'=" + assetnum + "','N_RESPONSOR':'=" + n_responsor + "'}}";
+
+            }
         } else {
+            if(null==n_responsor){
+                return "{'appid':'" + Constants.N_MATWO_APPID + "','objectname':'" + Constants.WOTASK_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WOTASKID DESC','condition':{'WONUM':'=" + wonum + "','ASSETNUM':'=" + assetnum +"'},'sinorsearch':{'WOSEQUENCE':'" + vaule + "','ASSETNUM':'" + vaule + "'}}";
+
+            }
             return "{'appid':'" + Constants.N_MATWO_APPID + "','objectname':'" + Constants.WOTASK_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'WOTASKID DESC','condition':{'WONUM':'=" + wonum + "','ASSETNUM':'=" + assetnum + "','N_RESPONSOR':'=" + n_responsor + "'},'sinorsearch':{'WOSEQUENCE':'" + vaule + "','ASSETNUM':'" + vaule + "'}}";
         }
     }
@@ -611,6 +620,7 @@ public class HttpManager {
         RequestParams params = new RequestParams();
         params.put("useruid", useruid);
         params.put("itemreqid", itemreqid);
+        client.setConnectTimeout(60000);
         client.post(Constants.ITEM_GENERATE_URL, params, new TextHttpResponseHandler() {
 
 

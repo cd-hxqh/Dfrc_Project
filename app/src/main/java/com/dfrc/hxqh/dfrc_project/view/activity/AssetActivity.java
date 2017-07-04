@@ -477,7 +477,34 @@ public class AssetActivity extends BaseActivity implements SwipeRefreshLayout.On
     private void offLineDownData() {
         String url = null;
         url = HttpManager.getASSETURL("", AccountUtils.getloginSite(AssetActivity.this), null, page, 50);
-        HttpManager.getDataPagingInfo(AssetActivity.this, url, new HttpRequestHandler<Results>() {
+//        HttpManager.getDataPagingInfo(AssetActivity.this, url, new HttpRequestHandler<Results>() {
+//            @Override
+//            public void onSuccess(Results results) {
+//                Log.i(TAG, "data=" + results);
+//            }
+//
+//            @Override
+//            public void onSuccess(Results results, int totalPages, int currentPage) {
+//                colseProgressBar();
+//                ArrayList<ASSET> item = JsonUtils.parsingASSET(results.getResultlist());
+//                if (item != null || !item.isEmpty()) {
+//                    assetDao.addAssets(item);
+//                    MessageUtils.showMiddleToast(AssetActivity.this, "设备数据下载成功");
+//                    for (ASSET asset : item) {
+//                        offLineDownItemData(asset.getASSETNUM());
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(String error) {
+//                colseProgressBar();
+//                MessageUtils.showMiddleToast(AssetActivity.this, "设备数据下载失败");
+//            }
+//        });
+
+
+        HttpManager.getData(AssetActivity.this, url, new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {
                 Log.i(TAG, "data=" + results);
@@ -502,7 +529,6 @@ public class AssetActivity extends BaseActivity implements SwipeRefreshLayout.On
                 MessageUtils.showMiddleToast(AssetActivity.this, "设备数据下载失败");
             }
         });
-
     }
 
     /**

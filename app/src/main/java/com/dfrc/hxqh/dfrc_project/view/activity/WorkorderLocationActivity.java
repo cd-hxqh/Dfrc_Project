@@ -353,7 +353,6 @@ public class WorkorderLocationActivity extends BaseActivity implements SwipeRefr
     private void findWotaskOk() {
         for (WORKORDER workorder : chooseWorkOrderList) {
             String wonum = workorder.getWONUM();
-            Log.i(TAG, "wonum=" + wonum);
             List<WOTASK> wotasklist = woTaskDao.findByWonum(wonum);
             if (null != wotasklist && wotasklist.size() != 0) {
                 for (WOTASK wotask : wotasklist) {
@@ -413,7 +412,6 @@ public class WorkorderLocationActivity extends BaseActivity implements SwipeRefr
                 if (null != list && list.size() != 0) {
                     for (WOTASK wotask : list) {
                         String relut=AndroidClientService.UpdateMbo(WorkorderLocationActivity.this, JsonUtils.potoWOTASK(wotask), Constants.WOTASK_NAME, "WOTASKID", wotask.getWOTASKID());
-                        Log.i(TAG,"修改"+relut);
                     }
                 }
 
@@ -495,7 +493,6 @@ public class WorkorderLocationActivity extends BaseActivity implements SwipeRefr
             protected String doInBackground(String... strings) {
                 for (WOTASKPRO wotaskpro : wotaskpros) {
                     String relut = AndroidClientService.MaintWOPro(WorkorderLocationActivity.this, wotaskpro);
-                    Log.i(TAG, "relut=" + relut);
                 }
                 return "提交成功";
             }

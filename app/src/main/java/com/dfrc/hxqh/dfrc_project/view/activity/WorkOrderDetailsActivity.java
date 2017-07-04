@@ -135,6 +135,7 @@ public class WorkOrderDetailsActivity extends BaseActivity {
             bundle.putSerializable("wonum", workorder.getWONUM());
             bundle.putSerializable("crewid", workorder.getCREWID());
             bundle.putSerializable("siteid", workorder.getSITEID());
+            bundle.putSerializable("siteid", workorder.getSITEID());
             bundle.putString("assetNum", "");
             intent.putExtras(bundle);
             startActivityForResult(intent, 1000);
