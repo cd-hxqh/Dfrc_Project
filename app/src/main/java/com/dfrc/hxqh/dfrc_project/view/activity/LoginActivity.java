@@ -53,7 +53,7 @@ import butterknife.OnClick;
  **/
 
 public class LoginActivity extends BaseActivity {
-    private static final String TAG = "LoginActivity";
+    private static final String TAG = "LoginActivity1";
     @Bind(R.id.login_username_edit)
     EditText mUsername;
     @Bind(R.id.login_password_edit)
@@ -357,6 +357,7 @@ public class LoginActivity extends BaseActivity {
 
 
     private boolean isJsonArrary(String data) {
+        Log.i(TAG,"data="+data);
         try {
             JSONArray jsonArray = new JSONArray(data);
         } catch (JSONException e) {
@@ -379,7 +380,9 @@ public class LoginActivity extends BaseActivity {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
+                Log.i(TAG,"1111");
                 if (isJsonArrary(s)) {
+                    Log.i(TAG,"22");
                     try {
                         JSONArray jsonArray = new JSONArray(s);
                         JSONObject jsonObject;
@@ -401,9 +404,10 @@ public class LoginActivity extends BaseActivity {
                         startIntent();
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        MessageUtils.showMiddleToast(LoginActivity.this, "获取权限失败");
                     }
                 } else {
-                    MessageUtils.showErrorMessage(LoginActivity.this, "获取权限失败");
+                    MessageUtils.showMiddleToast(LoginActivity.this, "获取权限失败");
                 }
             }
         }.execute();

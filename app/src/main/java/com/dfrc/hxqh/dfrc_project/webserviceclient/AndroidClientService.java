@@ -57,6 +57,7 @@ public class AndroidClientService {
         try {
             httpTransport.call("urn:action", soapEnvelope);
         } catch (IOException | XmlPullParserException e) {
+            Log.i(TAG,"rrr");
             return null;
         }
         String obj = null;
@@ -66,6 +67,7 @@ public class AndroidClientService {
             Log.i(TAG, "webResult=" + webResult);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
+            return null;
         }
         return webResult;
     }
