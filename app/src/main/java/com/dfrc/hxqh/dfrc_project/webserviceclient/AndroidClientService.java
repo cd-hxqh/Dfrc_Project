@@ -42,6 +42,7 @@ public class AndroidClientService {
         String ip_adress = AccountUtils.getIpAddress(context);
         if (ip_adress.equals(Constants.HTTPZS_API_IP)) {
             ip_adress = Constants.HTTPCES_API_IP + Constants.LoginwebserviceURL;
+//            ip_adress = Constants.HTTP_API_IP + Constants.LoginwebserviceURL;
         } else {
             ip_adress = AccountUtils.getIpAddress(context) + Constants.LoginwebserviceURL;
         }
@@ -526,8 +527,10 @@ public class AndroidClientService {
         Log.i(TAG, "key=" + key + ",keyvalue=" + keyvalue + ",type=" + type);
 
         String ip_adress = AccountUtils.getIpAddress(cxt);
+
         if (ip_adress.equals(Constants.HTTPZS_API_IP)) {
             ip_adress = Constants.HTTPCES_API_IP + Constants.LoginwebserviceURL;
+//            ip_adress = Constants.HTTP_API_IP + Constants.LoginwebserviceURL;
         } else {
             ip_adress = AccountUtils.getIpAddress(cxt) + Constants.LoginwebserviceURL;
         }

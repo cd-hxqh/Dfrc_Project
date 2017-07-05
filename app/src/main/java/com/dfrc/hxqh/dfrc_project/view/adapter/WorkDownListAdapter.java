@@ -3,7 +3,6 @@ package com.dfrc.hxqh.dfrc_project.view.adapter;
 import android.animation.Animator;
 import android.content.Context;
 import android.support.v7.widget.CardView;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -48,7 +47,11 @@ public class WorkDownListAdapter extends BaseQuickAdapter<WORKORDER> {
         if (null != item.getDOWNSTATUS() && item.getDOWNSTATUS().equals("已下载")) {
             helper.setText(R.id.workorder_status_id, "已下载");
             helper.setTextColorRes(R.id.workorder_status_id, R.color.red);
-        }else{
+        }else if(null != item.getDOWNSTATUS() && item.getDOWNSTATUS().equals("下载失败")){
+            helper.setText(R.id.workorder_status_id, "下载失败");
+            helper.setTextColorRes(R.id.workorder_status_id, R.color.red);
+        }
+        else{
             helper.setText(R.id.workorder_status_id, "未下载");
             helper.setTextColorRes(R.id.workorder_status_id, R.color.black);
         }

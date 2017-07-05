@@ -249,4 +249,27 @@ public class WoTaskDao {
             return null;
         }
     }
+
+    /**
+     * 根据当前WOSEQUENCE,ASSETNUM,N_RESULT查询相应点检明细行的数据
+     * WOSEQUENCE
+     * ASSETNUM
+     * N_RESULT
+     *
+     * @return
+     */
+    public List<WOTASK> findByAssetNum(String wonum, String assetnum,String n_responsor) {
+        try {
+            if (null == n_responsor) {
+
+                return WotaskDaoOpe.queryBuilder().where().eq("WONUM", wonum).and().eq("ASSETNUM", assetnum).query();
+            } else {
+                return WotaskDaoOpe.queryBuilder().where().eq("WONUM", wonum).and().eq("N_RESPONSOR", n_responsor).and().eq("ASSETNUM", assetnum).query();
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

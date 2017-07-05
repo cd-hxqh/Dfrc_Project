@@ -281,7 +281,7 @@
     <string name="have_load_out_all_the_data">已加载出全部数据</string>
     <string name="down_text">下载</string>
     <string name="down_success_text">已下载</string>
-    <string name="down_fail_text">已失败</string>
+    <string name="down_fail_text">下载失败</string>
     <string name="yxzrw_text">已下载任务</string>
     <string name="data_success_text">数据保存成功</string>
     <string name="all_text">全选</string>

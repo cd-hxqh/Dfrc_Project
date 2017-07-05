@@ -11,6 +11,7 @@ import android.text.Editable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -155,7 +156,7 @@ public class WotaskLocationActivity extends BaseActivity implements SwipeRefresh
             nodatalayout.setVisibility(View.GONE);
             refresh_layout.setRefreshing(true);
             page = 1;
-            getData();
+            getDataSearch(assetNum);
         }
     }
 
@@ -245,8 +246,8 @@ public class WotaskLocationActivity extends BaseActivity implements SwipeRefresh
      */
     private void getData() {
 
-        List<WOTASK> wotaskList = new WoTaskDao(WotaskLocationActivity.this).queryForByWonum(wonum,n_responsor);
-        if (wotaskList != null || wotaskList.size() != 0) {
+        List<WOTASK> wotaskList = new WoTaskDao(WotaskLocationActivity.this).queryForByWonum(wonum, n_responsor);
+        if (wotaskList != null && wotaskList.size() != 0) {
             addData(wotaskList);
             refresh_layout.setRefreshing(false);
             refresh_layout.setLoading(false);
@@ -262,14 +263,23 @@ public class WotaskLocationActivity extends BaseActivity implements SwipeRefresh
      * 获取根据查询条件查询数据*
      */
     private void getDataSearch(String search) {
-
-        List<WOTASK> wotaskList = new WoTaskDao(WotaskLocationActivity.this).findByWonum(wonum,n_responsor,search);
-        if (wotaskList != null || wotaskList.size() != 0) {
+        List<WOTASK> wotaskList = null;
+        if (assetNum.equals("")) {
+            wotaskList = new WoTaskDao(WotaskLocationActivity.this).findByWonum(wonum, n_responsor, search);
+        } else {
+            Log.i(TAG, "assetNum=" + assetNum);
+            wotaskList = new WoTaskDao(WotaskLocationActivity.this).findByAssetNum(wonum, assetNum, n_responsor);
+        }
+        wotaskListAdapter.removeAll(wotaskListAdapter.getData());
+        if (wotaskList != null && wotaskList.size() != 0) {
+            Log.i(TAG, "wotaskList=" + wotaskList.size());
+            Log.i(TAG, "2");
             addData(wotaskList);
             refresh_layout.setRefreshing(false);
             refresh_layout.setLoading(false);
             nodatalayout.setVisibility(View.GONE);
         } else {
+            Log.i(TAG, "3");
             refresh_layout.setRefreshing(false);
             nodatalayout.setVisibility(View.VISIBLE);
         }

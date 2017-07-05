@@ -330,7 +330,7 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
             public void cDownOnClickListener(int postion, TextView statusText, View pb) {
                 WORKORDER workorder = (WORKORDER) workDownListAdapter.getData().get(postion);
                 if(workorder.getSTATUS().equals("进行中")) {
-                    workOrderDao.update(workorder);
+
                     statusText.setVisibility(View.GONE);
                     pb.setVisibility(View.VISIBLE);
                     getItemData(postion, workorder, workorder.getWONUM(), statusText, pb);
@@ -373,8 +373,7 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
         new AsyncTask<String, String, String>() {
             @Override
             protected String doInBackground(String... strings) {
-//                return AndroidClientService.searchMaint2(WorkorderActivity.this, "ASSETNUM", assetNum, "line"); //根据设备获取定期点检工单
-                return AndroidClientService.searchMaint2(WorkorderActivity.this, "ASSETNUM","H2-Z2-CV-063", "line"); //根据设备获取定期点检工单
+                return AndroidClientService.searchMaint2(WorkorderActivity.this, "ASSETNUM", assetNum, "line"); //根据设备获取定期点检工单
             }
 
             @Override
@@ -384,6 +383,9 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
                 refresh_layout.setLoading(false);
                 String result = JsonUtils.parsingsearchMaint2(s);
                 if (result.equals("暂无数据")) {
+                    nodatalayout.setVisibility(View.VISIBLE);
+                    workDownListAdapter.removeAll(workDownListAdapter.getData());
+                    workDownListAdapter.notifyDataSetChanged();
                 } else {
                     ArrayList<WORKORDER> item = JsonUtils.parsingWORKORDER(s);
 
@@ -405,7 +407,49 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
      * 根据编号获取子表信息
      **/
     private void getItemData(final int postion, final WORKORDER workorder, final String wonum, final TextView statusText, final View pb) {
-//        HttpManager.getDataPagingInfo(WorkorderActivity.this, HttpManager.getWOTASKURL(wonum, page, 10000), new HttpRequestHandler<Results>() {
+        HttpManager.getDataPagingInfo(WorkorderActivity.this, HttpManager.getWOTASKURL(wonum, page, 200), new HttpRequestHandler<Results>() {
+            @Override
+            public void onSuccess(Results results) {
+            }
+
+            @Override
+            public void onSuccess(Results results, int totalPages, int currentPage) {
+                ArrayList<WOTASK> item = JsonUtils.parsingWOTASK(results.getResultlist());
+                workOrderDao.update(workorder);
+                if (item == null || item.isEmpty()) {
+
+                } else {
+                    woTaskDao.update(item);
+                }
+                workorder.setDOWNSTATUS("已下载");
+                WORKORDER w = (WORKORDER) workDownListAdapter.getData().get(postion);
+                workDownListAdapter.remove(postion);
+                workDownListAdapter.add(postion, workorder);
+                statusText.setText(R.string.down_success_text);
+                statusText.setTextColor(getResources().getColor(R.color.red));
+                statusText.setVisibility(View.VISIBLE);
+                pb.setVisibility(View.GONE);
+                workDownListAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(String error) {
+                Log.i(TAG,"error="+error);
+                workorder.setDOWNSTATUS("下载失败");
+                WORKORDER w = (WORKORDER) workDownListAdapter.getData().get(postion);
+                workDownListAdapter.remove(postion);
+                workDownListAdapter.add(postion, workorder);
+                statusText.setText(R.string.down_fail_text);
+                statusText.setTextColor(getResources().getColor(R.color.red));
+                statusText.setVisibility(View.VISIBLE);
+                pb.setVisibility(View.GONE);
+                workDownListAdapter.notifyDataSetChanged();
+            }
+        });
+
+    }
+
+//        HttpManager.getData(WorkorderActivity.this, HttpManager.getWOTASKURL(wonum), new HttpRequestHandler<Results>() {
 //            @Override
 //            public void onSuccess(Results results) {
 //            }
@@ -413,7 +457,7 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
 //            @Override
 //            public void onSuccess(Results results, int totalPages, int currentPage) {
 //                ArrayList<WOTASK> item = JsonUtils.parsingWOTASK(results.getResultlist());
-//
+//                workOrderDao.update(workorder);
 //                if (item == null || item.isEmpty()) {
 //                } else {
 //                    woTaskDao.update(item);
@@ -442,47 +486,7 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
 //                workDownListAdapter.notifyDataSetChanged();
 //            }
 //        });
-
-
-
-        HttpManager.getData(WorkorderActivity.this, HttpManager.getWOTASKURL(wonum), new HttpRequestHandler<Results>() {
-            @Override
-            public void onSuccess(Results results) {
-            }
-
-            @Override
-            public void onSuccess(Results results, int totalPages, int currentPage) {
-                ArrayList<WOTASK> item = JsonUtils.parsingWOTASK(results.getResultlist());
-
-                if (item == null || item.isEmpty()) {
-                } else {
-                    woTaskDao.update(item);
-                }
-                workorder.setDOWNSTATUS("已下载");
-                WORKORDER w = (WORKORDER) workDownListAdapter.getData().get(postion);
-                workDownListAdapter.remove(postion);
-                workDownListAdapter.add(postion, workorder);
-                statusText.setText(R.string.down_success_text);
-                statusText.setTextColor(getResources().getColor(R.color.red));
-                statusText.setVisibility(View.VISIBLE);
-                pb.setVisibility(View.GONE);
-                workDownListAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onFailure(String error) {
-                workorder.setDOWNSTATUS("下载失败");
-                WORKORDER w = (WORKORDER) workDownListAdapter.getData().get(postion);
-                workDownListAdapter.remove(postion);
-                workDownListAdapter.add(postion, workorder);
-                statusText.setText(R.string.down_fail_text);
-                statusText.setTextColor(getResources().getColor(R.color.red));
-                statusText.setVisibility(View.VISIBLE);
-                pb.setVisibility(View.GONE);
-                workDownListAdapter.notifyDataSetChanged();
-            }
-        });
-    }
-
+//    }
+//
 
 }

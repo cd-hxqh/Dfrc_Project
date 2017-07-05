@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -213,7 +212,7 @@ public class WorkorderLocationActivity extends BaseActivity implements SwipeRefr
 
 
         List<WORKORDER> workorderList = workOrderDao.queryForByCrewId("MAINT", "MAINT", AccountUtils.getCrewid(WorkorderLocationActivity.this));
-        if (workorderList != null || workorderList.size() != 0) {
+        if (workorderList != null && workorderList.size() != 0) {
             addData(workorderList);
             refresh_layout.setRefreshing(false);
             refresh_layout.setLoading(false);

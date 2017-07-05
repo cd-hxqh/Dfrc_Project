@@ -557,6 +557,9 @@ public class HttpManager {
         Log.i(TAG, "data=" + data);
         String ip_adress = AccountUtils.getIpAddress(cxt) + Constants.BASE_URL;
         AsyncHttpClient client = new AsyncHttpClient();
+        client.setConnectTimeout(50000);
+        client.setTimeout(50000);
+        client.setMaxConnections(10000);
         RequestParams params = new RequestParams();
         params.put("data", data);
         client.get(ip_adress, params, new TextHttpResponseHandler() {
@@ -586,22 +589,31 @@ public class HttpManager {
 
         Log.i(TAG, "ip_adress=" + ip_adress);
         AsyncHttpClient client = new AsyncHttpClient();
+        client.setConnectTimeout(500000);
+        client.setTimeout(500000);
+        client.setMaxConnections(10000);
         RequestParams params = new RequestParams();
         params.put("data", data);
         client.get(ip_adress, params, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
+                Log.i(TAG,"statusCode"+statusCode+"responseString="+responseString+"throwable="+throwable.toString());
+
                 SafeHandler.onFailure(handler, cxt.getString(R.string.get_data_info_fail));
             }
 
 
             @Override
             public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
+                Log.i(TAG,"33333333333");
                 Results result = JsonUtils.parsingResults(cxt, responseString);
                 SafeHandler.onSuccess(handler, result, result.getCurpage(), result.getShowcount());
             }
 
         });
+
+       Log.i(TAG, "连接时间:"+client.getConnectTimeout());
+        Log.i(TAG, "连接数:"+client.getMaxConnections());
     }
 
 
@@ -620,7 +632,6 @@ public class HttpManager {
         RequestParams params = new RequestParams();
         params.put("useruid", useruid);
         params.put("itemreqid", itemreqid);
-        client.setConnectTimeout(60000);
         client.post(Constants.ITEM_GENERATE_URL, params, new TextHttpResponseHandler() {
 
 

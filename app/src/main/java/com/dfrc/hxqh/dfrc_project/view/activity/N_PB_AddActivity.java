@@ -32,7 +32,6 @@ import butterknife.OnClick;
  * 问题点录入
  */
 public class N_PB_AddActivity extends BaseActivity {
-
     private static final String TAG = "N_PB_AddActivity";
 
     @OnClick(R.id.title_back_id)
@@ -75,6 +74,9 @@ public class N_PB_AddActivity extends BaseActivity {
     private WOTASKPRO wotaskpro; //问题点
 
 
+  
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +98,8 @@ public class N_PB_AddActivity extends BaseActivity {
 
     @Override
     protected void findViewById() {
+
+
 
 
     }
@@ -244,6 +248,9 @@ public class N_PB_AddActivity extends BaseActivity {
 
 
     }
+
+
+
 
     /**
      * 在线保存NG
