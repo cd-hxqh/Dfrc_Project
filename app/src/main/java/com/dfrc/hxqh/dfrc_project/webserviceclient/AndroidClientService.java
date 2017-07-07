@@ -326,6 +326,7 @@ public class AndroidClientService {
         soapReq.addProperty("SOLVE", n_problem.getSOLVE()); //对策
         soapReq.addProperty("FINISHDATE", n_problem.getFINISHDATE());//完成日期
         soapReq.addProperty("STATUS", n_problem.getSTATUS());//进展
+        soapReq.addProperty("SITEID", n_problem.getSITEID());//进展
         soapReq.addProperty("ABC", n_problem.getABC()); //重要度
         soapReq.addProperty("CONFIRMBY", n_problem.getCONFIRMBY()); //确认人
         soapReq.addProperty("RESULT", n_problem.getRESULT());//整改结果
@@ -341,6 +342,7 @@ public class AndroidClientService {
         String obj = null;
         try {
             obj = soapEnvelope.getResponse().toString();
+            Log.i(TAG,"obj="+obj);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
@@ -698,5 +700,42 @@ public class AndroidClientService {
         }
         return webResult;
     }
+
+
+
+    /**获取个人已完成或未完成项目数**/
+
+    public static String countMaint(Context context, String wonum, String responsor) {
+        String ip_adress = AccountUtils.getIpAddress(context);
+        if (ip_adress.equals(Constants.HTTPZS_API_IP)) {
+            ip_adress = Constants.HTTPCES_API_IP+ Constants.LoginwebserviceURL;
+        } else {
+            ip_adress = AccountUtils.getIpAddress(context)+ Constants.LoginwebserviceURL;
+        }
+        Log.i(TAG,"ip_adress="+ip_adress+",wonum="+wonum+",responsor="+responsor);
+        SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        soapEnvelope.implicitTypes = true;
+        soapEnvelope.dotNet = true;
+        SoapObject soapReq = new SoapObject(NAMESPACE, "dflserviceCountMaint");
+        soapReq.addProperty("WONUM", wonum);//工单号
+        soapReq.addProperty("N_RESPONSOR", responsor);//当前登录人
+        soapEnvelope.setOutputSoapObject(soapReq);
+
+        HttpTransportSE httpTransport = new HttpTransportSE(ip_adress, timeOut);
+        try {
+            httpTransport.call("urn:action", soapEnvelope);
+        } catch (IOException | XmlPullParserException e) {
+            return null;
+        }
+        String webResult = null;
+        try {
+            webResult = soapEnvelope.getResponse().toString();
+            Log.i(TAG, "webResult=" + webResult);
+        } catch (SoapFault soapFault) {
+            soapFault.printStackTrace();
+        }
+        return webResult;
+    }
+
 
 }

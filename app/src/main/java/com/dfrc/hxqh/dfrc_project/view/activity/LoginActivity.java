@@ -313,6 +313,7 @@ public class LoginActivity extends BaseActivity {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
+
                             getPerson(mUsername.getText().toString());
                             getUserApp(mUsername.getText().toString());
                         }
@@ -357,7 +358,6 @@ public class LoginActivity extends BaseActivity {
 
 
     private boolean isJsonArrary(String data) {
-        Log.i(TAG,"data="+data);
         try {
             JSONArray jsonArray = new JSONArray(data);
         } catch (JSONException e) {
@@ -380,9 +380,7 @@ public class LoginActivity extends BaseActivity {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                Log.i(TAG,"1111");
                 if (isJsonArrary(s)) {
-                    Log.i(TAG,"22");
                     try {
                         JSONArray jsonArray = new JSONArray(s);
                         JSONObject jsonObject;
@@ -429,7 +427,6 @@ public class LoginActivity extends BaseActivity {
                 ArrayList<PERSON> item = JsonUtils.parsingPERSON(results.getResultlist());
                 if (item == null || item.isEmpty()) {
                 } else {
-
                     AccountUtils.setPerson(LoginActivity.this, item.get(0));
                 }
             }

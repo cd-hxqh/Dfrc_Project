@@ -164,8 +164,8 @@ public class HttpManager {
     /**
      * 设置定期点检工单明细行
      */
-    public static String getWOTASKURL(String wonum) {
-        return "{'appid':'" + Constants.N_MATWO_APPID + "','objectname':'" + Constants.WOTASK_NAME + "','option':'read','orderby':'WOTASKID DESC','condition':{'WONUM':'=" + wonum + "'}}";
+    public static String getWOTASKURL(String wonum,String n_responsor) {
+        return "{'appid':'" + Constants.N_MATWO_APPID + "','objectname':'" + Constants.WOTASK_NAME + "','option':'read','orderby':'WOTASKID DESC','condition':{'WONUM':'=" + wonum + "','N_RESPONSOR':'="+n_responsor+"'}}";
 
 
     }
@@ -524,13 +524,13 @@ public class HttpManager {
 
             @Override
             public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                Log.i(TAG, "SstatusCode=" + statusCode + "responseString=" + responseString);
+                Log.i(TAG, "SstatusCode1=" + statusCode + "responseString=" + responseString);
                 SafeHandler.onFailure(handler, IMErrorType.errorMessage(cxt, IMErrorType.ErrorLoginFailure));
             }
 
             @Override
             public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                Log.i(TAG, "SstatusCode=" + statusCode + "responseString=" + responseString);
+                Log.i(TAG, "SstatusCode2=" + statusCode + "responseString=" + responseString);
                 if (statusCode == 200) {
                     LoginResults loginResults = JsonUtils.parsingAuthStr(cxt, responseString);
                     if (loginResults != null) {

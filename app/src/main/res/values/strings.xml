@@ -304,5 +304,9 @@
     <string name="server_adress_text">服务器地址</string>
     <string name="vendor_text">供应商:</string>
     <string name="vendorname_text">供应商名称:</string>
+    <string name="item_n_qtycomp_text">个人未完成数:</string>
+    <string name="item_n_qtyopen_text">个人已完成数:</string>
+    <string name="sbmit_text">提交</string>
+    <string name="fj_text">附件</string>
 
 </resources>

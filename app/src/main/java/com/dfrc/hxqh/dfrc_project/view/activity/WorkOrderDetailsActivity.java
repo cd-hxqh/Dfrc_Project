@@ -1,6 +1,7 @@
 package com.dfrc.hxqh.dfrc_project.view.activity;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -9,6 +10,11 @@ import com.dfrc.hxqh.dfrc_project.R;
 import com.dfrc.hxqh.dfrc_project.model.WORKORDER;
 import com.dfrc.hxqh.dfrc_project.until.AccountUtils;
 import com.dfrc.hxqh.dfrc_project.until.NetWorkHelper;
+import com.dfrc.hxqh.dfrc_project.webserviceclient.AndroidClientService;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -42,6 +48,10 @@ public class WorkOrderDetailsActivity extends BaseActivity {
     TextView n_qtyopenTextView; //未完成项目数
     @Bind(R.id.n_qtycomp_text_id)
     TextView n_qtycompTextView; //已完成项目数
+    @Bind(R.id.item_n_qtycomp_text_id)
+    TextView item_n_qtycompTextView; //个人未完成项目数
+    @Bind(R.id.item_n_qtyopen_text_id)
+    TextView item_n_qtyopenTextView; //个人已完成项目数
     @Bind(R.id.n_qtyok_text_id)
     TextView n_qtyokTextView; //OK数
     @Bind(R.id.n_qtyng_text_id)
@@ -59,6 +69,11 @@ public class WorkOrderDetailsActivity extends BaseActivity {
         geiIntentData();
         findViewById();
         initView();
+        if (NetWorkHelper.isWifi(WorkOrderDetailsActivity.this) && !AccountUtils.getIsOffLine(this)) {
+            Log.i(TAG,"2222");
+            getLoadingDialog("正在加载数据");
+            startAsyncTask();
+        }
 
     }
 
@@ -128,7 +143,6 @@ public class WorkOrderDetailsActivity extends BaseActivity {
     //点击明细行
     @OnClick(R.id.all_wotask_btn_id)
     void setAllWotaskBtnOnClickListener() {
-        Log.i(TAG, "line=" + !AccountUtils.getIsOffLine(this));
         if (NetWorkHelper.isWifi(this) && !AccountUtils.getIsOffLine(this)) { //在线
             Intent intent = new Intent(WorkOrderDetailsActivity.this, WotaskActivity.class);
             Bundle bundle = new Bundle();
@@ -153,4 +167,40 @@ public class WorkOrderDetailsActivity extends BaseActivity {
     }
 
 
+
+    /**获取个人已完成数与未完成数**/
+
+    private void startAsyncTask() {
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... strings) {
+                return AndroidClientService.countMaint(WorkOrderDetailsActivity.this,workorder.getWONUM(),AccountUtils.getloginUserName(WorkOrderDetailsActivity.this));
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                colseProgressBar();
+                isJsonArrary(s);
+            }
+        }.execute();
+
+
+    }
+
+    //解析已完成或未完成
+    private boolean isJsonArrary(String data) {
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            JSONObject jsonObject=jsonArray.getJSONObject(0);
+            String wwccount=jsonObject.getInt("WWCCOUNT")+"";
+            String ywccount=jsonObject.getInt("YWCCOUNT")+"";
+
+            item_n_qtycompTextView.setText(wwccount);
+            item_n_qtyopenTextView.setText(ywccount);
+        } catch (JSONException e) {
+            return false;
+        }
+        return true;
+    }
 }

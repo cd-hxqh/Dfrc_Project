@@ -305,8 +305,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dimens_line"
                     android:background="@mipmap/line"></View>
-
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -340,6 +338,78 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dimens_line"
                     android:background="@mipmap/line"></View>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/dimen_10">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/item_n_qtycomp_text"
+                        android:textColor="@color/light_black"
+                        android:textSize="@dimen/dimens_16sp" />
+
+                    <TextView
+                        android:id="@+id/item_n_qtycomp_text_id"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:background="@color/sb__transparent"
+                        android:gravity="right"
+                        android:hint="@string/have_not_data"
+                        android:textColor="@color/light_black"
+                        android:textSize="@dimen/dimens_16sp" />
+
+                </LinearLayout>
+
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimens_line"
+                    android:background="@mipmap/line"></View>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/dimen_10">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/item_n_qtyopen_text"
+                        android:textColor="@color/light_black"
+                        android:textSize="@dimen/dimens_16sp" />
+
+                    <TextView
+                        android:id="@+id/item_n_qtyopen_text_id"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:background="@color/sb__transparent"
+                        android:gravity="right"
+                        android:hint="@string/have_not_data"
+                        android:textColor="@color/light_black"
+                        android:textSize="@dimen/dimens_16sp" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimens_line"
+                    android:background="@mipmap/line"></View>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -408,6 +478,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dimens_line"
                     android:background="@mipmap/line"></View>
+
+
             </LinearLayout>
 
 

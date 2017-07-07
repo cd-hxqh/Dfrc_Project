@@ -12,7 +12,6 @@ import android.text.Editable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -407,49 +406,7 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
      * 根据编号获取子表信息
      **/
     private void getItemData(final int postion, final WORKORDER workorder, final String wonum, final TextView statusText, final View pb) {
-        HttpManager.getDataPagingInfo(WorkorderActivity.this, HttpManager.getWOTASKURL(wonum, page, 200), new HttpRequestHandler<Results>() {
-            @Override
-            public void onSuccess(Results results) {
-            }
-
-            @Override
-            public void onSuccess(Results results, int totalPages, int currentPage) {
-                ArrayList<WOTASK> item = JsonUtils.parsingWOTASK(results.getResultlist());
-                workOrderDao.update(workorder);
-                if (item == null || item.isEmpty()) {
-
-                } else {
-                    woTaskDao.update(item);
-                }
-                workorder.setDOWNSTATUS("已下载");
-                WORKORDER w = (WORKORDER) workDownListAdapter.getData().get(postion);
-                workDownListAdapter.remove(postion);
-                workDownListAdapter.add(postion, workorder);
-                statusText.setText(R.string.down_success_text);
-                statusText.setTextColor(getResources().getColor(R.color.red));
-                statusText.setVisibility(View.VISIBLE);
-                pb.setVisibility(View.GONE);
-                workDownListAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onFailure(String error) {
-                Log.i(TAG,"error="+error);
-                workorder.setDOWNSTATUS("下载失败");
-                WORKORDER w = (WORKORDER) workDownListAdapter.getData().get(postion);
-                workDownListAdapter.remove(postion);
-                workDownListAdapter.add(postion, workorder);
-                statusText.setText(R.string.down_fail_text);
-                statusText.setTextColor(getResources().getColor(R.color.red));
-                statusText.setVisibility(View.VISIBLE);
-                pb.setVisibility(View.GONE);
-                workDownListAdapter.notifyDataSetChanged();
-            }
-        });
-
-    }
-
-//        HttpManager.getData(WorkorderActivity.this, HttpManager.getWOTASKURL(wonum), new HttpRequestHandler<Results>() {
+//        HttpManager.getDataPagingInfo(WorkorderActivity.this, HttpManager.getWOTASKURL(wonum, page, 200), new HttpRequestHandler<Results>() {
 //            @Override
 //            public void onSuccess(Results results) {
 //            }
@@ -459,6 +416,7 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
 //                ArrayList<WOTASK> item = JsonUtils.parsingWOTASK(results.getResultlist());
 //                workOrderDao.update(workorder);
 //                if (item == null || item.isEmpty()) {
+//
 //                } else {
 //                    woTaskDao.update(item);
 //                }
@@ -475,6 +433,7 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
 //
 //            @Override
 //            public void onFailure(String error) {
+//                Log.i(TAG,"error="+error);
 //                workorder.setDOWNSTATUS("下载失败");
 //                WORKORDER w = (WORKORDER) workDownListAdapter.getData().get(postion);
 //                workDownListAdapter.remove(postion);
@@ -486,7 +445,47 @@ public class WorkorderActivity extends BaseActivity implements SwipeRefreshLayou
 //                workDownListAdapter.notifyDataSetChanged();
 //            }
 //        });
-//    }
 //
+//    }
+
+        HttpManager.getData(WorkorderActivity.this, HttpManager.getWOTASKURL(wonum,AccountUtils.getloginUserName(this)), new HttpRequestHandler<Results>() {
+            @Override
+            public void onSuccess(Results results) {
+            }
+
+            @Override
+            public void onSuccess(Results results, int totalPages, int currentPage) {
+                ArrayList<WOTASK> item = JsonUtils.parsingWOTASK(results.getResultlist());
+                workOrderDao.update(workorder);
+                if (item == null || item.isEmpty()) {
+                } else {
+                    woTaskDao.update(item);
+                }
+                workorder.setDOWNSTATUS("已下载");
+                WORKORDER w = (WORKORDER) workDownListAdapter.getData().get(postion);
+                workDownListAdapter.remove(postion);
+                workDownListAdapter.add(postion, workorder);
+                statusText.setText(R.string.down_success_text);
+                statusText.setTextColor(getResources().getColor(R.color.red));
+                statusText.setVisibility(View.VISIBLE);
+                pb.setVisibility(View.GONE);
+                workDownListAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(String error) {
+                workorder.setDOWNSTATUS("下载失败");
+                WORKORDER w = (WORKORDER) workDownListAdapter.getData().get(postion);
+                workDownListAdapter.remove(postion);
+                workDownListAdapter.add(postion, workorder);
+                statusText.setText(R.string.down_fail_text);
+                statusText.setTextColor(getResources().getColor(R.color.red));
+                statusText.setVisibility(View.VISIBLE);
+                pb.setVisibility(View.GONE);
+                workDownListAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
 
 }

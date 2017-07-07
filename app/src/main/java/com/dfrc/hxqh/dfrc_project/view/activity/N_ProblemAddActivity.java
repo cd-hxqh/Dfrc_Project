@@ -6,9 +6,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.dfrc.hxqh.dfrc_project.R;
@@ -17,7 +17,6 @@ import com.dfrc.hxqh.dfrc_project.api.HttpRequestHandler;
 import com.dfrc.hxqh.dfrc_project.api.JsonUtils;
 import com.dfrc.hxqh.dfrc_project.bean.Results;
 import com.dfrc.hxqh.dfrc_project.constants.Constants;
-import com.dfrc.hxqh.dfrc_project.dialog.FlippingLoadingDialog;
 import com.dfrc.hxqh.dfrc_project.model.ALNDOMAIN;
 import com.dfrc.hxqh.dfrc_project.model.ASSET;
 import com.dfrc.hxqh.dfrc_project.model.N_PROBLEM;
@@ -58,8 +57,8 @@ public class N_ProblemAddActivity extends BaseActivity {
     @Bind(R.id.title_name)
     TextView titleTextView; //标题
 
-    @Bind(R.id.sbmittext_id)  //保存
-            ImageButton sbmitBtn;
+//    @Bind(R.id.sbmittext_id)  //保存
+//            ImageButton sbmitBtn;
 
 
     @Bind(R.id.prodesc_text_id)
@@ -94,6 +93,10 @@ public class N_ProblemAddActivity extends BaseActivity {
     TextView confirmbyTextView; //确认人
     @Bind(R.id.result_text_id)
     TextView resultTextView; //整改结果
+    @Bind(R.id.sbmit_btn_id)
+    Button sbmitBtn; //提交
+    @Bind(R.id.fj_btn_id)
+    TextView fjBtn; //附件
 
 
     /**
@@ -113,8 +116,7 @@ public class N_ProblemAddActivity extends BaseActivity {
     //进展
     private String[] jinzhanTypes = null;
 
-
-    protected FlippingLoadingDialog mLoadingDialog;
+    private String ownerid; //新增返回的ID
 
 
     @Override
@@ -213,6 +215,7 @@ public class N_ProblemAddActivity extends BaseActivity {
     void setResponsorTextViewOnClickListener() {
         Intent intent = new Intent(N_ProblemAddActivity.this, PersonActivity.class);
         intent.putExtra("crewid", AccountUtils.getCrewid(this));
+        intent.putExtra("siteid", AccountUtils.getloginSite(this));
         startActivityForResult(intent, RESPONSOR_REQUESTCODE);
     }
 
@@ -242,6 +245,7 @@ public class N_ProblemAddActivity extends BaseActivity {
     void setConfirmbyTextViewOnClickListeber() {
         Intent intent = new Intent(N_ProblemAddActivity.this, PersonActivity.class);
         intent.putExtra("crewid", AccountUtils.getCrewid(this));
+        intent.putExtra("siteid", AccountUtils.getloginSite(this));
         startActivityForResult(intent, CONFIRMBY_REQUESTCODE);
     }
 
@@ -253,10 +257,28 @@ public class N_ProblemAddActivity extends BaseActivity {
 
 
     //修改提交
-    @OnClick(R.id.sbmittext_id)
+    @OnClick(R.id.sbmit_btn_id)
     void setSbmitBtnOnClickListener() {
-        getLoadingDialog("正在提交").show();
-        saveAsyncTask();
+        if(prodescTextView.getText().toString().equals("")){
+            MessageUtils.showMiddleToast(N_ProblemAddActivity.this,"问题描述不能为空");
+        }else {
+            getLoadingDialog("正在提交").show();
+            saveAsyncTask();
+        }
+    }
+
+    //附件
+    @OnClick(R.id.fj_btn_id)
+    void setFjBtnOnClickListener() {
+        if(null==ownerid){
+            MessageUtils.showMiddleToast(N_ProblemAddActivity.this,"请先上传问题单...");
+        }else{
+            Intent intent = new Intent(N_ProblemAddActivity.this, PhotoActivity.class);
+            intent.putExtra("ownertable", Constants.N_PROBLEM_NAME);
+            intent.putExtra("ownerid", ownerid);
+            startActivityForResult(intent, 0);
+        }
+
     }
 
 
@@ -347,9 +369,6 @@ public class N_ProblemAddActivity extends BaseActivity {
     }
 
 
-
-
-
     /**
      * 提交数据*
      */
@@ -364,9 +383,10 @@ public class N_ProblemAddActivity extends BaseActivity {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                mLoadingDialog.dismiss();
+                results(s);
+                colseProgressBar();
                 MessageUtils.showMiddleToast(N_ProblemAddActivity.this, s);
-                finish();
+//                finish();
             }
         }.execute();
 
@@ -405,7 +425,15 @@ public class N_ProblemAddActivity extends BaseActivity {
         n_problem.setABC(abc);
         n_problem.setCONFIRMBY(confirmby);
         n_problem.setRESULT(result);
+        n_problem.setSITEID(AccountUtils.getloginSite(this));
 
         return n_problem;
+    }
+
+    //解析新增返回的ID
+    private String results(String s) {
+        ownerid = s.split("\\|")[1];
+        return ownerid;
+
     }
 }

@@ -267,19 +267,15 @@ public class WotaskLocationActivity extends BaseActivity implements SwipeRefresh
         if (assetNum.equals("")) {
             wotaskList = new WoTaskDao(WotaskLocationActivity.this).findByWonum(wonum, n_responsor, search);
         } else {
-            Log.i(TAG, "assetNum=" + assetNum);
             wotaskList = new WoTaskDao(WotaskLocationActivity.this).findByAssetNum(wonum, assetNum, n_responsor);
         }
         wotaskListAdapter.removeAll(wotaskListAdapter.getData());
         if (wotaskList != null && wotaskList.size() != 0) {
-            Log.i(TAG, "wotaskList=" + wotaskList.size());
-            Log.i(TAG, "2");
             addData(wotaskList);
             refresh_layout.setRefreshing(false);
             refresh_layout.setLoading(false);
             nodatalayout.setVisibility(View.GONE);
         } else {
-            Log.i(TAG, "3");
             refresh_layout.setRefreshing(false);
             nodatalayout.setVisibility(View.VISIBLE);
         }
