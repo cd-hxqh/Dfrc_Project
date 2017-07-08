@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <string-array name="address_text">
+        <item>正式 http://172.28.16.96</item>
+        <item>测试 http://172.25.185.32:7001</item>
+    </string-array>
+
+
+</resources>
